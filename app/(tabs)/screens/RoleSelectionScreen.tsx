@@ -45,7 +45,7 @@ const RoleSelectionScreen = ({ navigation }: any) => {
 
             <TouchableOpacity 
               style={[styles.roleCard, { backgroundColor: '#F0FDF4' }]}
-              onPress={() => Alert.alert('Đã chọn', 'Người nước ngoài')}
+              onPress={() => { Alert.alert('Đã chọn', 'Người nước ngoài'); navigation.navigate('MenuSurvey'); }}
             >
               <View style={styles.iconContainer}>
                 <Text style={styles.icon}>🌍</Text>
