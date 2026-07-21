@@ -33,7 +33,7 @@ const RoleSelectionScreen = ({ navigation }: any) => {
           <View style={styles.row}>
             <TouchableOpacity 
               style={[styles.roleCard, { backgroundColor: '#EFF6FF' }]}
-              onPress={() => Alert.alert('Đã chọn', 'Học sinh tiểu học')}
+              onPress={() => { Alert.alert('Đã chọn', 'Học sinh tiểu học'); navigation.navigate('Home_primary'); }}
             >
               <View style={styles.iconContainer}>
                 <Text style={styles.icon}>👨‍🎓</Text>
@@ -60,7 +60,7 @@ const RoleSelectionScreen = ({ navigation }: any) => {
           <View style={styles.row}>
             <TouchableOpacity 
               style={[styles.roleCard, { backgroundColor: '#F5F3FF' }]}
-              onPress={() => Alert.alert('Đã chọn', 'Giáo viên')}
+              onPress={() => { Alert.alert('Đã chọn', 'Giáo viên') }}
             >
               <View style={styles.iconContainer}>
                 <Text style={styles.icon}>👩‍🏫</Text>

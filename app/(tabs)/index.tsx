@@ -6,6 +6,7 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import RoleSelectionScreen from "./screens/RoleSelectionScreen";
 import MenuSurvey from "./screens/foreigners/menu_survery";
+import HomePrimary from "./screens/primary_school_students/Home_primary";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ export default function App() {
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="RoleSelection" component={RoleSelectionScreen} />
       <Stack.Screen name="MenuSurvey" component={MenuSurvey} />
+      <Stack.Screen name="Home_primary" component={HomePrimary} />
     </Stack.Navigator>
   );
 }
