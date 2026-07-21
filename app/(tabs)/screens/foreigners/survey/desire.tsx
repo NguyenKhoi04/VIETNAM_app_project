@@ -1,110 +1,136 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+// Bạn muốn đạt được điều gì khi học tiếng Việt
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+
+const desires = [
+  { id: 'basic', text: ' Mình muốn học những điều cơ bản', icon: '📚' },
+  { id: 'speaking', text: 'Mình muốn cải thiện kỹ năng nói', icon: '🗣️' },
+  { id: 'fluent', text: ' Tôi muốn giao tiếp trôi chảy', icon: '🤩' },
+  { id: 'thinking', text: ' Mình đang suy nghĩ câu hỏi này', icon: '🤔' },
+];
 
 const DesireScreen = ({ navigation }: any) => {
+  const [selected, setSelected] = useState<string | null>(null);
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView 
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={styles.card}>
-          {/* Nút quay lại */}
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Text style={styles.backIcon}>◀️</Text>
-          </TouchableOpacity>
-          <Text style={styles.title}>Đâu là lý do chính bạn muốn học tiếng Việt?</Text>
+      <View style={styles.card}>
+        {/* Nút quay lại */}
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Text style={styles.backIcon}>◀️</Text>
+        </TouchableOpacity>
 
-          {/* Danh sách lựa chọn */}
-          <View style={styles.optionsContainer}>
-            <TouchableOpacity style={styles.option}>
-              <Text style={styles.optionText}>Giao tiếp hàng ngày</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.option}>
-              <Text style={styles.optionText}>Du lịch tại Việt Nam</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.option}>
-              <Text style={styles.optionText}>Học tập / Làm việc</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.option}>
-              <Text style={styles.optionText}>Yêu thích văn hóa Việt Nam</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.option}>
-              <Text style={styles.optionText}>Giao tiếp với gia đình / bạn bè người Việt</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.option}>
-              <Text style={styles.optionText}>Khác</Text>
-            </TouchableOpacity>
-          </View>
+        <Text style={styles.title}>Bạn muốn đạt được điều gì?</Text>
+        <Text style={styles.subtitle}>
+          Chúng mình sẽ xây dựng lộ trình học phù hợp với mục tiêu của bạn.
+        </Text>
 
-          {/* Nút Tiếp tục */}
-          <TouchableOpacity 
-            style={styles.continueButton}
-            onPress={() => navigation.navigate('Home')} // Thay bằng màn hình chính
+        {/* Danh sách lựa chọn */}
+        {desires.map((desire) => (
+          <TouchableOpacity
+            key={desire.id}
+            style={[
+              styles.option,
+              selected === desire.id && styles.selectedOption,
+            ]}
+            onPress={() => setSelected(desire.id)}
           >
-            <Text style={styles.continueText}>Hoàn thành</Text>
+            <View style={styles.left}>
+              <Text style={styles.icon}>{desire.icon}</Text>
+              <Text style={styles.optionText}>{desire.text}</Text>
+            </View>
           </TouchableOpacity>
-        </View>
-      </ScrollView>
+        ))}
+
+        {/* Nút Tiếp tục */}
+        <TouchableOpacity
+          style={[styles.continueButton, !selected && styles.disabledButton]}
+          disabled={!selected}
+          onPress={() => navigation.navigate('Reason')}
+        >
+          <Text style={styles.continueText}>Tiếp tục</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: '#2563EB' 
-  },
-  scrollContent: {
-    flexGrow: 1,
+  container: {
+    flex: 1,
+    backgroundColor: '#2563EB',
     justifyContent: 'center',
     padding: 20,
   },
-  card: { 
-    backgroundColor: 'white', 
-    borderRadius: 24, 
+  card: {
+    backgroundColor: 'white',
+    borderRadius: 24,
     padding: 24,
-    paddingBottom: 40,
   },
-  backButton: { 
-    alignSelf: 'flex-start', 
-    marginBottom: 20 
+  backButton: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
   },
-  backIcon: { 
-    fontSize: 28, 
-    color: '#64748B' 
+  backIcon: {
+    fontSize: 28,
+    color: '#64748B',
   },
-  title: { 
-    fontSize: 23, 
-    fontWeight: '700', 
-    textAlign: 'center', 
-    marginBottom: 32,
-    lineHeight: 30,
+  title: {
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 8,
+    marginTop: 30,
+    textAlign: 'center',
   },
-  optionsContainer: {
-    marginBottom: 30,
+  subtitle: {
+    fontSize: 15,
+    color: '#64748B',
+    marginBottom: 24,
+    textAlign: 'center',
   },
   option: {
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 18,
     backgroundColor: '#F8FAFC',
     borderRadius: 16,
     marginBottom: 12,
   },
-  optionText: { 
-    fontSize: 18, 
-    color: '#1E3A8A' 
+  selectedOption: {
+    backgroundColor: '#EFF6FF',
+    borderColor: '#2563EB',
+    borderWidth: 2,
+  },
+  left: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  icon: {
+    fontSize: 24,
+    marginRight: 14,
+  },
+  optionText: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#1E3A8A',
+    flex: 1,
   },
   continueButton: {
     backgroundColor: '#2563EB',
     paddingVertical: 18,
     borderRadius: 16,
+    marginTop: 20,
   },
-  continueText: { 
-    color: 'white', 
-    fontSize: 18, 
-    fontWeight: '600', 
-    textAlign: 'center' 
+  disabledButton: {
+    backgroundColor: '#94A3B8',
+  },
+  continueText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
   },
 });
 
