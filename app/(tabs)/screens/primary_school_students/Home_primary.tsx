@@ -15,7 +15,7 @@ const HomePrimary = () => {
   const features = [
     { 
       title: "Tập Đọc", 
-      desc: "Đọc truyện & hiểu nghĩa", 
+      desc: "Đọc & hiểu nghĩa", 
       emoji: "📖", 
       bgColor: "#FFF3E0" 
     },

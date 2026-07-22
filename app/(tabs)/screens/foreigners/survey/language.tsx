@@ -4,18 +4,17 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Scro
 
 const languages = [
   { flag: '🇻🇳', name: 'Tiếng Việt (VietNamese)' },
-  { flag: '🇰🇷', name: 'Tiếng Hàn (Korean)' },
+  { flag: '🇰🇷', name: 'Tiếng Hàn (한국인)' },
   { flag: '🇬🇧', name: 'Tiếng Anh (English)' },
-  { flag: '🇹🇼', name: 'Tiếng Trung - Đài Loan (Mandarin - Taiwan)' },
-  { flag: '🇸🇰', name: 'Tiếng Slovak (Slovak)' },
-  { flag: '🇺🇦', name: 'Tiếng Ukraina (Ukrainian)' },
-  { flag: '🇪🇸', name: 'Tiếng Tây Ban Nha - Châu Âu (Spanish - Europe)' },
-  { flag: '🇲🇽', name: 'Tiếng Tây Ban Nha - Mỹ Latinh (Spanish - Latin America)' },
-  { flag: '🇫🇷', name: 'Tiếng Pháp (French)' },
-  { flag: '🇩🇪', name: 'Tiếng Đức (German)' },
-  { flag: '🇮🇹', name: 'Tiếng Ý (Italian)' },
-  { flag: '🇷🇺', name: 'Tiếng Nga (Russian)' },
-  { flag: '🇯🇵', name: 'Tiếng Nhật (Japanese)' },
+  { flag: '🇹🇼', name: 'Tiếng Trung (中国人)' },
+  { flag: '🇸🇰', name: 'Tiếng Slovak (Slovenský jazyk)' },
+  { flag: '🇺🇦', name: 'Tiếng Ukraina (українська)' },
+  { flag: '🇪🇸', name: 'Tiếng Tây Ban Nha (Español)' },
+  { flag: '🇫🇷', name: 'Tiếng Pháp (Français)' },
+  { flag: '🇩🇪', name: 'Tiếng Đức (Deutsch)' },
+  { flag: '🇮🇹', name: 'Tiếng Ý (Italiano)' },
+  { flag: '🇷🇺', name: 'Tiếng Nga (Русский)' },
+  { flag: '🇯🇵', name: 'Tiếng Nhật (日本語)' },
 ];
 
 const LanguageScreen = ({ navigation }: any) => {
@@ -58,7 +57,7 @@ const LanguageScreen = ({ navigation }: any) => {
         <TouchableOpacity 
           style={[styles.continueButton, !selected && styles.disabledButton]}
           disabled={!selected}
-          onPress={() => navigation.navigate('LevelVn')}
+          onPress={() => navigation.navigate('age')}
         >
           <Text style={styles.continueText}>Tiếp tục</Text>
         </TouchableOpacity>

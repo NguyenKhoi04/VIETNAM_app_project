@@ -36,7 +36,7 @@ const AgeScreen = ({ navigation }: any) => {
         <TouchableOpacity 
           style={[styles.continueButton, !selected && styles.disabledButton]}
           disabled={!selected}
-          onPress={() => navigation.navigate('Language')}
+          onPress={() => navigation.navigate('LevelVn')}
         >
           <Text style={styles.continueText}>Tiếp tục</Text>
         </TouchableOpacity>
