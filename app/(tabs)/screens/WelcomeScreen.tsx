@@ -1,9 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, SafeAreaView, Dimensions } from 'react-native';
+import { BASE_URL } from '../../../config'; // Import BASE_URL từ config.ts
+
 
 const { width } = Dimensions.get('window');
 
 const WelcomeScreen = ({ navigation }: any) => {
+ 
+  const [serverStatus, setServerStatus] = useState<string>('Đang kiểm tra kết nối...');
+  const [isServerReady, setIsServerReady] = useState<boolean>(false);
+  // Kiểm tra kết nối tới Backend MySQL
+  useEffect(() => {
+    fetch(`${BASE_URL}/api/status`)
+      .then((res) => res.json())
+      .then((data) => {
+        setServerStatus(data.message || 'Kết nối máy chủ thành công');
+        setIsServerReady(true);
+      })
+      .catch((error) => {
+        console.error('Lỗi kết nối Backend:', error);
+        setServerStatus('Chưa kết nối được với Server Backend');
+        setIsServerReady(false);
+      });
+  }, []);
+
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
