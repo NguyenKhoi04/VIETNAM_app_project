@@ -13,6 +13,12 @@ const HomePrimary = () => {
   const classes = ['Lớp 1', 'Lớp 2', 'Lớp 3', 'Lớp 4', 'Lớp 5'];
 
   const features = [
+    {
+      title: "Phát âm, ghép vần", 
+      desc: "Luyện phát âm chuẩn", 
+      emoji: "🗣️", 
+      bgColor: "#E0F7FA"
+    },
     { 
       title: "Tập Đọc", 
       desc: "Đọc & hiểu nghĩa", 
@@ -20,22 +26,16 @@ const HomePrimary = () => {
       bgColor: "#FFF3E0" 
     },
     { 
+      title: "Luyện Viết", 
+      desc: "Viết chữ cái, viết từ, viết câu", 
+      emoji: "✏️",
+      bgColor: "#E8F5E9"
+    },
+    { 
       title: "Chính Tả", 
-      desc: "Viết đúng chính tả", 
+      desc: "Nghe và viết đúng chính tả", 
       emoji: "✍️", 
       bgColor: "#E0F2FE" 
-    },
-    { 
-      title: "Luyện Từ & Câu", 
-      desc: "Từ vựng vui nhộn", 
-      emoji: "🔤", 
-      bgColor: "#F3E8FF" 
-    },
-    { 
-      title: "Tập Làm Văn", 
-      desc: "Viết bài sáng tạo", 
-      emoji: "📝", 
-      bgColor: "#E8F5E9" 
     },
     { 
       title: "Ôn Tập", 

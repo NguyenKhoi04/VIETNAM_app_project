@@ -15,7 +15,7 @@ const SurveyStack = createNativeStackNavigator();
 const MenuSurvey = () => {
   return (
     <SurveyStack.Navigator 
-      initialRouteName="Age"
+      initialRouteName="Language"
       screenOptions={{
         headerShown: false,
         contentStyle: { backgroundColor: '#2563EB' },

@@ -48,3 +48,136 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## Tạo kết nối project app với MySQL
+
+Mô hình chuẩn bắt buộc phải qua 3 lớp: React Native (App) $\rightarrow$ Backend API (Node.js/Express) $\rightarrow$ MySQL Database.
+
+Để quản lý tất cả trong một project trên VS Code, bạn hãy tạo một thư mục con tên là backend (hoặc server) ngay bên trong project VIETNAM_APP_project.
+
+Cấu trúc thư mục dự án của bạn sẽ trông như thế này:
+VIETNAM_APP_project/
+├── app/                  <-- Mã nguồn React Native (Expo)
+├── backend/              <-- Chứa server kết nối MySQL
+│   ├── node_modules/
+│   ├── package.json
+│   └── server.js
+├── package.json          <-- Package của React Native
+└── ...
+
+## Bước 1: Tạo thư mục Backend và cài đặt thư viện
+Mở project VIETNAM_APP_project trên VS Code.
+
+Mở Terminal trong VS Code (`Ctrl + ``) và chạy lần lượt các lệnh sau:
+
+1. Tạo thư mục backend và di chuyển vào trong đó
+mkdir backend
+cd backend
+
+2. Khởi tạo package.json riêng cho backend
+npm init -y
+
+3. Cài đặt các thư viện cần thiết
+npm install express mysql2 cors
+
+## Bước 2: Tạo file server.js trong thư mục backend
+// backend/server.js
+const express = require('express');
+const mysql = require('mysql2');
+const cors = require('cors');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// 1. Cấu hình thông tin tài khoản MySQL của bạn
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',             // Tên user MySQL (mặc định là root)
+  password: '123456', // Điền mật khẩu MySQL của bạn vào đây
+  database: 'luyenviet_chinhta_vietnam'  // Điền tên database của bạn vào đây
+});
+
+// 2. Kiểm tra kết nối Database
+db.connect((err) => {
+  if (err) {
+    console.error('Lỗi kết nối MySQL:', err.message);
+    return;
+  }
+  console.log('Đã kết nối MySQL thành công!');
+});
+
+// 3. API kiểm tra server hoạt động
+app.get('/api/status', (req, res) => {
+  res.json({ message: 'Backend đang hoạt động tốt!' });
+});
+
+// 4. API mẫu lấy danh sách dữ liệu (thay 'ten_bang' bằng bảng thực tế của bạn)
+app.get('/api/data', (req, res) => {
+  const sql = 'SELECT * FROM mguoi_dung'; // Thay 'ten_bang' bằng tên bảng thực tế của bạn
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
+
+// Chạy server tại cổng 5506
+const PORT = 5506;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server backend đang chạy tại http://localhost:${PORT}`);
+});
+
+*Lưu ý nếu quên mật khẩu root hay không đăng nhập root sd cách này:
+
+Bước 1: Tắt dịch vụ MySQL đang chạy ngầm
+1.	Nhấn tổ hợp phím Windows + R, gõ services.msc rồi bấm Enter.
+2.	Trong danh sách dịch vụ hiện ra, kéo tìm dịch vụ tên là MySQL80 (hoặc MySQL).
+3.	Nhấp chuột phải vào MySQL80 $\rightarrow$ chọn Stop (Dừng).
+Bước 2: Tạo file lệnh đổi mật khẩu
+1.	Mở ổ đĩa D:\ trên máy tính của bạn.
+2.	Tạo một file văn bản mới tên là reset.txt (đường dẫn file sẽ là D:\reset.txt).
+3.	Dán đúng 1 dòng lệnh sau vào file rồi lưu lại:
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY '123456';
+
+Bước 3: Cưỡng chế nạp mật khẩu mới
+1.	Nhấn phím Windows, gõ cmd.
+2.	Nhấp chuột phải vào Command Prompt $\rightarrow$ chọn Run as administrator (Chạy bằng quyền quản trị).
+3.	Dán toàn bộ dòng lệnh sau vào CMD rồi bấm Enter:
+
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqld.exe" --defaults-file="C:\ProgramData\MySQL\MySQL Server 8.0\my.ini" --init-file="D:\reset.txt" --console
+
+
+
+
+## Bước 3: Cách chạy đồng thời Backend và React Native trên VS Code
+
+Terminal 1 (Chạy Backend):
+
+Bash
+cd backend
+node server.js
+
+(Khi thấy thông báo "Đã kết nối MySQL thành công!" là server đã sẵn sàng).
+
+Terminal 2 (Chạy Expo React Native):
+
+Nhấn vào dấu + (hoặc biểu tượng chia đôi màn hình Split Terminal) ở góc trên bên phải của bảng Terminal để mở tab thứ hai.
+
+Chạy lệnh Expo ở thư mục gốc của project:
+
+Bash
+npx expo start
+
+## Bước 4: Gọi dữ liệu từ React Native lên App
+
+/Kt wifi như sau
+1. Tạo file cấu hình API dùng chung
+
+Tạo file config.ts ở thư mục gốc (hoặc trong thư mục src/) để quản lý URL backend tập trung:
+// config.ts
+// Thay bằng IP mạng Wi-Fi của máy tính bạn (xem lại qua ipconfig trên CMD)
+export const BASE_URL = 'http://192.168.1.3:5000';
+

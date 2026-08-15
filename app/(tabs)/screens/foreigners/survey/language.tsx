@@ -57,7 +57,7 @@ const LanguageScreen = ({ navigation }: any) => {
         <TouchableOpacity 
           style={[styles.continueButton, !selected && styles.disabledButton]}
           disabled={!selected}
-          onPress={() => navigation.navigate('age')}
+          onPress={() => navigation.navigate('Age')}
         >
           <Text style={styles.continueText}>Tiếp tục</Text>
         </TouchableOpacity>
