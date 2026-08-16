@@ -1,29 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, SafeAreaView, Dimensions } from 'react-native';
-import { BASE_URL } from '../../../config'; // Import BASE_URL từ config.ts
-
+import { 
+  View, 
+  Text, 
+  TouchableOpacity, 
+  Image, 
+  StyleSheet, 
+  SafeAreaView, 
+  Dimensions 
+} from 'react-native';
 
 const { width } = Dimensions.get('window');
 
-const WelcomeScreen = ({ navigation }: any) => {
- 
-  const [serverStatus, setServerStatus] = useState<string>('Đang kiểm tra kết nối...');
-  const [isServerReady, setIsServerReady] = useState<boolean>(false);
-  // Kiểm tra kết nối tới Backend MySQL
-  useEffect(() => {
-    fetch(`${BASE_URL}/api/status`)
-      .then((res) => res.json())
-      .then((data) => {
-        setServerStatus(data.message || 'Kết nối máy chủ thành công');
-        setIsServerReady(true);
-      })
-      .catch((error) => {
-        console.error('Lỗi kết nối Backend:', error);
-        setServerStatus('Chưa kết nối được với Server Backend');
-        setIsServerReady(false);
-      });
-  }, []);
+// Link Localtunnel của bạn
+const API_STATUS_URL = 'http://localhost:5000/api/status';
 
+export default function WelcomeScreen({ navigation }: any) {
+  const [status, setStatus] = useState<string>('Đang kiểm tra kết nối Backend...');
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+
+  useEffect(() => {
+  fetch(API_STATUS_URL)
+    .then((res) => res.json())
+    .then((data) => {
+      setStatus(data.message || 'Kết nối MySQL thành công!');
+      setIsConnected(true);
+    })
+    .catch((error) => {
+      // ĐỂ XEM LỖI CỤ THỂ, BẠN CÓ THỂ PRINT CÁI error NÀY RA
+      console.error('Lỗi kết nối chi tiết:', error);
+      setStatus('Không thể kết nối đến Backend');
+      setIsConnected(false);
+    });
+}, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -31,7 +39,7 @@ const WelcomeScreen = ({ navigation }: any) => {
         {/* Illustration */}
         <View style={styles.illustrationContainer}>
           <Image 
-           source={require('../../../assets/images/welcome-illustration.png')} // Thay bằng ảnh minh họa của bạn
+            source={require('../../../assets/images/welcome-illustration.png')} 
             style={styles.illustration}
             resizeMode="contain"
           />
@@ -44,6 +52,7 @@ const WelcomeScreen = ({ navigation }: any) => {
           Cải thiện kỹ năng tiếng Việt qua các bài tập vui nhộn và hiệu quả
         </Text>
 
+        {/* Nút Đăng Nhập */}
         <TouchableOpacity 
           style={styles.primaryButton}
           onPress={() => navigation.navigate('Login')}
@@ -51,16 +60,25 @@ const WelcomeScreen = ({ navigation }: any) => {
           <Text style={styles.primaryButtonText}>Đăng Nhập</Text>
         </TouchableOpacity>
 
+        {/* Nút Đăng Ký */}
         <TouchableOpacity 
           style={styles.secondaryButton}
           onPress={() => navigation.navigate('Register')}
         >
           <Text style={styles.secondaryButtonText}>Đăng Ký</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
       </View>
+     
+      {/* Hiển thị trạng thái kết nối Database/Backend */}
+        <View style={styles.statusBadge}>
+          <Text style={[styles.statusText, { color: isConnected ? '#16a34a' : '#dc2626' }]}>
+            ● {status}
+          </Text>
+        </View>
+
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -74,54 +92,63 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   illustrationContainer: {
-    marginBottom: 40,
+    marginBottom: 24,
   },
   illustration: {
     width: width * 0.75,
-    height: 280,
+    height: 240,
   },
   title: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: '700',
     color: '#1E3A8A',
     textAlign: 'center',
-    lineHeight: 34,
+    lineHeight: 32,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#64748B',
     textAlign: 'center',
-    marginTop: 16,
-    marginBottom: 40,
-    lineHeight: 24,
+    marginTop: 12,
+    marginBottom: 20,
+    lineHeight: 22,
+  },
+  statusBadge: {
+    backgroundColor: '#EEF2F6',
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+    marginBottom: 24,
+  },
+  statusText: {
+    fontSize: 13,
+    fontWeight: '600',
   },
   primaryButton: {
     backgroundColor: '#2563EB',
     width: '100%',
-    paddingVertical: 16,
+    paddingVertical: 15,
     borderRadius: 12,
     marginBottom: 12,
   },
   primaryButtonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '600',
     textAlign: 'center',
   },
   secondaryButton: {
     backgroundColor: 'transparent',
     width: '100%',
-    paddingVertical: 16,
+    paddingVertical: 15,
     borderRadius: 12,
     borderWidth: 2,
     borderColor: '#2563EB',
   },
   secondaryButtonText: {
     color: '#2563EB',
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '600',
     textAlign: 'center',
   },
 });
-
-export default WelcomeScreen;

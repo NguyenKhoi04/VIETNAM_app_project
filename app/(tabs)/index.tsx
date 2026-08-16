@@ -1,6 +1,7 @@
 // App.tsx (Main entry - Navigation setup)
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import WelcomeScreen from "./screens/WelcomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
@@ -12,16 +13,18 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <Stack.Navigator
-      initialRouteName="Welcome"
-      screenOptions={{ headerShown: false }}
-    >
-      <Stack.Screen name="Welcome" component={WelcomeScreen} />
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Register" component={RegisterScreen} />
-      <Stack.Screen name="RoleSelection" component={RoleSelectionScreen} />
-      <Stack.Screen name="MenuSurvey" component={MenuSurvey} />
-      <Stack.Screen name="Home_primary" component={HomePrimary} />
-    </Stack.Navigator>
+   
+      <Stack.Navigator
+        initialRouteName="Welcome"
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="RoleSelection" component={RoleSelectionScreen} />
+        <Stack.Screen name="MenuSurvey" component={MenuSurvey} />
+        <Stack.Screen name="Home_primary" component={HomePrimary} />
+      </Stack.Navigator>
+   
   );
 }

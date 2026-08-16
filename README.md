@@ -154,7 +154,7 @@ Bước 3: Cưỡng chế nạp mật khẩu mới
 
 ## Bước 3: Cách chạy đồng thời Backend và React Native trên VS Code
 
-Terminal 1 (Chạy Backend):
+Terminal 1 (Chạy Backend): (bắt buộc mở tab này và giữ nguyên tab/ trang đó)
 
 Bash
 cd backend
@@ -173,11 +173,70 @@ npx expo start
 
 ## Bước 4: Gọi dữ liệu từ React Native lên App
 
-/Kt wifi như sau
-1. Tạo file cấu hình API dùng chung
+Biến Backend thành link Online qua Localtunnel (Dành cho điện thoại thật)
+Công cụ này tạo một đường link internet (HTTPS) công khai trỏ thẳng vào cổng 5000 của máy tính. Điện thoại dù bật 4G hay bất kỳ mạng nào cũng gọi được dữ liệu từ MySQL mà không bị tường lửa chặn.
 
-Tạo file config.ts ở thư mục gốc (hoặc trong thư mục src/) để quản lý URL backend tập trung:
-// config.ts
-// Thay bằng IP mạng Wi-Fi của máy tính bạn (xem lại qua ipconfig trên CMD)
-export const BASE_URL = 'http://192.168.1.3:5000';
+Mở cổng Backend ra Internet:
+Mở thêm một cửa sổ Terminal mới trên VS Code và chạy lệnh:
 
+Bash
+npx localtunnel --port 5000
+Terminal sẽ trả về một đường link công khai, ví dụ:
+
+Plaintext
+
+your url is: https://neat-kings-cover.loca.lt
+
+
+## LỖI KHÔNG MỞ PROJECT ĐƯỢC
+Lỗi java.io.IOException: Failed to download remote update xuất hiện khi app Expo Go trên điện thoại không thể tải được gói mã nguồn JavaScript (Metro Bundler) từ máy tính do bị tường lửa chặn hoặc router Wi-Fi chặn kết nối nội bộ giữa 2 thiết bị.
+
+Dưới đây là các bước xử lý triệt để nhất:
+
+Giải pháp 1: Sử dụng chế độ Tunnel (Khuyên dùng - bỏ qua mọi rào cản Wi-Fi và Firewall)
+
+Chế độ Tunnel sẽ tạo một đường truyền qua Internet để máy tính và điện thoại kết nối với nhau mà không phụ thuộc vào việc chung mạng LAN hay bị router chặn.
+
+Tại Terminal đang chạy Expo, nhấn Ctrl + C để dừng.
+
+Chạy lệnh:
+
+npx expo start --tunnel
+
+hoặc
+
+Cách 2: Ép toàn bộ giao thông qua USB (Bỏ qua Wi-Fi)
+1.Thiết lập ADB Reverse cho cả Expo Bundler (cổng 8081): Mở terminal PowerShell thứ tư và chạy lệnh (thay bằng đường dẫn tuyệt đối đến adb.exe nếu cần):
+
+& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" reverse tcp:8081 tcp:8081
+
+2.Khởi động Expo Bundler ràng buộc với Localhost:
+
+npx expo start --no-dev --clear --minify --host localhost
+
+Lưu ý: Nếu terminal hỏi Do you want to install @expo/ngrok?, bạn gõ y rồi bấm Enter.
+
+Quét lại mã QR mới xuất hiện trên màn hình bằng Expo Go.
+
+
+## Thực hiện lần lượt các bước sau để chạy lệnh adb reverse thành công:
+Bước 1: Bật gỡ lỗi USB trên điện thoại
+Bước 1: Bật gỡ lỗi USB trên điện thoại
+1.	Vào Cài đặt $\rightarrow$ Thông tin điện thoại $\rightarrow$ bấm 7 lần vào dòng Số bản dựng (Build Number) để mở Chế độ nhà phát triển.
+2.	Quay lại menu Cài đặt, vào Tùy chọn cho nhà phát triển (Developer Options) $\rightarrow$ bật Gỡ lỗi USB (USB Debugging).
+3.	Cắm cáp USB nối điện thoại với máy tính, trên màn hình điện thoại chọn chế độ Truyền tệp (File Transfer), sau đó chọn Cho phép / Luôn cho phép gỡ lỗi USB nếu có hộp thoại hỏi.
+Bước 2: Tìm và chạy trực tiếp adb.exe bằng PowerShell
+Mở một tab PowerShell mới trong VS Code (hoặc Windows PowerShell) và chạy lệnh sau để kiểm tra xem file adb.exe mặc định có sẵn trên máy chưa:
+
+& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" devices
+
+Nếu kết quả hiển thị dạng:
+
+List of devices attached
+xxxxxxxxx    device
+
+Máy tính đã nhận điện thoại. Chạy tiếp lệnh đảo cổng:
+
+& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" reverse tcp:5000 tcp:5000
+
+(Lệnh in ra 5000 là xong).

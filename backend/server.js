@@ -40,8 +40,8 @@ app.get('/api/data', (req, res) => {
   });
 });
 
-// Chạy server tại cổng 5506
-const PORT = 5506;
+// Chạy server tại cổng 5000
+const PORT = 5000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server backend đang chạy tại http://localhost:${PORT}`);
 });
