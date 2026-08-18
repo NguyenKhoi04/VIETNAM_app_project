@@ -11,27 +11,36 @@ import {
 
 const { width } = Dimensions.get('window');
 
-// Link Localtunnel của bạn
+// Link API Backend
 const API_STATUS_URL = 'http://localhost:5000/api/status';
 
 export default function WelcomeScreen({ navigation }: any) {
   const [status, setStatus] = useState<string>('Đang kiểm tra kết nối Backend...');
   const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [showStatus, setShowStatus] = useState<boolean>(true);
 
   useEffect(() => {
-  fetch(API_STATUS_URL)
-    .then((res) => res.json())
-    .then((data) => {
-      setStatus(data.message || 'Kết nối MySQL thành công!');
-      setIsConnected(true);
-    })
-    .catch((error) => {
-      // ĐỂ XEM LỖI CỤ THỂ, BẠN CÓ THỂ PRINT CÁI error NÀY RA
-      console.error('Lỗi kết nối chi tiết:', error);
-      setStatus('Không thể kết nối đến Backend');
-      setIsConnected(false);
-    });
-}, []);
+    // 1. Gọi API kiểm tra trạng thái
+    fetch(API_STATUS_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        setStatus(data.message || 'Kết nối MySQL thành công!');
+        setIsConnected(true);
+      })
+      .catch((error) => {
+        console.error('Lỗi kết nối chi tiết:', error);
+        setStatus('Không thể kết nối đến Backend');
+        setIsConnected(false);
+      });
+
+    // 2. Đặt bộ đếm tự ẩn statusBadge sau 15 giây
+    const timer = setTimeout(() => {
+      setShowStatus(false);
+    }, 15000);
+
+    // Hủy timer khi rời màn hình để tránh memory leak
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -69,12 +78,14 @@ export default function WelcomeScreen({ navigation }: any) {
         </TouchableOpacity> 
       </View>
      
-      {/* Hiển thị trạng thái kết nối Database/Backend */}
+      {/* Hiển thị trạng thái kết nối Database/Backend (Tự ẩn sau 10s) */}
+      {showStatus && (
         <View style={styles.statusBadge}>
           <Text style={[styles.statusText, { color: isConnected ? '#16a34a' : '#dc2626' }]}>
             ● {status}
           </Text>
         </View>
+      )}
 
     </SafeAreaView>
   );
@@ -114,15 +125,19 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   statusBadge: {
-    backgroundColor: '#EEF2F6',
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 20,
-    marginBottom: 24,
+    backgroundColor: '#EFEBE9',
+    paddingVertical: 8,
+    paddingHorizontal: 18,
+    borderRadius: 999,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 80,
   },
   statusText: {
     fontSize: 13,
     fontWeight: '600',
+    textAlign: 'center',
   },
   primaryButton: {
     backgroundColor: '#2563EB',
