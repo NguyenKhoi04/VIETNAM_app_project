@@ -1,50 +1,114 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert,} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
+// LƯU Ý ĐỔI IP:
+// - Máy ảo Android: dùng 'http://10.0.2.2:5000/api/login'
+// - Máy thật (qua Wi-Fi): dùng 'http://<IP_MAY_TINH>:5000/api/login' (ví dụ: 'http://192.168.1.15:5000/api/login')
+//Hoặc localhost:5000/api/login
+// - Máy ảo iOS: dùng 'http://localhost:5000/api/login'
 
+const API_LOGIN_URL = 'http://192.168.102.12:5000/api/login';
 const LoginScreen = ({ navigation }: any) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [ten_dang_nhap, setusername] = useState('');
+  const [mat_khau, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+const handleLogin = async () => {
+  // 1. Kiểm tra dữ liệu đầu vào trước
+  if (!ten_dang_nhap.trim() || !mat_khau.trim()) {
+    Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu');
+    return; // Dừng lại, không gọi API nếu để trống
+  }
 
-  const handleLogin = () => {
-    if (email && password) {
-      //Alert.alert('Đăng nhập', 'Chào mừng bạn đến với ứng dụng!');
-      //CHUYỂN VÀO RoleSelectionScreen
-      navigation.replace('RoleSelection');
-      // TODO: Xử lý đăng nhập thật
-    } else {
-      Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ thông tin');
+  setLoading(true);
+
+  try {
+    const response = await fetch(API_LOGIN_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: ten_dang_nhap.trim(),
+        password: mat_khau.trim(),
+      }),
+    });
+
+    // 2. Đọc phản hồi dưới dạng text để tránh lỗi crash nếu server trả về HTML
+    const textData = await response.text();
+    let data;
+    try {
+      data = JSON.parse(textData);
+    } catch {
+      console.log('Server trả về HTML lỗi:', textData);
+      Alert.alert('Lỗi Server', 'Đường dẫn API sai hoặc server gặp sự cố.');
+      return;
     }
-  };
+
+    // 3. Xử lý kết quả từ server trả về
+    if (response.ok) {
+    ( [
+        {
+          text: 'OK',
+          onPress: () => navigation.replace('RoleSelection'),
+        },
+      ]);
+    } else {
+      Alert.alert('Thất bại', data.message || 'Sai thông tin đăng nhập');
+    }
+  } catch (error: any) {
+    console.log('Chi tiết lỗi:', error);
+    Alert.alert('Lỗi kết nối', error.message || 'Không thể kết nối đến server');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.header}>Đăng Nhập</Text>
-        <Text style={styles.welcomeText}>Chào mừng bạn trở lại!{'\n'}Hãy tiếp tục luyện tập nhé!</Text>
+        <Text style={styles.welcomeText}>
+          Chào mừng bạn trở lại!{'\n'}Hãy tiếp tục luyện tập nhé!
+        </Text>
 
+        {/* Ô Tên đăng nhập */}
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Email</Text>
+          <Text style={styles.label}>Tên đăng nhập</Text>
           <TextInput
             style={styles.input}
-            placeholder="Nhập email của bạn"
-            value={email}
-            onChangeText={setEmail}
+            placeholder="Nhập tên đăng nhập"
+            value={ten_dang_nhap}
+            onChangeText={setusername}
             keyboardType="email-address"
             autoCapitalize="none"
           />
         </View>
 
+        {/* Ô Mật khẩu */}
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Mật khẩu</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Nhập mật khẩu"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+          <View style={styles.passwordWrapper}>
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="Nhập mật khẩu"
+              value={mat_khau}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+            />
+            <TouchableOpacity
+              style={styles.showPasswordButton}
+              onPress={() => setShowPassword(!showPassword)}
+            >
+              <Ionicons
+                name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                size={22}
+                color="#64748B"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <TouchableOpacity style={styles.forgotPassword}>
@@ -59,10 +123,10 @@ const LoginScreen = ({ navigation }: any) => {
 
         <View style={styles.socialButtons}>
           <TouchableOpacity style={styles.socialButton}>
-            <Text style={styles.socialIcon_google}>G</Text>
+            <Text style={styles.socialIconGoogle}>G</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.socialButton}>
-            <Text style={styles.socialIcon_facebook}>f</Text>
+            <Text style={styles.socialIconFacebook}>f</Text>
           </TouchableOpacity>
         </View>
 
@@ -108,13 +172,30 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   input: {
-    backgroundColor: 'white',
     borderWidth: 1,
     borderColor: '#E2E8F0',
-    borderRadius: 12,
+    borderRadius: 10,
+    backgroundColor: '#fff',
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 12,
     fontSize: 16,
+  },
+  passwordWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    borderRadius: 10,
+    backgroundColor: '#fff',
+  },
+  passwordInput: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 16,
+  },
+  showPasswordButton: {
+    paddingHorizontal: 12,
   },
   forgotPassword: {
     alignSelf: 'flex-end',
@@ -157,12 +238,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  socialIcon_google: {
+  socialIconGoogle: {
     fontSize: 24,
     color: '#DB4437',
     fontWeight: 'bold',
   },
-  socialIcon_facebook: {
+  socialIconFacebook: {
     fontSize: 24,
     color: '#4267B2',
     fontWeight: 'bold',

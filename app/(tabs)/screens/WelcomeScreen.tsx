@@ -12,7 +12,14 @@ import {
 const { width } = Dimensions.get('window');
 
 // Link API Backend
-const API_STATUS_URL = 'http://localhost:5000/api/status';
+
+// LƯU Ý ĐỔI IP:
+// - Máy ảo Android: dùng 'http://10.0.2.2:5000/api/login'
+// - Máy thật (qua Wi-Fi): dùng 'http://<IP_MAY_TINH>:5000/api/login' (ví dụ: 'http://192.168.1.15:5000/api/login')
+//Hoặc localhost:5000/api/login
+// - Máy ảo iOS: dùng 'http://localhost:5000/api/login'
+
+const API_STATUS_URL = 'http://192.168.102.12:5000/api/status';
 
 export default function WelcomeScreen({ navigation }: any) {
   const [status, setStatus] = useState<string>('Đang kiểm tra kết nối Backend...');
