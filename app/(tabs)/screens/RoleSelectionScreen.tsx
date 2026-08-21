@@ -1,9 +1,27 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Image, Dimensions, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Image, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
-const RoleSelectionScreen = ({ navigation }: any) => {
+const API_roles_URL = 'http://192.168.102.12:5000/api/roles';
+
+const RoleSelectionScreen = ({ navigation, route }: any) => {
+  const [doi_tuong, setRoles] = useState<string>('');
+  
+  // Nhận họ tên từ Login truyền sang
+  const currentName = route?.params?.ho_ten || '';
+
+  const handleSelectRole = (selectedRole: string, targetScreen: string) => {
+    setRoles(selectedRole);
+
+    // Chuyển tiếp đúng họ tên sang HomePrimary
+    navigation.navigate(targetScreen, { 
+      doi_tuong: selectedRole, 
+      ho_ten: currentName,
+      user: route?.params?.user || null, // Truyền đối tượng user nếu có
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -22,18 +40,15 @@ const RoleSelectionScreen = ({ navigation }: any) => {
           Chào mừng bạn đến với{' '}
           <Text style={styles.appName}>Luyện Viết Chính Tả và Tập Đọc Tiếng Việt</Text>
         </Text>
-        <Text style={styles.subtitle}>
-         Bạn muốn học tiếng Việt với vai trò nào? </Text>
-         <Text style={styles.subtitle_bold}>Hãy chọn một trong các vai trò dưới đây để bắt đầu trải nghiệm.</Text>
-        
+        <Text style={styles.subtitle}>Bạn muốn học tiếng Việt với vai trò nào?</Text>
+        <Text style={styles.subtitle_bold}>Hãy chọn một trong các vai trò dưới đây để bắt đầu trải nghiệm.</Text>
 
-        {/* 3 Thẻ vai trò - Bố cục 2 dòng */}
         <View style={styles.rolesContainer}>
           {/* Dòng 1: 2 thẻ */}
           <View style={styles.row}>
             <TouchableOpacity 
               style={[styles.roleCard, { backgroundColor: '#EFF6FF' }]}
-              onPress={() => { Alert.alert('Đã chọn', 'Học sinh tiểu học'); navigation.navigate('Home_primary'); }}
+              onPress={() => handleSelectRole('hoc_sinh_tieu_hoc', 'Home_primary')}
             >
               <View style={styles.iconContainer}>
                 <Text style={styles.icon}>👨‍🎓</Text>
@@ -45,7 +60,7 @@ const RoleSelectionScreen = ({ navigation }: any) => {
 
             <TouchableOpacity 
               style={[styles.roleCard, { backgroundColor: '#F0FDF4' }]}
-              onPress={() => { Alert.alert('Đã chọn', 'Người nước ngoài'); navigation.navigate('MenuSurvey'); }}
+              onPress={() => handleSelectRole('nguoi_nuoc_ngoai', 'MenuSurvey')}
             >
               <View style={styles.iconContainer}>
                 <Text style={styles.icon}>🌍</Text>
@@ -57,7 +72,7 @@ const RoleSelectionScreen = ({ navigation }: any) => {
           </View>
 
           {/* Dòng 2: 1 thẻ căn giữa */}
-          <View style={styles.row}>
+          {/* <View style={styles.row}>
             <TouchableOpacity 
               style={[styles.roleCard, { backgroundColor: '#F5F3FF' }]}
               onPress={() => { Alert.alert('Đã chọn', 'Giáo viên') }}
@@ -69,7 +84,7 @@ const RoleSelectionScreen = ({ navigation }: any) => {
               <Text style={styles.roleTitle_small}>Teachers</Text>
               <View style={[styles.bottomBar, { backgroundColor: '#8B5CF6' }]} />
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </View>
     </SafeAreaView>

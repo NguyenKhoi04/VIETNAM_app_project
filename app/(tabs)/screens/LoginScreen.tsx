@@ -16,10 +16,10 @@ const LoginScreen = ({ navigation }: any) => {
   const [loading, setLoading] = useState(false);
 
 const handleLogin = async () => {
-  // 1. Kiểm tra dữ liệu đầu vào trước
+  
   if (!ten_dang_nhap.trim() || !mat_khau.trim()) {
     Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu');
-    return; // Dừng lại, không gọi API nếu để trống
+    return;
   }
 
   setLoading(true);
@@ -49,21 +49,39 @@ const handleLogin = async () => {
 
     // 3. Xử lý kết quả từ server trả về
     if (response.ok) {
-    ( [
+      // Lấy đúng họ tên trả về từ server
+      const userFullName = data.user?.ho_ten || data.ho_ten || ten_dang_nhap.trim();
+
+      Alert.alert('Thành công', data.message || 'Đăng nhập thành công', [
         {
           text: 'OK',
-          onPress: () => navigation.replace('RoleSelection'),
+          onPress: () =>
+            navigation.replace('RoleSelection', {
+              ho_ten: userFullName || ten_dang_nhap.trim() || 'Chưa có tên', // Sử dụng họ tên từ server hoặc tên đăng nhập nếu không có
+              user: data.user || null,
+            }),
         },
       ]);
-    } else {
+
+//       console.log('=== PARSED DATA ===');
+// console.log(JSON.stringify(data, null, 2));
+
+// console.log('data.user?.ho_ten =', data.user?.ho_ten);
+// console.log('data.ho_ten =', data.ho_ten);
+
+    } 
+    
+    else {
       Alert.alert('Thất bại', data.message || 'Sai thông tin đăng nhập');
     }
+
   } catch (error: any) {
-    console.log('Chi tiết lỗi:', error);
     Alert.alert('Lỗi kết nối', error.message || 'Không thể kết nối đến server');
   } finally {
     setLoading(false);
   }
+
+  
 };
 
   return (

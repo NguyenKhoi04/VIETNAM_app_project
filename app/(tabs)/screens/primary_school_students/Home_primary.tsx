@@ -1,61 +1,52 @@
-//Trang chủ cho học sinh tiểu học
-// Home_primary.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
-  View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Dimensions 
+  View, 
+  Text, 
+  TouchableOpacity, 
+  StyleSheet, 
+  SafeAreaView, 
+  ScrollView, 
+  Dimensions, 
+  Alert 
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
+const API_USERINFO_URL = 'http://192.168.102.12:5000/api/user-info';
 
-const HomePrimary = () => {
+const HomePrimary = ({ navigation, route }: any) => {
   const [selectedClass, setSelectedClass] = useState('Lớp 1');
+  const [name, setName] = useState<string>(route?.params?.ho_ten || '');
 
   const classes = ['Lớp 1', 'Lớp 2', 'Lớp 3', 'Lớp 4', 'Lớp 5'];
 
   const features = [
-    {
-      title: "Phát âm, ghép vần", 
-      desc: "Luyện phát âm chuẩn", 
-      emoji: "🗣️", 
-      bgColor: "#E0F7FA"
-    },
-    { 
-      title: "Tập Đọc", 
-      desc: "Đọc & hiểu nghĩa", 
-      emoji: "📖", 
-      bgColor: "#FFF3E0" 
-    },
-    { 
-      title: "Luyện Viết", 
-      desc: "Viết chữ cái, viết từ, viết câu", 
-      emoji: "✏️",
-      bgColor: "#E8F5E9"
-    },
-    { 
-      title: "Chính Tả", 
-      desc: "Nghe và viết đúng chính tả", 
-      emoji: "✍️", 
-      bgColor: "#E0F2FE" 
-    },
-    { 
-      title: "Ôn Tập", 
-      desc: "Ôn lại kiến thức đã học", 
-      emoji: "📚",
-      bgColor: "#CCCCFF"}
+    { title: "Phát âm, ghép vần", desc: "Luyện phát âm chuẩn", emoji: "🗣️", bgColor: "#E0F7FA" },
+    { title: "Tập Đọc", desc: "Đọc & hiểu nghĩa", emoji: "📖", bgColor: "#FFF3E0" },
+    { title: "Luyện Viết", desc: "Viết chữ cái, viết từ, viết câu", emoji: "✏️", bgColor: "#E8F5E9" },
+    { title: "Chính Tả", desc: "Nghe và viết đúng chính tả", emoji: "✍️", bgColor: "#E0F2FE" },
+    { title: "Ôn Tập", desc: "Ôn lại kiến thức đã học", emoji: "📚", bgColor: "#CCCCFF" }
   ];
+
+  useEffect(() => {
+    if (route?.params?.ho_ten) {
+      setName(route.params.ho_ten);
+    }
+  }, [route?.params?.ho_ten]);
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Chào con đang học {selectedClass}! 👋</Text>
+        <Text style={styles.headerTitle}>
+          Chào {name ? `con ${name}` : 'con'} đang học {selectedClass}! 👋
+        </Text>
         <Text style={styles.headerSubtitle}>Hôm nay con muốn luyện kỹ năng gì nào?</Text>
       </View>
 
             {/* Chọn Lớp - Hiển thị 2 hàng */}
       <View style={styles.classContainer}>
         <View style={styles.classGrid}>
-          {classes.map((cls, index) => (
+          {classes.map((cls) => (
             <TouchableOpacity
               key={cls}
               style={[
@@ -84,7 +75,7 @@ const HomePrimary = () => {
             <TouchableOpacity 
               key={index} 
               style={[styles.featureCard, { backgroundColor: feature.bgColor }]}
-              onPress={() => alert(`Đang mở: ${feature.title}`)}
+              onPress={() => Alert.alert('Thông báo', `Đang mở: ${feature.title}`)}
               activeOpacity={0.8}
             >
               <View style={styles.emojiContainer}>
@@ -133,10 +124,9 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingBottom: 20,
   },
-  headerTitle: { fontSize: 28, fontWeight: '700', color: 'white' },
-  headerSubtitle: { fontSize: 16, color: '#BAE6FD', marginTop: 4 },
-
-    classContainer: {
+  headerTitle: { fontSize: 24, fontWeight: '700', color: 'white' },
+  headerSubtitle: { fontSize: 15, color: '#BAE6FD', marginTop: 4 },
+  classContainer: {
     backgroundColor: 'white',
     paddingVertical: 16,
     paddingHorizontal: 20,
@@ -150,18 +140,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   classButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 11,
+    paddingHorizontal: 20,
+    paddingVertical: 9,
     borderRadius: 30,
     backgroundColor: '#F1F5F9',
-    minWidth: 80,
+    minWidth: 75,
     alignItems: 'center',
   },
   classButtonActive: {
     backgroundColor: '#2563EB',
   },
   classText: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
     color: '#64748B',
   },
@@ -172,10 +162,10 @@ const styles = StyleSheet.create({
   mainContent: { flex: 1 },
   scrollContent: { padding: 20, paddingBottom: 100 },
   sectionTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '700',
     color: '#1E40AF',
-    marginBottom: 20,
+    marginBottom: 18,
   },
 
   /* Grid cải tiến - đẹp và vừa màn hình */
@@ -186,50 +176,50 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   featureCard: {
-    width: (width - 56) / 2,     // Vừa khít 2 cột
-    aspectRatio: 1,              // Làm thẻ vuông đẹp
+    width: (width - 56) / 2,
+    aspectRatio: 1,
     borderRadius: 24,
-    padding: 20,
+    padding: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 5,
+    elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
   },
   emojiContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.08,
   },
-  featureEmoji: { fontSize: 42 },
+  featureEmoji: { fontSize: 34 },
   featureTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: '#1E3A8A',
     textAlign: 'center',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   featureDesc: {
-    fontSize: 13.5,
+    fontSize: 12.5,
     color: '#64748B',
     textAlign: 'center',
-    lineHeight: 18,
+    lineHeight: 16,
   },
 
     /* Footer */
   footer: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    paddingVertical: 12,
+    paddingVertical: 10,
     paddingHorizontal: 10,
     borderTopWidth: 1,
     borderTopColor: '#E2E8F0',
@@ -245,22 +235,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    paddingVertical: 6,
+    paddingVertical: 4,
   },
-  footerIcon: {
-    fontSize: 26,
-    marginBottom: 4,
-  },
-  footerText: {
-    fontSize: 13,
-    color: '#64748B',
-    fontWeight: '500',
-  },
-  footerTextActive: {
-    fontSize: 13,
-    color: '#2563EB',
-    fontWeight: '700',
-  },
+  footerIcon: { fontSize: 22, marginBottom: 2 },
+  footerText: { fontSize: 12, color: '#64748B', fontWeight: '500' },
+  footerTextActive: { fontSize: 12, color: '#2563EB', fontWeight: '700' },
 });
 
 export default HomePrimary;

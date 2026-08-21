@@ -50,6 +50,8 @@ app.post('/api/login', (req, res) => {
         user: {
           id: results[0].id,
           ten_dang_nhap: results[0].ten_dang_nhap,
+          ho_ten: results[0].ho_ten,          // ← quan trọng
+          doi_tuong: results[0].doi_tuong,
         },
       });
     } else {
@@ -58,7 +60,61 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-// 5. API lấy danh sách người dùng
+//6. API đăng ký
+app.post('/api/register', (req, res) => {
+  const { ten_dang_nhap, mat_khau } = req.body;
+
+  // Đã sửa 'mguoi_dung' thành 'nguoi_dung'
+  const sql = 'INSERT INTO nguoi_dung (ten_dang_nhap, mat_khau) VALUES (?, ?)';
+  db.query(sql, [ten_dang_nhap, mat_khau], (err, results) => {
+    if (err) {
+      console.error('Lỗi SQL chi tiết:', err);
+      return res.status(500).json({ message: err.message || 'Lỗi truy vấn server' });
+    }
+    return res.status(200).json({ message: 'Đăng ký thành công!' });
+  });
+});
+
+// 7. API lấy vai trò người dùng
+app.get('/api/roles', (req, res) => {
+  // Đã sửa 'mguoi_dung' thành 'nguoi_dung'
+  const sql = 'SELECT DISTINCT doi_tuong FROM nguoi_dung';
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
+
+// 8.API lấy thông tin người dùng (tìm theo ten_dang_nhap HOẶC ho_ten)
+// Đảm bảo route này tồn tại trong backend của bạn
+app.get('/api/user-info/:identifier', (req, res) => {
+  const { identifier } = req.params;
+
+  const sql = `
+    SELECT id, ho_ten, ten_dang_nhap, doi_tuong 
+    FROM nguoi_dung 
+    WHERE ten_dang_nhap = ? OR ho_ten = ? 
+    LIMIT 1
+  `;
+
+  db.query(sql, [identifier, identifier], (err, results) => {
+    if (err) {
+      console.error('Lỗi SQL:', err);
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Không tìm thấy người dùng!' });
+    }
+
+    // Trả về JSON chuẩn
+    return res.json(results[0]);
+  });
+});
+
+// API lấy danh sách người dùng
 app.get('/api/data', (req, res) => {
   // Đã sửa 'mguoi_dung' thành 'nguoi_dung'
   const sql = 'SELECT id, ten_dang_nhap FROM nguoi_dung';
