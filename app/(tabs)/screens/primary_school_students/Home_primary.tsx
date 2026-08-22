@@ -11,13 +11,23 @@ import {
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
-const API_USERINFO_URL = 'http://192.168.102.12:5000/api/user-info';
+//const API_USERINFO_URL = 'http://192.168.102.12:5000/api/user-info';
+
+const API_USERINFO_URL = 'http://192.168.1.147:5000/api/user-info';
+
+interface ClassInfo {
+  lop: string;
+}
 
 const HomePrimary = ({ navigation, route }: any) => {
-  const [selectedClass, setSelectedClass] = useState('Lớp 1');
+  //const [selectedClass, setSelectedClass] = useState('Lớp 1');
+  
   const [name, setName] = useState<string>(route?.params?.ho_ten || '');
 
-  const classes = ['Lớp 1', 'Lớp 2', 'Lớp 3', 'Lớp 4', 'Lớp 5'];
+  const [classes, setClasses] = useState<ClassInfo[]>([]);
+  const [selectedClass, setSelectedClass] = useState<string>('');
+
+  //const classes = ['Lớp 1', 'Lớp 2', 'Lớp 3', 'Lớp 4', 'Lớp 5'];
 
   const features = [
     { title: "Phát âm, ghép vần", desc: "Luyện phát âm chuẩn", emoji: "🗣️", bgColor: "#E0F7FA" },
@@ -31,6 +41,31 @@ const HomePrimary = ({ navigation, route }: any) => {
     if (route?.params?.ho_ten) {
       setName(route.params.ho_ten);
     }
+
+
+   const fetchClasses = async () => {
+    try {
+      const response = await fetch('http://192.168.1.147:5000/api/classes');
+      const data = await response.json();
+      
+      // Kiểm tra nếu API trả về đúng định dạng mảng
+      if (Array.isArray(data)) {
+        setClasses(data);
+        if (data.length > 0) {
+          setSelectedClass(`Lớp ${data[0].lop}`);
+        }
+      } else {
+        console.error('Dữ liệu API không phải là mảng (có thể backend báo lỗi):', data);
+        setClasses([]);
+      }
+    } catch (error) {
+      console.error('Lỗi kết nối tới Server:', error);
+      setClasses([]);
+    }
+  };
+
+  fetchClasses();
+
   }, [route?.params?.ho_ten]);
 
   return (
@@ -46,20 +81,20 @@ const HomePrimary = ({ navigation, route }: any) => {
             {/* Chọn Lớp - Hiển thị 2 hàng */}
       <View style={styles.classContainer}>
         <View style={styles.classGrid}>
-          {classes.map((cls) => (
+          {Array.isArray(classes) && classes.map((cls, index) => (
             <TouchableOpacity
-              key={cls}
+              key={cls.lop ?? index} // Dùng cls.lop làm key
               style={[
                 styles.classButton,
-                selectedClass === cls && styles.classButtonActive
+                selectedClass === `Lớp ${cls.lop}` && styles.classButtonActive
               ]}
-              onPress={() => setSelectedClass(cls)}
+              onPress={() => setSelectedClass(`Lớp ${cls.lop}`)}
             >
               <Text style={[
                 styles.classText,
-                selectedClass === cls && styles.classTextActive
+                selectedClass === `Lớp ${cls.lop}` && styles.classTextActive
               ]}>
-                {cls}
+                {`Lớp ${cls.lop}`}
               </Text>
             </TouchableOpacity>
           ))}

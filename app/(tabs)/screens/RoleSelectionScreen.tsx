@@ -3,7 +3,9 @@ import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Image, Dimensio
 
 const { width } = Dimensions.get('window');
 
-const API_roles_URL = 'http://192.168.102.12:5000/api/roles';
+//const API_roles_URL = 'http://192.168.102.12:5000/api/roles';
+
+const API_roles_URL = 'http://192.168.1.147:5000/api/roles';
 
 const RoleSelectionScreen = ({ navigation, route }: any) => {
   const [doi_tuong, setRoles] = useState<string>('');

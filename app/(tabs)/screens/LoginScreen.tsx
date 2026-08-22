@@ -8,7 +8,10 @@ import { Ionicons } from '@expo/vector-icons';
 //Hoặc localhost:5000/api/login
 // - Máy ảo iOS: dùng 'http://localhost:5000/api/login'
 
-const API_LOGIN_URL = 'http://192.168.102.12:5000/api/login';
+//const API_LOGIN_URL = 'http://192.168.102.12:5000/api/login';
+const API_LOGIN_URL = 'http://192.168.1.147:5000/api/login';
+
+
 const LoginScreen = ({ navigation }: any) => {
   const [ten_dang_nhap, setusername] = useState('');
   const [mat_khau, setPassword] = useState('');

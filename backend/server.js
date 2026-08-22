@@ -114,6 +114,21 @@ app.get('/api/user-info/:identifier', (req, res) => {
   });
 });
 
+// 9. API lấy tên lớp trong bảng chuong_trinh
+app.get('/api/classes', (req, res) => {
+  // Dùng DISTINCT để tránh lặp lại các dòng có cùng lớp (1, 2, 3)
+  const sql = 'SELECT DISTINCT lop FROM chuong_trinh WHERE lop IN (1, 2, 3) ORDER BY lop ASC';
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Lỗi SQL:', err);
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
+
+
 // API lấy danh sách người dùng
 app.get('/api/data', (req, res) => {
   // Đã sửa 'mguoi_dung' thành 'nguoi_dung'

@@ -19,8 +19,9 @@ const { width } = Dimensions.get('window');
 //Hoặc localhost:5000/api/login
 // - Máy ảo iOS: dùng 'http://localhost:5000/api/login'
 
-const API_STATUS_URL = 'http://192.168.102.12:5000/api/status';
+// const API_STATUS_URL = 'http://192.168.102.12:5000/api/status';
 
+const API_STATUS_URL = 'http://192.168.1.147:5000/api/status';
 export default function WelcomeScreen({ navigation }: any) {
   const [status, setStatus] = useState<string>('Đang kiểm tra kết nối Backend...');
   const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -43,7 +44,7 @@ export default function WelcomeScreen({ navigation }: any) {
     // 2. Đặt bộ đếm tự ẩn statusBadge sau 15 giây
     const timer = setTimeout(() => {
       setShowStatus(false);
-    }, 15000);
+    }, 20000);
 
     // Hủy timer khi rời màn hình để tránh memory leak
     return () => clearTimeout(timer);
