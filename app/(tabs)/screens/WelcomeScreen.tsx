@@ -21,7 +21,7 @@ const { width } = Dimensions.get('window');
 
 // const API_STATUS_URL = 'http://192.168.102.12:5000/api/status';
 
-const API_STATUS_URL = 'http://192.168.1.147:5000/api/status';
+const API_STATUS_URL = 'http://192.168.1.6:5000/api/status';
 export default function WelcomeScreen({ navigation }: any) {
   const [status, setStatus] = useState<string>('Đang kiểm tra kết nối Backend...');
   const [isConnected, setIsConnected] = useState<boolean>(false);

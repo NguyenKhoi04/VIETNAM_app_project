@@ -10,15 +10,32 @@ import {
   Alert,
   ImageBackground
 } from 'react-native';
+import Footer from './Footer';
 
 const { width } = Dimensions.get('window');
 //const API_USERINFO_URL = 'http://192.168.102.12:5000/api/user-info';
 
-const API_USERINFO_URL = 'http://192.168.1.147:5000/api/user-info';
+const API_USERINFO_URL = 'http://192.168.1.6:5000/api/user-info';
 
 interface ClassInfo {
-  lop: string;
+  lop: number | string;
+  ten_chuong_trinh?: string;
 }
+
+// Interface khớp với dữ liệu từ MySQL + FE
+interface Feature {
+  id_ky_nang: number;
+  ma_ky_nang: string;
+  ten_ky_nang: string;
+  mo_ta: string;
+  icon: string;
+  lop: number;
+  ten_chuong_trinh?: string;
+  bgColor?: string;
+}
+
+// Bảng màu quay vòng cho giao diện
+const BG_COLORS = ['#E0F7FA', '#FFF3E0', '#E8F5E9', '#E0F2FE', '#CCCCFF'];
 
 const HomePrimary = ({ navigation, route }: any) => {
   //const [selectedClass, setSelectedClass] = useState('Lớp 1');
@@ -27,47 +44,103 @@ const HomePrimary = ({ navigation, route }: any) => {
 
   const [classes, setClasses] = useState<ClassInfo[]>([]);
   const [selectedClass, setSelectedClass] = useState<string>('');
+  const [ten_chuong_trinh, setProgramName] = useState<string>('');
 
-  //const classes = ['Lớp 1', 'Lớp 2', 'Lớp 3', 'Lớp 4', 'Lớp 5'];
+  const [features, setFeatures] = useState<Feature[]>([]);
+  // const features = [
+  //   { title: "Phát âm, ghép vần", desc: "Luyện phát âm chuẩn", emoji: "🗣️", bgColor: "#E0F7FA" },
+  //   { title: "Tập Đọc", desc: "Đọc & hiểu nghĩa", emoji: "📖", bgColor: "#FFF3E0" },
+  //   { title: "Luyện Viết", desc: "Viết chữ cái, viết từ, viết câu", emoji: "✏️", bgColor: "#E8F5E9" },
+  //   { title: "Chính Tả", desc: "Nghe và viết đúng chính tả", emoji: "✍️", bgColor: "#E0F2FE" },
+  //   { title: "Ôn Tập", desc: "Ôn lại kiến thức đã học", emoji: "📚", bgColor: "#CCCCFF" }
+  // ];
 
-  const features = [
-    { title: "Phát âm, ghép vần", desc: "Luyện phát âm chuẩn", emoji: "🗣️", bgColor: "#E0F7FA" },
-    { title: "Tập Đọc", desc: "Đọc & hiểu nghĩa", emoji: "📖", bgColor: "#FFF3E0" },
-    { title: "Luyện Viết", desc: "Viết chữ cái, viết từ, viết câu", emoji: "✏️", bgColor: "#E8F5E9" },
-    { title: "Chính Tả", desc: "Nghe và viết đúng chính tả", emoji: "✍️", bgColor: "#E0F2FE" },
-    { title: "Ôn Tập", desc: "Ôn lại kiến thức đã học", emoji: "📚", bgColor: "#CCCCFF" }
-  ];
-
+  // 1. Cập nhật họ tên khi route params thay đổi
   useEffect(() => {
     if (route?.params?.ho_ten) {
       setName(route.params.ho_ten);
     }
+  }, [route?.params?.ho_ten]);
 
+  // 2. Lấy danh sách lớp khi mở màn hình
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const response = await fetch('http://192.168.1.6:5000/api/classes');
+        const data = await response.json();
 
-   const fetchClasses = async () => {
-    try {
-      const response = await fetch('http://192.168.1.147:5000/api/classes');
-      const data = await response.json();
-      
-      // Kiểm tra nếu API trả về đúng định dạng mảng
-      if (Array.isArray(data)) {
-        setClasses(data);
-        if (data.length > 0) {
+        if (Array.isArray(data) && data.length > 0) {
+          setClasses(data);
+          // Gán mặc định chọn lớp đầu tiên từ API trả về
           setSelectedClass(`Lớp ${data[0].lop}`);
+        } else {
+          setClasses([]);
         }
+      } catch (error) {
+        console.error('Lỗi lấy danh sách lớp:', error);
+      }
+    };
+
+    fetchClasses();
+  }, []);
+
+  // 3. Tự động lấy tên chương trình MỖI KHI selectedClass thay đổi
+  useEffect(() => {
+    if (!selectedClass) return; // Không gọi nếu chưa có lớp được chọn
+
+    const lopNumber = selectedClass.replace('Lớp ', '').trim();
+
+    const fetchProgramName = async () => {
+      try {
+        const response = await fetch(`http://192.168.1.6:5000/api/program-name?lop=${lopNumber}`);
+        const data = await response.json();
+
+        if (Array.isArray(data) && data.length > 0) {
+          setProgramName(data[0]?.ten_chuong_trinh || '');
+        } else {
+          setProgramName('');
+        }
+      } catch (error) {
+        console.error('Lỗi lấy tên chương trình:', error);
+      }
+    };
+
+    fetchProgramName();
+  }, [selectedClass]); // Chạy lại khi người dùng đổi lớp hoặc khi API tải xong lớp mặc định
+
+
+ // 4. API lấy danh sách kỹ năng theo lớp
+useEffect(() => {
+  if (!selectedClass) return;
+
+  const lopNumber = selectedClass.replace('Lớp ', '').trim();
+
+  const fetchSkillsData = async () => {
+    try {
+      const response = await fetch(`http://192.168.1.6:5000/api/skills?lop=${lopNumber}`);
+      const data: Feature[] = await response.json();
+
+      if (Array.isArray(data) && data.length > 0) {
+        setProgramName(data[0]?.ten_chuong_trinh || '');
+        
+        // Gán màu nền luân phiên cho từng card
+        const formattedFeatures = data.map((item, index) => ({
+          ...item,
+          bgColor: BG_COLORS[index % BG_COLORS.length],
+        }));
+        
+        setFeatures(formattedFeatures);
       } else {
-        console.error('Dữ liệu API không phải là mảng (có thể backend báo lỗi):', data);
-        setClasses([]);
+        setProgramName('');
+        setFeatures([]);
       }
     } catch (error) {
-      console.error('Lỗi kết nối tới Server:', error);
-      setClasses([]);
+      console.error('Lỗi lấy danh sách kỹ năng:', error);
     }
   };
 
-  fetchClasses();
-
-  }, [route?.params?.ho_ten]);
+  fetchSkillsData();
+}, [selectedClass]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -111,7 +184,7 @@ const HomePrimary = ({ navigation, route }: any) => {
           >
             <View style={styles.bannerTextContainer}>
               <Text style={styles.bannerTitle}>CHƯƠNG TRÌNH</Text>
-              <Text style={styles.bannerSubtitle}>Tiếng Việt lớp 1 - Kết nối tri thức với cuộc sống</Text>
+              <Text style={styles.bannerSubtitle}>{ten_chuong_trinh}</Text>
             </View>
             
           </ImageBackground><Text style={styles.sectionTitle}>Các kỹ năng hôm nay ✨</Text>
@@ -124,44 +197,23 @@ const HomePrimary = ({ navigation, route }: any) => {
         <View style={styles.featuresGrid}>
           {features.map((feature, index) => (
             <TouchableOpacity 
-              key={index} 
+              key={feature.id_ky_nang} 
               style={[styles.featureCard, { backgroundColor: feature.bgColor }]}
-              onPress={() => Alert.alert('Thông báo', `Đang mở: ${feature.title}`)}
+              onPress={() => Alert.alert('Thông báo', `Đang mở: ${feature.ten_ky_nang}`)}
               activeOpacity={0.8}
             >
               <View style={styles.emojiContainer}>
-                <Text style={styles.featureEmoji}>{feature.emoji}</Text>
+                <Text style={styles.featureEmoji}>{feature.icon || '🌟'}</Text>
               </View>
-              <Text style={styles.featureTitle}>{feature.title}</Text>
-              <Text style={styles.featureDesc}>{feature.desc}</Text>
+              <Text style={styles.featureTitle}>{feature.ten_ky_nang}</Text>
+              <Text style={styles.featureDesc}>{feature.mo_ta}</Text>
             </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
 
       {/* Footer */}
-            {/* Footer */}
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.footerItem} onPress={() => {}}>
-          <Text style={styles.footerIcon}>🏠</Text>
-          <Text style={styles.footerTextActive}>Trang chủ</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.footerItem} onPress={() => {}}>
-          <Text style={styles.footerIcon}>📚</Text>
-          <Text style={styles.footerText}>Bài học</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.footerItem} onPress={() => {}}>
-          <Text style={styles.footerIcon}>🏆</Text>
-          <Text style={styles.footerText}>Thành tích</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.footerItem} onPress={() => {}}>
-          <Text style={styles.footerIcon}>👤</Text>
-          <Text style={styles.footerText}>Cá nhân</Text>
-        </TouchableOpacity>
-      </View>
+      <Footer />
     </SafeAreaView>
   );
 };
@@ -302,31 +354,6 @@ const styles = StyleSheet.create({
 
 
 
-    /* Footer */
-  footer: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#E2E8F0',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    elevation: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-  },
-  footerItem: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingVertical: 4,
-  },
-  footerIcon: { fontSize: 22, marginBottom: 2 },
-  footerText: { fontSize: 12, color: '#64748B', fontWeight: '500' },
-  footerTextActive: { fontSize: 12, color: '#2563EB', fontWeight: '700' },
 });
 
 export default HomePrimary;

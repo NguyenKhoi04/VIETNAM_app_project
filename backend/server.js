@@ -128,6 +128,54 @@ app.get('/api/classes', (req, res) => {
   });
 });
 
+// 10. API lấy tên chương trình dựa trên lớp
+app.get('/api/program-name', (req, res) => {
+  const lop = req.query.lop;
+
+  const sql = 'SELECT ten_chuong_trinh FROM chuong_trinh WHERE lop = ?';
+
+  db.query(sql, [lop], (err, results) => {
+    if (err) {
+      console.error('Lỗi SQL:', err);
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
+
+
+//11. API lấy danh sách kỹ năng trong kỹ năng được nối với tên lớp trong bảng chương trình
+// API lấy danh sách kỹ năng theo lớp
+app.get('/api/skills', (req, res) => {
+  const { lop } = req.query;
+
+  let sql = `
+    SELECT 
+      ky_nang.id_ky_nang,
+      ky_nang.ma_ky_nang,
+      ky_nang.ten_ky_nang,
+      ky_nang.mo_ta,
+      ky_nang.icon,
+      ky_nang.lop,
+      chuong_trinh.ten_chuong_trinh
+    FROM ky_nang
+    JOIN chuong_trinh ON ky_nang.lop = chuong_trinh.id_chuong_trinh
+  `;
+  const params = [];
+
+  if (lop) {
+    sql += ` WHERE ky_nang.lop = ?`;
+    params.push(lop);
+  }
+
+  db.query(sql, params, (err, results) => {
+    if (err) {
+      console.error('Lỗi SQL:', err);
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
 
 // API lấy danh sách người dùng
 app.get('/api/data', (req, res) => {
