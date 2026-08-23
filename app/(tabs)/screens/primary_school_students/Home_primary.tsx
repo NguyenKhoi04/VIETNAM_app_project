@@ -7,7 +7,8 @@ import {
   SafeAreaView, 
   ScrollView, 
   Dimensions, 
-  Alert 
+  Alert,
+  ImageBackground
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -101,8 +102,23 @@ const HomePrimary = ({ navigation, route }: any) => {
         </View>
       </View>
 
+          {/* Banner Chương trình - hình nền + chữ động */}
+        <View style={styles.bannerContainer}>
+          <ImageBackground
+            source={require('../../../../assets/images/banner-chuong-trinh.png')} // ← thay đường dẫn hình của bạn
+            style={styles.bannerBackground}
+            resizeMode="contain"
+          >
+            <View style={styles.bannerTextContainer}>
+              <Text style={styles.bannerTitle}>CHƯƠNG TRÌNH</Text>
+              <Text style={styles.bannerSubtitle}>Tiếng Việt lớp 1 - Kết nối tri thức với cuộc sống</Text>
+            </View>
+            
+          </ImageBackground><Text style={styles.sectionTitle}>Các kỹ năng hôm nay ✨</Text>
+        </View>
+
       <ScrollView style={styles.mainContent} contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.sectionTitle}>Các kỹ năng hôm nay ✨</Text>
+        {/* <Text style={styles.sectionTitle}>Các kỹ năng hôm nay ✨</Text> */}
 
         {/* Grid 2x2 đẹp hơn */}
         <View style={styles.featuresGrid}>
@@ -200,7 +216,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: '#1E40AF',
-    marginBottom: 18,
+    marginBottom: 0,
   },
 
   /* Grid cải tiến - đẹp và vừa màn hình */
@@ -249,6 +265,42 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 16,
   },
+
+  /* Banner Chương trình */
+  bannerContainer: {
+  alignItems: 'center',
+  marginHorizontal: 5,
+  marginTop: 8,
+  marginBottom: 5,
+  },
+
+  bannerBackground: {
+    width: '100%',
+    height: 85,               // chỉnh theo tỉ lệ hình của bạn
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  bannerTextContainer: {
+    alignItems: 'center',
+    // nếu cần đẩy chữ lên/xuống một chút
+     marginTop: -25,
+  },
+
+  bannerTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#E53E3E',         // đỏ giống hình
+    letterSpacing: 0.5,
+  },
+
+  bannerSubtitle: {
+    fontSize: 12,
+    color: '#2B6CB0',         // xanh giống hình
+    marginTop: 2,
+  },
+
+
 
     /* Footer */
   footer: {
