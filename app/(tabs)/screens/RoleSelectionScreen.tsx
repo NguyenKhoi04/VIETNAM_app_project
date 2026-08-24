@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Image, Dimensions } from 'react-native';
+import { API_ENDPOINTS } from '../../../src/config/api'; // Import API_ENDPOINTS from the config file
 
 const { width } = Dimensions.get('window');
 
 //const API_roles_URL = 'http://192.168.102.12:5000/api/roles';
 
-const API_roles_URL = 'http://192.168.1.6:5000/api/roles';
+const API_roles_URL = API_ENDPOINTS.GET_ROLES;
 
 const RoleSelectionScreen = ({ navigation, route }: any) => {
   const [doi_tuong, setRoles] = useState<string>('');

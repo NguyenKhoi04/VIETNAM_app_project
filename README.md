@@ -203,6 +203,9 @@ Chạy lệnh:
 
 npx expo start --tunnel
 
+hoặc xóa achaer cũ
+npx expo start -c
+
 hoặc
 
 Cách 2: Ép toàn bộ giao thông qua USB (Bỏ qua Wi-Fi)

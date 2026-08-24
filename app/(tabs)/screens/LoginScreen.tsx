@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
 import {View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert,} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { API_ENDPOINTS } from '../../../src/config/api'; // Import API_ENDPOINTS from the config file
 
-// LƯU Ý ĐỔI IP:
-// - Máy ảo Android: dùng 'http://10.0.2.2:5000/api/login'
-// - Máy thật (qua Wi-Fi): dùng 'http://<IP_MAY_TINH>:5000/api/login' (ví dụ: 'http://192.168.1.15:5000/api/login')
-//Hoặc localhost:5000/api/login
-// - Máy ảo iOS: dùng 'http://localhost:5000/api/login'
-
-//const API_LOGIN_URL = 'http://192.168.102.12:5000/api/login';
-const API_LOGIN_URL = 'http://192.168.1.6:5000/api/login';
+const API_LOGIN_URL = API_ENDPOINTS.LOGIN;
 
 
 const LoginScreen = ({ navigation }: any) => {

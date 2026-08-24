@@ -11,11 +11,12 @@ import {
   ImageBackground
 } from 'react-native';
 import Footer from './Footer';
+import { API_ENDPOINTS } from '@/src/config/api';
 
 const { width } = Dimensions.get('window');
 //const API_USERINFO_URL = 'http://192.168.102.12:5000/api/user-info';
 
-const API_USERINFO_URL = 'http://192.168.1.6:5000/api/user-info';
+const API_USERINFO_URL = API_ENDPOINTS.GET_USER_INFO; // ← Sử dụng URL từ config file
 
 interface ClassInfo {
   lop: number | string;
@@ -66,7 +67,7 @@ const HomePrimary = ({ navigation, route }: any) => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const response = await fetch('http://192.168.1.6:5000/api/classes');
+        const response = await fetch(API_ENDPOINTS.GET_CLASSES);
         const data = await response.json();
 
         if (Array.isArray(data) && data.length > 0) {
@@ -92,7 +93,7 @@ const HomePrimary = ({ navigation, route }: any) => {
 
     const fetchProgramName = async () => {
       try {
-        const response = await fetch(`http://192.168.1.6:5000/api/program-name?lop=${lopNumber}`);
+        const response = await fetch(`${API_ENDPOINTS.GET_PROGRAM_NAME}?lop=${lopNumber}`);
         const data = await response.json();
 
         if (Array.isArray(data) && data.length > 0) {
@@ -117,7 +118,7 @@ useEffect(() => {
 
   const fetchSkillsData = async () => {
     try {
-      const response = await fetch(`http://192.168.1.6:5000/api/skills?lop=${lopNumber}`);
+      const response = await fetch(`${API_ENDPOINTS.GET_SKILLS}?lop=${lopNumber}`);
       const data: Feature[] = await response.json();
 
       if (Array.isArray(data) && data.length > 0) {
