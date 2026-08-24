@@ -243,3 +243,21 @@ Máy tính đã nhận điện thoại. Chạy tiếp lệnh đảo cổng:
 & "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" reverse tcp:5000 tcp:5000
 
 (Lệnh in ra 5000 là xong).
+
+
+
+## Trong databse có bảng kỹ năng với cột url_link
+
+Không thể lưu đường dẫn ổ đĩa máy tính (D:\...) vào database vì ứng dụng di động khi chạy trên thiết bị sẽ không nhận diện được đường dẫn tệp tin của máy tính. Trong Expo Router, bạn cần lưu đường dẫn route (Relative Route).
+
+1. Cập nhật dữ liệu cột url_link trong MySQL
+
+Lưu đường dẫn tương đối tính từ thư mục app/ (bỏ phần đuôi .tsx và đường dẫn ổ đĩa D:\...):
+
+Giá trị cần lưu: 
+
+** Giá trị trong database phải trùng khớp chính xác với name được khai báo trong <Stack.Screen name="..."/>:
+
+❌ Giá trị cũ (sai): /screens/primary_school_students/skills_students/practice_reading
+
+✅ Giá trị mới (đúng): PracticeReading

@@ -8,9 +8,14 @@ import {
   ScrollView, 
   Dimensions, 
   Alert,
-  ImageBackground
+  ImageBackground,
+
 } from 'react-native';
 import Footer from './Footer';
+
+import { useRouter } from 'expo-router'; // 1. Import router
+
+
 import { API_ENDPOINTS } from '@/src/config/api';
 
 const { width } = Dimensions.get('window');
@@ -33,10 +38,12 @@ interface Feature {
   lop: number;
   ten_chuong_trinh?: string;
   bgColor?: string;
+  url_link?: string; // ← Thêm trường url_link để điều hướng
 }
 
 // Bảng màu quay vòng cho giao diện
 const BG_COLORS = ['#E0F7FA', '#FFF3E0', '#E8F5E9', '#E0F2FE', '#CCCCFF'];
+
 
 const HomePrimary = ({ navigation, route }: any) => {
   //const [selectedClass, setSelectedClass] = useState('Lớp 1');
@@ -47,6 +54,8 @@ const HomePrimary = ({ navigation, route }: any) => {
   const [selectedClass, setSelectedClass] = useState<string>('');
   const [ten_chuong_trinh, setProgramName] = useState<string>('');
 
+  const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
+
   const [features, setFeatures] = useState<Feature[]>([]);
   // const features = [
   //   { title: "Phát âm, ghép vần", desc: "Luyện phát âm chuẩn", emoji: "🗣️", bgColor: "#E0F7FA" },
@@ -56,6 +65,7 @@ const HomePrimary = ({ navigation, route }: any) => {
   //   { title: "Ôn Tập", desc: "Ôn lại kiến thức đã học", emoji: "📚", bgColor: "#CCCCFF" }
   // ];
 
+  
   // 1. Cập nhật họ tên khi route params thay đổi
   useEffect(() => {
     if (route?.params?.ho_ten) {
@@ -143,6 +153,17 @@ useEffect(() => {
   fetchSkillsData();
 }, [selectedClass]);
 
+// 5. Router để điều hướng sang màn hình luyện kỹ năng
+  const router = useRouter(); // 2. Khởi tạo router
+
+  const handleNavigate = (url: string, tenKyNang: string) => {
+    if (url) {
+      router.push(url as any); // Chuyển đến màn hình tương ứng
+    } else {
+      Alert.alert('Thông báo', `Tính năng "${tenKyNang}" đang được phát triển!`);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -196,21 +217,21 @@ useEffect(() => {
 
         {/* Grid 2x2 đẹp hơn */}
         <View style={styles.featuresGrid}>
-          {features.map((feature, index) => (
-            <TouchableOpacity 
-              key={feature.id_ky_nang} 
-              style={[styles.featureCard, { backgroundColor: feature.bgColor }]}
-              onPress={() => Alert.alert('Thông báo', `Đang mở: ${feature.ten_ky_nang}`)}
-              activeOpacity={0.8}
-            >
-              <View style={styles.emojiContainer}>
-                <Text style={styles.featureEmoji}>{feature.icon || '🌟'}</Text>
-              </View>
-              <Text style={styles.featureTitle}>{feature.ten_ky_nang}</Text>
-              <Text style={styles.featureDesc}>{feature.mo_ta}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+      {features.map((feature, index) => (
+        <TouchableOpacity 
+          key={feature.id_ky_nang} 
+          style={[styles.featureCard, { backgroundColor: feature.bgColor }]}
+          onPress={() => handleNavigate(navigation.navigate(feature.url_link), feature.ten_ky_nang)} // 3. Gắn hàm chuyển trang và gọi điều hướng
+          activeOpacity={0.8}
+        >
+          <View style={styles.emojiContainer}>
+            <Text style={styles.featureEmoji}>{feature.icon || '🌟'}</Text>
+          </View>
+          <Text style={styles.featureTitle}>{feature.ten_ky_nang}</Text>
+          <Text style={styles.featureDesc}>{feature.mo_ta}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
       </ScrollView>
 
       {/* Footer */}
@@ -218,6 +239,7 @@ useEffect(() => {
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F8FAFF' },

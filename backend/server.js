@@ -157,6 +157,7 @@ app.get('/api/skills', (req, res) => {
       ky_nang.mo_ta,
       ky_nang.icon,
       ky_nang.lop,
+      ky_nang.url_link,
       chuong_trinh.ten_chuong_trinh
     FROM ky_nang
     JOIN chuong_trinh ON ky_nang.lop = chuong_trinh.id_chuong_trinh
