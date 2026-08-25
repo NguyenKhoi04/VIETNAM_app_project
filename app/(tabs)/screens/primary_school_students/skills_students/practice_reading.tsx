@@ -68,10 +68,12 @@ export default function PracticeReadingScreen() {
         </ImageBackground>
       </View>
 
+      
       <ScrollView
         style={styles.mainContent}
         contentContainerStyle={styles.scrollContent}
       >
+      <Text style={styles.sectionTitle}>📚 SGK Tiếng Việt 1, tập một</Text>
         {/* Grid 4 hình */}
         <View style={styles.imageGrid}>
           <View style={styles.imageRow}>
@@ -81,7 +83,7 @@ export default function PracticeReadingScreen() {
               resizeMode="cover"
             />
             <Image
-              source={require('@/assets/images/hsth_tuan1.png')}
+              source={require('@/assets/images/hsth_tuan3.png')}
               style={styles.imageBox}
               resizeMode="cover"
             />
@@ -89,19 +91,48 @@ export default function PracticeReadingScreen() {
 
           <View style={styles.imageRow}>
             <Image
-              source={require('@/assets/images/hsth_tuan1.png')}
+              source={require('@/assets/images/hsth_tuan5.png')}
               style={styles.imageBox}
               resizeMode="cover"
             />
+            {/* <Image
+              source={require('@/assets/images/hsth_tuan1.png')}
+              style={styles.imageBox}
+              resizeMode="cover"
+            /> */}
+          </View>
+        </View>
+      <Text style={styles.sectionTitle}>📚 SGK Tiếng Việt 1, tập hai</Text>
+      
+        {/* Grid 4 hình */}
+        <View style={styles.imageGrid}>
+          <View style={styles.imageRow}>
             <Image
               source={require('@/assets/images/hsth_tuan1.png')}
               style={styles.imageBox}
               resizeMode="cover"
             />
+            <Image
+              source={require('@/assets/images/hsth_tuan3.png')}
+              style={styles.imageBox}
+              resizeMode="cover"
+            />
+          </View>
+
+          <View style={styles.imageRow}>
+            <Image
+              source={require('@/assets/images/hsth_tuan5.png')}
+              style={styles.imageBox}
+              resizeMode="cover"
+            />
+            {/* <Image
+              source={require('@/assets/images/hsth_tuan1.png')}
+              style={styles.imageBox}
+              resizeMode="cover"
+            /> */}
           </View>
         </View>
       </ScrollView>
-
       <Footer />
     </SafeAreaView>
   );
@@ -148,6 +179,15 @@ const styles = StyleSheet.create({
 
   mainContent: {
     flex: 1,
+  },
+
+    sectionTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1E40AF',
+    marginBottom: 16,
+    marginTop: 12,
+    paddingHorizontal: 16,
   },
   scrollContent: {
     paddingHorizontal: 16,
