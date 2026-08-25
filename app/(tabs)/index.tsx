@@ -7,6 +7,7 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import RoleSelectionScreen from "./screens/RoleSelectionScreen";
 import MenuSurvey from "./screens/foreigners/menu_survery";
+import Header from "./screens/primary_school_students/Header";
 import HomePrimary from "./screens/primary_school_students/Home_primary";
 import Footer from "./screens/primary_school_students/Footer";
 import PracticeReading from "./screens/primary_school_students/skills_students/practice_reading";
@@ -27,6 +28,7 @@ export default function App() {
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="RoleSelection" component={RoleSelectionScreen} />
         <Stack.Screen name="MenuSurvey" component={MenuSurvey} />
+        <Stack.Screen name="Header" component={Header} />
         <Stack.Screen name="Home_primary" component={HomePrimary} />
         <Stack.Screen name="PracticeReading" component={PracticeReading} />
       <Stack.Screen name="Footer" component={Footer} />

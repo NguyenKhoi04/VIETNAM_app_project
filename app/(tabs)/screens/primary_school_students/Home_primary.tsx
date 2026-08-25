@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  StyleSheet, 
-  SafeAreaView, 
-  ScrollView, 
-  Dimensions, 
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  Dimensions,
   Alert,
   ImageBackground,
 
 } from 'react-native';
+
+import Header from './Header';
 import Footer from './Footer';
 
 import { useRouter } from 'expo-router'; // 1. Import router
@@ -38,7 +40,7 @@ interface Feature {
   lop: number;
   ten_chuong_trinh?: string;
   bgColor?: string;
-  url_link?: string; // ← Thêm trường url_link để điều hướng
+  url_link?: string;
 }
 
 // Bảng màu quay vòng cho giao diện
@@ -46,8 +48,7 @@ const BG_COLORS = ['#E0F7FA', '#FFF3E0', '#E8F5E9', '#E0F2FE', '#CCCCFF'];
 
 
 const HomePrimary = ({ navigation, route }: any) => {
-  //const [selectedClass, setSelectedClass] = useState('Lớp 1');
-  
+  const router = useRouter();
   const [name, setName] = useState<string>(route?.params?.ho_ten || '');
 
   const [classes, setClasses] = useState<ClassInfo[]>([]);
@@ -57,16 +58,7 @@ const HomePrimary = ({ navigation, route }: any) => {
   const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
 
   const [features, setFeatures] = useState<Feature[]>([]);
-  // const features = [
-  //   { title: "Phát âm, ghép vần", desc: "Luyện phát âm chuẩn", emoji: "🗣️", bgColor: "#E0F7FA" },
-  //   { title: "Tập Đọc", desc: "Đọc & hiểu nghĩa", emoji: "📖", bgColor: "#FFF3E0" },
-  //   { title: "Luyện Viết", desc: "Viết chữ cái, viết từ, viết câu", emoji: "✏️", bgColor: "#E8F5E9" },
-  //   { title: "Chính Tả", desc: "Nghe và viết đúng chính tả", emoji: "✍️", bgColor: "#E0F2FE" },
-  //   { title: "Ôn Tập", desc: "Ôn lại kiến thức đã học", emoji: "📚", bgColor: "#CCCCFF" }
-  // ];
 
-  
-  // 1. Cập nhật họ tên khi route params thay đổi
   useEffect(() => {
     if (route?.params?.ho_ten) {
       setName(route.params.ho_ten);
@@ -97,141 +89,97 @@ const HomePrimary = ({ navigation, route }: any) => {
 
   // 3. Tự động lấy tên chương trình MỖI KHI selectedClass thay đổi
   useEffect(() => {
-    if (!selectedClass) return; // Không gọi nếu chưa có lớp được chọn
+    if (!selectedClass) return;
 
     const lopNumber = selectedClass.replace('Lớp ', '').trim();
 
-    const fetchProgramName = async () => {
+    const fetchSkillsData = async () => {
       try {
-        const response = await fetch(`${API_ENDPOINTS.GET_PROGRAM_NAME}?lop=${lopNumber}`);
-        const data = await response.json();
+        const response = await fetch(
+          `${API_ENDPOINTS.GET_SKILLS}?lop=${lopNumber}`
+        );
+        const data: Feature[] = await response.json();
 
         if (Array.isArray(data) && data.length > 0) {
           setProgramName(data[0]?.ten_chuong_trinh || '');
+          const formattedFeatures = data.map((item, index) => ({
+            ...item,
+            bgColor: BG_COLORS[index % BG_COLORS.length],
+          }));
+          setFeatures(formattedFeatures);
         } else {
           setProgramName('');
+          setFeatures([]);
         }
       } catch (error) {
-        console.error('Lỗi lấy tên chương trình:', error);
+        console.error('Lỗi lấy danh sách kỹ năng:', error);
       }
     };
 
-    fetchProgramName();
-  }, [selectedClass]); // Chạy lại khi người dùng đổi lớp hoặc khi API tải xong lớp mặc định
-
-
- // 4. API lấy danh sách kỹ năng theo lớp
-useEffect(() => {
-  if (!selectedClass) return;
-
-  const lopNumber = selectedClass.replace('Lớp ', '').trim();
-
-  const fetchSkillsData = async () => {
-    try {
-      const response = await fetch(`${API_ENDPOINTS.GET_SKILLS}?lop=${lopNumber}`);
-      const data: Feature[] = await response.json();
-
-      if (Array.isArray(data) && data.length > 0) {
-        setProgramName(data[0]?.ten_chuong_trinh || '');
-        
-        // Gán màu nền luân phiên cho từng card
-        const formattedFeatures = data.map((item, index) => ({
-          ...item,
-          bgColor: BG_COLORS[index % BG_COLORS.length],
-        }));
-        
-        setFeatures(formattedFeatures);
-      } else {
-        setProgramName('');
-        setFeatures([]);
-      }
-    } catch (error) {
-      console.error('Lỗi lấy danh sách kỹ năng:', error);
-    }
-  };
-
-  fetchSkillsData();
-}, [selectedClass]);
+    fetchSkillsData();
+  }, [selectedClass]);
 
 // 5. Router để điều hướng sang màn hình luyện kỹ năng
-  const router = useRouter(); // 2. Khởi tạo router
 
-  const handleNavigate = (url: string, tenKyNang: string) => {
-    if (url) {
-      router.push(url as any); // Chuyển đến màn hình tương ứng
-    } else {
-      Alert.alert('Thông báo', `Tính năng "${tenKyNang}" đang được phát triển!`);
-    }
-  };
+
+const handleNavigate = (url: string, tenKyNang: string) => {
+  if (url) {
+    router.push({
+      pathname: url as any,
+      params: {
+        ho_ten: name,
+        ten_ky_nang: tenKyNang || '',
+      },
+    });
+  } else {
+    Alert.alert('Thông báo', `Tính năng "${tenKyNang}" đang được phát triển!`);
+  }
+};
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>
-          Chào {name ? `con ${name}` : 'con'} đang học {selectedClass}! 👋
-        </Text>
-        <Text style={styles.headerSubtitle}>Hôm nay con muốn luyện kỹ năng gì nào?</Text>
+      <Header navigation={navigation} route={route} />
+
+      {/* Banner Chương trình */}
+      <View style={styles.bannerContainer}>
+        <ImageBackground
+          source={require('../../../../assets/images/banner-chuong-trinh.png')}
+          style={styles.bannerBackground}
+          resizeMode="contain"
+        >
+          <View style={styles.bannerTextContainer}>
+            <Text style={styles.bannerTitle}>CHƯƠNG TRÌNH</Text>
+            <Text style={styles.bannerSubtitle}>{ten_chuong_trinh}</Text>
+          </View>
+        </ImageBackground>
       </View>
 
-            {/* Chọn Lớp - Hiển thị 2 hàng */}
-      <View style={styles.classContainer}>
-        <View style={styles.classGrid}>
-          {Array.isArray(classes) && classes.map((cls, index) => (
+      <ScrollView
+        style={styles.mainContent}
+        contentContainerStyle={styles.scrollContent}
+      >
+        <Text style={styles.sectionTitle}>Các kỹ năng hôm nay ✨</Text>
+
+        <View style={styles.featuresGrid}>
+          {features.map((feature) => (
             <TouchableOpacity
-              key={cls.lop ?? index} // Dùng cls.lop làm key
-              style={[
-                styles.classButton,
-                selectedClass === `Lớp ${cls.lop}` && styles.classButtonActive
-              ]}
-              onPress={() => setSelectedClass(`Lớp ${cls.lop}`)}
+              key={feature.id_ky_nang}
+              style={[styles.featureCard, { backgroundColor: feature.bgColor }]}
+              onPress={() =>
+                handleNavigate(navigation.navigate(feature.url_link), feature.ten_ky_nang)
+              }
+              activeOpacity={0.8}
             >
-              <Text style={[
-                styles.classText,
-                selectedClass === `Lớp ${cls.lop}` && styles.classTextActive
-              ]}>
-                {`Lớp ${cls.lop}`}
-              </Text>
+              <View style={styles.emojiContainer}>
+                <Text style={styles.featureEmoji}>
+                  {feature.icon || '🌟'}
+                </Text>
+              </View>
+              <Text style={styles.featureTitle}>{feature.ten_ky_nang}</Text>
+              <Text style={styles.featureDesc}>{feature.mo_ta}</Text>
             </TouchableOpacity>
           ))}
         </View>
-      </View>
-
-          {/* Banner Chương trình - hình nền + chữ động */}
-        <View style={styles.bannerContainer}>
-          <ImageBackground
-            source={require('../../../../assets/images/banner-chuong-trinh.png')} // ← thay đường dẫn hình của bạn
-            style={styles.bannerBackground}
-            resizeMode="contain"
-          >
-            <View style={styles.bannerTextContainer}>
-              <Text style={styles.bannerTitle}>CHƯƠNG TRÌNH</Text>
-              <Text style={styles.bannerSubtitle}>{ten_chuong_trinh}</Text>
-            </View>
-            
-          </ImageBackground><Text style={styles.sectionTitle}>Các kỹ năng hôm nay ✨</Text>
-        </View>
-
-      <ScrollView style={styles.mainContent} contentContainerStyle={styles.scrollContent}>
-        {/* <Text style={styles.sectionTitle}>Các kỹ năng hôm nay ✨</Text> */}
-
-        {/* Grid 2x2 đẹp hơn */}
-        <View style={styles.featuresGrid}>
-      {features.map((feature, index) => (
-        <TouchableOpacity 
-          key={feature.id_ky_nang} 
-          style={[styles.featureCard, { backgroundColor: feature.bgColor }]}
-          onPress={() => handleNavigate(navigation.navigate(feature.url_link), feature.ten_ky_nang)} // 3. Gắn hàm chuyển trang và gọi điều hướng
-          activeOpacity={0.8}
-        >
-          <View style={styles.emojiContainer}>
-            <Text style={styles.featureEmoji}>{feature.icon || '🌟'}</Text>
-          </View>
-          <Text style={styles.featureTitle}>{feature.ten_ky_nang}</Text>
-          <Text style={styles.featureDesc}>{feature.mo_ta}</Text>
-        </TouchableOpacity>
-      ))}
-    </View>
       </ScrollView>
 
       {/* Footer */}
@@ -291,7 +239,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: '#1E40AF',
-    marginBottom: 0,
+    marginBottom: 16,
   },
 
   /* Grid cải tiến - đẹp và vừa màn hình */
@@ -343,40 +291,36 @@ const styles = StyleSheet.create({
 
   /* Banner Chương trình */
   bannerContainer: {
-  alignItems: 'center',
-  marginHorizontal: 5,
-  marginTop: 8,
-  marginBottom: 5,
+    alignItems: 'center',
+    marginHorizontal: 5,
+    marginTop: 8,
+    marginBottom: 5,
   },
 
   bannerBackground: {
     width: '100%',
-    height: 85,               // chỉnh theo tỉ lệ hình của bạn
+    height: 85,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   bannerTextContainer: {
     alignItems: 'center',
-    // nếu cần đẩy chữ lên/xuống một chút
-     marginTop: -25,
+    marginTop: -25,
   },
 
   bannerTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#E53E3E',         // đỏ giống hình
+    color: '#E53E3E',
     letterSpacing: 0.5,
   },
 
   bannerSubtitle: {
     fontSize: 12,
-    color: '#2B6CB0',         // xanh giống hình
+    color: '#2B6CB0',
     marginTop: 2,
   },
-
-
-
 });
 
 export default HomePrimary;

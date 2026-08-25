@@ -1,49 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  StyleSheet, 
-  SafeAreaView, 
-  ScrollView, 
-  Dimensions, 
-  Alert,
-  ImageBackground
-} from 'react-native';
- 
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
 
- const Footer = () => {
+const Footer = () => {
+  const router = useRouter();
   return (
     <View style={styles.footer}>
- {/* Footer */}
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.footerItem} onPress={() => {}}>
-          <Text style={styles.footerIcon}>🏠</Text>
-          <Text style={styles.footerTextActive}>Trang chủ</Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.footerItem} onPress={() =>router.push('/screens/primary_school_students/Home_primary' as any)}>
+        <Text style={styles.footerIcon}>🏠</Text>
+        <Text style={styles.footerTextActive}>Trang chủ</Text>
+      </TouchableOpacity>
 
-        <TouchableOpacity style={styles.footerItem} onPress={() => {}}>
-          <Text style={styles.footerIcon}>📚</Text>
-          <Text style={styles.footerText}>Bài học</Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.footerItem} onPress={() => {}}>
+        <Text style={styles.footerIcon}>📚</Text>
+        <Text style={styles.footerText}>Bài học</Text>
+      </TouchableOpacity>
 
-        <TouchableOpacity style={styles.footerItem} onPress={() => {}}>
-          <Text style={styles.footerIcon}>🏆</Text>
-          <Text style={styles.footerText}>Thành tích</Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.footerItem} onPress={() => {}}>
+        <Text style={styles.footerIcon}>🏆</Text>
+        <Text style={styles.footerText}>Thành tích</Text>
+      </TouchableOpacity>
 
-        <TouchableOpacity style={styles.footerItem} onPress={() => {}}>
-          <Text style={styles.footerIcon}>👤</Text>
-          <Text style={styles.footerText}>Cá nhân</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.footerItem} onPress={() => {}}>
+        <Text style={styles.footerIcon}>👤</Text>
+        <Text style={styles.footerText}>Cá nhân</Text>
+      </TouchableOpacity>
     </View>
   );
-}
+};
 
-      const styles = StyleSheet.create({
-        
-    /* Footer */
+const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     backgroundColor: 'white',
