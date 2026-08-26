@@ -57,30 +57,32 @@ Mô hình chuẩn bắt buộc phải qua 3 lớp: React Native (App) $\rightarr
 
 Cấu trúc thư mục dự án của bạn sẽ trông như thế này:
 VIETNAM_APP_project/
-├── app/                  <-- Mã nguồn React Native (Expo)
-├── backend/              <-- Chứa server kết nối MySQL
-│   ├── node_modules/
-│   ├── package.json
-│   └── server.js
-├── package.json          <-- Package của React Native
+├── app/ <-- Mã nguồn React Native (Expo)
+├── backend/ <-- Chứa server kết nối MySQL
+│ ├── node_modules/
+│ ├── package.json
+│ └── server.js
+├── package.json <-- Package của React Native
 └── ...
 
 ## Bước 1: Tạo thư mục Backend và cài đặt thư viện
+
 Mở project VIETNAM_APP_project trên VS Code.
 
 Mở Terminal trong VS Code (`Ctrl + ``) và chạy lần lượt các lệnh sau:
 
 1. Tạo thư mục backend và di chuyển vào trong đó
-mkdir backend
-cd backend
+   mkdir backend
+   cd backend
 
 2. Khởi tạo package.json riêng cho backend
-npm init -y
+   npm init -y
 
 3. Cài đặt các thư viện cần thiết
-npm install express mysql2 cors
+   npm install express mysql2 cors
 
 ## Bước 2: Tạo file server.js trong thư mục backend
+
 // backend/server.js
 const express = require('express');
 const mysql = require('mysql2');
@@ -92,65 +94,64 @@ app.use(express.json());
 
 // 1. Cấu hình thông tin tài khoản MySQL của bạn
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',             // Tên user MySQL (mặc định là root)
-  password: '123456', // Điền mật khẩu MySQL của bạn vào đây
-  database: 'luyenviet_chinhta_vietnam'  // Điền tên database của bạn vào đây
+host: 'localhost',
+user: 'root', // Tên user MySQL (mặc định là root)
+password: '123456', // Điền mật khẩu MySQL của bạn vào đây
+database: 'luyenviet_chinhta_vietnam' // Điền tên database của bạn vào đây
 });
 
 // 2. Kiểm tra kết nối Database
 db.connect((err) => {
-  if (err) {
-    console.error('Lỗi kết nối MySQL:', err.message);
-    return;
-  }
-  console.log('Đã kết nối MySQL thành công!');
+if (err) {
+console.error('Lỗi kết nối MySQL:', err.message);
+return;
+}
+console.log('Đã kết nối MySQL thành công!');
 });
 
 // 3. API kiểm tra server hoạt động
 app.get('/api/status', (req, res) => {
-  res.json({ message: 'Backend đang hoạt động tốt!' });
+res.json({ message: 'Backend đang hoạt động tốt!' });
 });
 
 // 4. API mẫu lấy danh sách dữ liệu (thay 'ten_bang' bằng bảng thực tế của bạn)
 app.get('/api/data', (req, res) => {
-  const sql = 'SELECT * FROM mguoi_dung'; // Thay 'ten_bang' bằng tên bảng thực tế của bạn
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(results);
-  });
+const sql = 'SELECT \* FROM mguoi_dung'; // Thay 'ten_bang' bằng tên bảng thực tế của bạn
+db.query(sql, (err, results) => {
+if (err) {
+return res.status(500).json({ error: err.message });
+}
+res.json(results);
+});
 });
 
 // Chạy server tại cổng 5506
 const PORT = 5506;
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server backend đang chạy tại http://localhost:${PORT}`);
+console.log(`Server backend đang chạy tại http://localhost:${PORT}`);
 });
 
-*Lưu ý nếu quên mật khẩu root hay không đăng nhập root sd cách này:
+\*Lưu ý nếu quên mật khẩu root hay không đăng nhập root sd cách này:
 
 Bước 1: Tắt dịch vụ MySQL đang chạy ngầm
-1.	Nhấn tổ hợp phím Windows + R, gõ services.msc rồi bấm Enter.
-2.	Trong danh sách dịch vụ hiện ra, kéo tìm dịch vụ tên là MySQL80 (hoặc MySQL).
-3.	Nhấp chuột phải vào MySQL80 $\rightarrow$ chọn Stop (Dừng).
-Bước 2: Tạo file lệnh đổi mật khẩu
-1.	Mở ổ đĩa D:\ trên máy tính của bạn.
-2.	Tạo một file văn bản mới tên là reset.txt (đường dẫn file sẽ là D:\reset.txt).
-3.	Dán đúng 1 dòng lệnh sau vào file rồi lưu lại:
+
+1. Nhấn tổ hợp phím Windows + R, gõ services.msc rồi bấm Enter.
+2. Trong danh sách dịch vụ hiện ra, kéo tìm dịch vụ tên là MySQL80 (hoặc MySQL).
+3. Nhấp chuột phải vào MySQL80 $\rightarrow$ chọn Stop (Dừng).
+   Bước 2: Tạo file lệnh đổi mật khẩu
+4. Mở ổ đĩa D:\ trên máy tính của bạn.
+5. Tạo một file văn bản mới tên là reset.txt (đường dẫn file sẽ là D:\reset.txt).
+6. Dán đúng 1 dòng lệnh sau vào file rồi lưu lại:
 
 ALTER USER 'root'@'localhost' IDENTIFIED BY '123456';
 
 Bước 3: Cưỡng chế nạp mật khẩu mới
-1.	Nhấn phím Windows, gõ cmd.
-2.	Nhấp chuột phải vào Command Prompt $\rightarrow$ chọn Run as administrator (Chạy bằng quyền quản trị).
-3.	Dán toàn bộ dòng lệnh sau vào CMD rồi bấm Enter:
+
+1. Nhấn phím Windows, gõ cmd.
+2. Nhấp chuột phải vào Command Prompt $\rightarrow$ chọn Run as administrator (Chạy bằng quyền quản trị).
+3. Dán toàn bộ dòng lệnh sau vào CMD rồi bấm Enter:
 
 "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqld.exe" --defaults-file="C:\ProgramData\MySQL\MySQL Server 8.0\my.ini" --init-file="D:\reset.txt" --console
-
-
-
 
 ## Bước 3: Cách chạy đồng thời Backend và React Native trên VS Code
 
@@ -187,8 +188,8 @@ Plaintext
 
 your url is: https://neat-kings-cover.loca.lt
 
-
 ## LỖI KHÔNG MỞ PROJECT ĐƯỢC
+
 Lỗi java.io.IOException: Failed to download remote update xuất hiện khi app Expo Go trên điện thoại không thể tải được gói mã nguồn JavaScript (Metro Bundler) từ máy tính do bị tường lửa chặn hoặc router Wi-Fi chặn kết nối nội bộ giữa 2 thiết bị.
 
 Dưới đây là các bước xử lý triệt để nhất:
@@ -221,30 +222,29 @@ Lưu ý: Nếu terminal hỏi Do you want to install @expo/ngrok?, bạn gõ y r
 
 Quét lại mã QR mới xuất hiện trên màn hình bằng Expo Go.
 
-
 ## Thực hiện lần lượt các bước sau để chạy lệnh adb reverse thành công:
+
 Bước 1: Bật gỡ lỗi USB trên điện thoại
 Bước 1: Bật gỡ lỗi USB trên điện thoại
-1.	Vào Cài đặt $\rightarrow$ Thông tin điện thoại $\rightarrow$ bấm 7 lần vào dòng Số bản dựng (Build Number) để mở Chế độ nhà phát triển.
-2.	Quay lại menu Cài đặt, vào Tùy chọn cho nhà phát triển (Developer Options) $\rightarrow$ bật Gỡ lỗi USB (USB Debugging).
-3.	Cắm cáp USB nối điện thoại với máy tính, trên màn hình điện thoại chọn chế độ Truyền tệp (File Transfer), sau đó chọn Cho phép / Luôn cho phép gỡ lỗi USB nếu có hộp thoại hỏi.
-Bước 2: Tìm và chạy trực tiếp adb.exe bằng PowerShell
-Mở một tab PowerShell mới trong VS Code (hoặc Windows PowerShell) và chạy lệnh sau để kiểm tra xem file adb.exe mặc định có sẵn trên máy chưa:
+
+1. Vào Cài đặt $\rightarrow$ Thông tin điện thoại $\rightarrow$ bấm 7 lần vào dòng Số bản dựng (Build Number) để mở Chế độ nhà phát triển.
+2. Quay lại menu Cài đặt, vào Tùy chọn cho nhà phát triển (Developer Options) $\rightarrow$ bật Gỡ lỗi USB (USB Debugging).
+3. Cắm cáp USB nối điện thoại với máy tính, trên màn hình điện thoại chọn chế độ Truyền tệp (File Transfer), sau đó chọn Cho phép / Luôn cho phép gỡ lỗi USB nếu có hộp thoại hỏi.
+   Bước 2: Tìm và chạy trực tiếp adb.exe bằng PowerShell
+   Mở một tab PowerShell mới trong VS Code (hoặc Windows PowerShell) và chạy lệnh sau để kiểm tra xem file adb.exe mặc định có sẵn trên máy chưa:
 
 & "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" devices
 
 Nếu kết quả hiển thị dạng:
 
 List of devices attached
-xxxxxxxxx    device
+xxxxxxxxx device
 
 Máy tính đã nhận điện thoại. Chạy tiếp lệnh đảo cổng:
 
 & "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" reverse tcp:5000 tcp:5000
 
 (Lệnh in ra 5000 là xong).
-
-
 
 ## Trong databse có bảng kỹ năng với cột url_link
 
@@ -254,10 +254,10 @@ Không thể lưu đường dẫn ổ đĩa máy tính (D:\...) vào database v�
 
 Lưu đường dẫn tương đối tính từ thư mục app/ (bỏ phần đuôi .tsx và đường dẫn ổ đĩa D:\...):
 
-Giá trị cần lưu: 
+Giá trị cần lưu:
 
-** Giá trị trong database phải trùng khớp chính xác với name được khai báo trong <Stack.Screen name="..."/>:
+\*\* Giá trị trong database phải trùng khớp chính xác với name được khai báo trong <Stack.Screen name="..."/>:
 
-❌ Giá trị cũ (sai): /screens/primary_school_students/skills_students/practice_reading
+❌ Giá trị cũ (sai): /screens/primary_school_students/skills_reading_students/practice_reading
 
 ✅ Giá trị mới (đúng): PracticeReading

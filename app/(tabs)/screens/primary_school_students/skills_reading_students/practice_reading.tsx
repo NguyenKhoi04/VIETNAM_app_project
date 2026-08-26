@@ -1,3 +1,5 @@
+//Danh mục đọc
+
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -73,7 +75,6 @@ export default function PracticeReadingScreen() {
         style={styles.mainContent}
         contentContainerStyle={styles.scrollContent}
       >
-      <Text style={styles.sectionTitle}>📚 SGK Tiếng Việt 1, tập một</Text>
         {/* Grid 4 hình */}
         <View style={styles.imageGrid}>
           <View style={styles.imageRow}>
@@ -102,7 +103,6 @@ export default function PracticeReadingScreen() {
             /> */}
           </View>
         </View>
-      <Text style={styles.sectionTitle}>📚 SGK Tiếng Việt 1, tập hai</Text>
       
         {/* Grid 4 hình */}
         <View style={styles.imageGrid}>
