@@ -58,7 +58,7 @@ export default function ReadingWeekDetailsScreen() {
       <Header navigation={null} route={{ params: { ho_ten: name } }} />
 
       {/* Banner Kỹ năng - ĐÃ SỬA */}
-      {/* <View style={styles.bannerContainer}>
+      <View style={styles.bannerContainer}>
         <ImageBackground
           source={require('@/assets/images/banner-chuong-trinh.png')}
           style={styles.bannerBackground}
@@ -69,7 +69,7 @@ export default function ReadingWeekDetailsScreen() {
             <Text style={styles.bannerSubtitle}>{tenKyNang}</Text>
           </View>
         </ImageBackground>
-      </View> */}
+      </View>
 
       
       <ScrollView
