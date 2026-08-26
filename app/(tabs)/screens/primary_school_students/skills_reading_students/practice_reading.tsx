@@ -10,6 +10,7 @@ import {
   Dimensions,
   ImageBackground,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Header from '../Header';
@@ -78,11 +79,20 @@ export default function PracticeReadingScreen() {
         {/* Grid 4 hình */}
         <View style={styles.imageGrid}>
           <View style={styles.imageRow}>
-            <Image
-              source={require('@/assets/images/hsth_tuan1.png')}
-              style={styles.imageBox}
-              resizeMode="cover"
-            />
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() =>
+                router.push(
+                  '/(tabs)/screens/primary_school_students/skills_reading_students/reading_week_details'
+                )
+              }
+            >
+              <Image
+                source={require('@/assets/images/hsth_tuan1.png')}
+                style={styles.imageBox}
+                resizeMode="cover"
+              />
+            </TouchableOpacity>
             <Image
               source={require('@/assets/images/hsth_tuan3.png')}
               style={styles.imageBox}

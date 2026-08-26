@@ -9,28 +9,21 @@ import {
   Dimensions,
   Alert,
   ImageBackground,
-
 } from 'react-native';
 
 import Header from './Header';
 import Footer from './Footer';
 
-import { useRouter } from 'expo-router'; // 1. Import router
-
-
+import { useRouter } from 'expo-router';
 import { API_ENDPOINTS } from '@/src/config/api';
 
 const { width } = Dimensions.get('window');
-//const API_USERINFO_URL = 'http://192.168.102.12:5000/api/user-info';
-
-const API_USERINFO_URL = API_ENDPOINTS.GET_USER_INFO; // ← Sử dụng URL từ config file
 
 interface ClassInfo {
   lop: number | string;
   ten_chuong_trinh?: string;
 }
 
-// Interface khớp với dữ liệu từ MySQL + FE
 interface Feature {
   id_ky_nang: number;
   ma_ky_nang: string;
@@ -43,9 +36,7 @@ interface Feature {
   url_link?: string;
 }
 
-// Bảng màu quay vòng cho giao diện
 const BG_COLORS = ['#E0F7FA', '#FFF3E0', '#E8F5E9', '#E0F2FE', '#CCCCFF'];
-
 
 const HomePrimary = ({ navigation, route }: any) => {
   const router = useRouter();
@@ -54,9 +45,6 @@ const HomePrimary = ({ navigation, route }: any) => {
   const [classes, setClasses] = useState<ClassInfo[]>([]);
   const [selectedClass, setSelectedClass] = useState<string>('');
   const [ten_chuong_trinh, setProgramName] = useState<string>('');
-
-  const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
-
   const [features, setFeatures] = useState<Feature[]>([]);
 
   useEffect(() => {
@@ -65,7 +53,7 @@ const HomePrimary = ({ navigation, route }: any) => {
     }
   }, [route?.params?.ho_ten]);
 
-  // 2. Lấy danh sách lớp khi mở màn hình
+  // Lấy danh sách lớp khi mở màn hình
   useEffect(() => {
     const fetchClasses = async () => {
       try {
@@ -74,7 +62,6 @@ const HomePrimary = ({ navigation, route }: any) => {
 
         if (Array.isArray(data) && data.length > 0) {
           setClasses(data);
-          // Gán mặc định chọn lớp đầu tiên từ API trả về
           setSelectedClass(`Lớp ${data[0].lop}`);
         } else {
           setClasses([]);
@@ -87,7 +74,7 @@ const HomePrimary = ({ navigation, route }: any) => {
     fetchClasses();
   }, []);
 
-  // 3. Tự động lấy tên chương trình MỖI KHI selectedClass thay đổi
+  // Tự động lấy danh sách kỹ năng khi selectedClass thay đổi
   useEffect(() => {
     if (!selectedClass) return;
 
@@ -119,21 +106,41 @@ const HomePrimary = ({ navigation, route }: any) => {
     fetchSkillsData();
   }, [selectedClass]);
 
-// 5. Router để điều hướng sang màn hình luyện kỹ năng
+  // Điều hướng bằng router của expo-router
+  // const handleNavigate = (url?: string, tenKyNang?: string) => {
+  //   if (url) {
+  //     router.push({
+  //       pathname: url as any,
+  //       params: {
+  //         ho_ten: name,
+  //         ten_ky_nang: tenKyNang || '',
+  //       },
+  //     });
+  //   } else {
+  //     Alert.alert('Thông báo', `Tính năng "${tenKyNang}" đang được phát triển!`);
+  //   }
+  // };
 
+  const handleNavigate = (url?: string, tenKyNang?: string) => {
+  console.log('--- CHECK ROUTE ---');
+  console.log('Tên kỹ năng:', tenKyNang);
+  console.log('url_link nhận được:', url);
 
-const handleNavigate = (url: string, tenKyNang: string) => {
-  if (url) {
-    router.push({
-      pathname: url as any,
-      params: {
-        ho_ten: name,
-        ten_ky_nang: tenKyNang || '',
-      },
-    });
-  } else {
+  if (!url) {
     Alert.alert('Thông báo', `Tính năng "${tenKyNang}" đang được phát triển!`);
+    return;
   }
+
+  // Tự động thêm dấu / nếu thiếu
+  const path = url.startsWith('/') ? url : `/${url}`;
+
+  router.push({
+    pathname: path as any,
+    params: {
+      ho_ten: name,
+      ten_ky_nang: tenKyNang || '',
+    },
+  });
 };
 
   return (
@@ -165,8 +172,9 @@ const handleNavigate = (url: string, tenKyNang: string) => {
             <TouchableOpacity
               key={feature.id_ky_nang}
               style={[styles.featureCard, { backgroundColor: feature.bgColor }]}
+              // ✅ ĐÃ SỬA: Chỉ truyền URL string và tên kỹ năng
               onPress={() =>
-                handleNavigate(navigation.navigate(feature.url_link), feature.ten_ky_nang)
+                handleNavigate(feature.url_link, feature.ten_ky_nang)
               }
               activeOpacity={0.8}
             >
@@ -187,7 +195,6 @@ const handleNavigate = (url: string, tenKyNang: string) => {
     </SafeAreaView>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F8FAFF' },
