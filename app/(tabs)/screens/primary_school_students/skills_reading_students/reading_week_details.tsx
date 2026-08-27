@@ -83,7 +83,7 @@ export default function ReadingWeekDetailsScreen() {
               activeOpacity={0.8}
               onPress={() =>
                 router.push(
-                  '/(tabs)/screens/primary_school_students/skills_reading_students/reading_week_details'
+                  '/(tabs)/screens/primary_school_students/skills_reading_students/reading_pronunciation'
                 )
               }
             >
