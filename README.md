@@ -269,3 +269,26 @@ Bước 2 lấy API
 Bước 3 chép code
 Bước 4: tạo cmd : npm install openai
 Bước 5 chạy  node tts.js để tải file âm thanh
+
+Để giảm tốc độ phát âm cho phù hợp với học sinh tiểu học, bạn có thể áp dụng 2 cách sau:
+
+Cách 1: Thêm tham số speed vào hàm tạo âm thanh (Khuyên dùng)
+
+OpenAI SDK hỗ trợ thuộc tính speed với dải giá trị từ 0.25 đến 4.0 (mặc định là 1.0). Đối với học sinh tiểu học hoặc bé tập đọc, mức 0.7 đến 0.8 là mức độ vừa phải, rõ chữ và không bị méo tiếng.
+
+Chỉnh sửa lại hàm run() trong file tts.js:
+async function run() {
+  const response = await client.audio.speech.create({
+    model: 'FPT.AI-VITS',
+    input: 'xin chào, chúng tôi là FPT',
+    response_format: 'wav',
+    voice: 'std_kimngan',
+    speed: 0.75, // Giảm tốc độ phát âm (0.7 - 0.8 phù hợp cho tiểu học)
+  });
+}
+
+Cách 2: Ngắt nhịp văn bản bằng dấu câu
+
+Mô hình TTS tự động ngắt nghỉ khi gặp dấu câu. Nếu muốn bé nghe rõ từng cụm từ hoặc từng âm tiết để luyện phát âm, bạn có thể chủ động thêm dấu phẩy , giữa các từ:
+
+ví dụ: input: 'xin chào, chúng tôi, là, FPT',
