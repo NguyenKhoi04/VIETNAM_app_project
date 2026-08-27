@@ -261,3 +261,11 @@ Giá trị cần lưu:
 ❌ Giá trị cũ (sai): /screens/primary_school_students/skills_reading_students/practice_reading
 
 ✅ Giá trị mới (đúng): PracticeReading
+
+
+## cách làm Text- to- Speech (TTS)
+Bước 1: TRUY CẬP https://marketplace.fptcloud.com/en/models/fpt-ai-vits 
+Bước 2 lấy API
+Bước 3 chép code
+Bước 4: tạo cmd : npm install openai
+Bước 5 chạy  node tts.js để tải file âm thanh
