@@ -10,13 +10,13 @@ const client = new OpenAI({
 async function run() {
   const response = await client.audio.speech.create({
     model: 'FPT.AI-VITs',
-    input: 'A... bà',
+    input: 'Nam, vẽ, kì, đà.',
     response_format: 'wav',
     voice: 'std_hatieumai',
     speed: 0.75,// Giảm tốc độ phát âm (0.7 - 0.8 phù hợp cho tiểu học)
   });
   const buffer = await response.arrayBuffer();
-  fs.writeFileSync('speech_a_ba.wav', Buffer.from(buffer));
+  fs.writeFileSync('speech_nam_ki_da.wav', Buffer.from(buffer));
 }
 
 run();

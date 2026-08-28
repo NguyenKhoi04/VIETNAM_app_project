@@ -28,7 +28,7 @@ export default function PracticeReadingScreen() {
   const [name, setName] = useState(params.ho_ten || "");
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [tenKyNang, setTenKyNang] = useState(params.ten_ky_nang || "Tập Đọc");
-  const [tenBaiHoc] = useState("ki  kì  kí  kĩ  kè  kẻ  kệ");
+  const [tenBaiHoc] = useState("ki  kì  kí  kỉ  kĩ  kè  kẻ  kệ");
 
   useEffect(() => {
     if (params.ho_ten) setName(params.ho_ten);
