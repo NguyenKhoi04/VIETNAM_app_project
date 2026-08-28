@@ -292,3 +292,39 @@ Cách 2: Ngắt nhịp văn bản bằng dấu câu
 Mô hình TTS tự động ngắt nghỉ khi gặp dấu câu. Nếu muốn bé nghe rõ từng cụm từ hoặc từng âm tiết để luyện phát âm, bạn có thể chủ động thêm dấu phẩy , giữa các từ:
 
 ví dụ: input: 'xin chào, chúng tôi, là, FPT',
+
+ví dụ 2: nếu kéo dài âm A (vd: Aaaaa, cá) thì A... cá ( thêm 3 chấm vô)
+
+Sau đó trở về file reading_pronuciation.stx thêm âm thanh vô
+
+1. Bước 1: npx expo install expo-av
+2. sửa code
+// Xử lý phát âm thanh
+  const playSound = async (text: string) => {
+    console.log('Phát âm:', text);
+    try {
+      // Dừng và giải phóng file âm thanh đang phát trước đó (nếu có)
+      if (sound) {
+        await sound.unloadAsync();
+      }
+
+      // Nạp và phát file âm thanh (đổi lại đuôi .wav/.mp3 theo đúng file của bạn)
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        require('@/assets/audio/speech_a.wav') // Trỏ đúng tới thư mục chứa file âm thanh
+      );
+
+      setSound(newSound);
+      await newSound.playAsync();
+    } catch (error) {
+      console.error('Lỗi phát âm thanh:', error);
+    }
+  };
+
+  // Tự động giải phóng bộ nhớ âm thanh khi component bị unmount
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);

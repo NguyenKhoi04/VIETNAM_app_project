@@ -1,4 +1,4 @@
-//Danh mục đọc
+// Danh mục đọc
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -18,8 +18,6 @@ import Footer from '../Footer';
 import { API_ENDPOINTS } from '@/src/config/api';
 
 const { width } = Dimensions.get('window');
-
-
 
 interface Feature {
   id_ky_nang: number;
@@ -43,7 +41,6 @@ export default function ReadingWeekDetailsScreen() {
   }>();
 
   const [name, setName] = useState<string>(params.ho_ten || '');
-  // Ưu tiên lấy tên kỹ năng từ params, fallback "Tập Đọc"
   const [tenKyNang, setTenKyNang] = useState<string>(
     params.ten_ky_nang || 'Tập Đọc'
   );
@@ -57,7 +54,7 @@ export default function ReadingWeekDetailsScreen() {
     <SafeAreaView style={styles.container}>
       <Header navigation={null} route={{ params: { ho_ten: name } }} />
 
-      {/* Banner Kỹ năng - ĐÃ SỬA */}
+      {/* Banner Kỹ năng */}
       <View style={styles.bannerContainer}>
         <ImageBackground
           source={require('@/assets/images/banner-chuong-trinh.png')}
@@ -71,50 +68,31 @@ export default function ReadingWeekDetailsScreen() {
         </ImageBackground>
       </View>
 
-      
       <ScrollView
         style={styles.mainContent}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Grid 4 hình */}
+        {/* Grid hình */}
         <View style={styles.imageGrid}>
           <View style={styles.imageRow}>
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() =>
                 router.push(
-                  '/(tabs)/screens/primary_school_students/skills_reading_students/reading_pronunciation'
+                  '/(tabs)/screens/primary_school_students/skills_reading_students/reading_pronunciation_week5'
                 )
               }
             >
               <Image
-                source={require('@/assets/images/hsth_abc.png')}
+                source={require('@/assets/images/hsth_RS.png')}
                 style={styles.imageBox}
                 resizeMode="cover"
               />
             </TouchableOpacity>
-            <Image
-              source={require('@/assets/images/hsth_Ik.png')}
-              style={styles.imageBox}
-              resizeMode="cover"
-            />
-          </View>
-
-          <View style={styles.imageRow}>
-            <Image
-              source={require('@/assets/images/hsth_RS.png')}
-              style={styles.imageBox}
-              resizeMode="cover"
-            />
-            {/* <Image
-              source={require('@/assets/images/hsth_tuan1.png')}
-              style={styles.imageBox}
-              resizeMode="cover"
-            /> */}
           </View>
         </View>
-      
       </ScrollView>
+
       <Footer />
     </SafeAreaView>
   );
@@ -125,45 +103,38 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F8F9FA',
   },
-  /* Banner Chương trình */
   bannerContainer: {
     alignItems: 'center',
     marginHorizontal: 5,
     marginTop: 8,
     marginBottom: 5,
   },
-
   bannerBackground: {
     width: '100%',
     height: 85,
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   bannerTextContainer: {
     alignItems: 'center',
     marginTop: -25,
   },
-
   bannerTitle: {
     fontSize: 16,
     fontWeight: '700',
     color: '#E53E3E',
     letterSpacing: 0.5,
   },
-
   bannerSubtitle: {
     fontSize: 14,
     color: '#2B6CB0',
     marginTop: 2,
     textTransform: 'uppercase',
   },
-
   mainContent: {
     flex: 1,
   },
-
-    sectionTitle: {
+  sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
     color: '#1E40AF',
@@ -176,18 +147,18 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   imageGrid: {
-  marginVertical: 12,
-  gap: 12,                    // khoảng cách giữa 2 hàng
-},
-imageRow: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  gap: 12,                    // khoảng cách giữa 2 ảnh trong 1 hàng
-},
-imageBox: {
-  width: (width - 16 * 2 - 12) / 2,   // tính đúng 2 cột
-  height: (width - 16 * 2 - 12) / 2,  // vuông
-  borderRadius: 12,
-  backgroundColor: '#E5E7EB',
-},
+    marginVertical: 12,
+    gap: 12,
+  },
+  imageRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  imageBox: {
+    width: (width - 16 * 2 - 12) / 2,
+    height: (width - 16 * 2 - 12) / 2,
+    borderRadius: 12,
+    backgroundColor: '#E5E7EB',
+  },
 });

@@ -93,7 +93,7 @@ export default function WelcomeScreen({ navigation }: any) {
       {showStatus && (
         <View style={styles.statusBadge}>
           <Text style={[styles.statusText, { color: isConnected ? '#16a34a' : '#dc2626' }]}>
-            ● {status}
+            {'● '}{status}
           </Text>
         </View>
       )}
