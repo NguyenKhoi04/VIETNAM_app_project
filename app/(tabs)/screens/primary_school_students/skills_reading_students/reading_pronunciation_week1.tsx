@@ -227,7 +227,7 @@ export default function PracticeReadingScreen() {
             ]}
             onPress={() => playSound("a_ba")}
           >
-            <Text style={styles.practiceText}>A, bà</Text>
+            <Text style={styles.practiceText}>A, bà.</Text>
             <Text style={styles.speaker}>🔊</Text>
           </Pressable>
 
@@ -238,7 +238,7 @@ export default function PracticeReadingScreen() {
             ]}
             onPress={() => playSound("a_ca")}
           >
-            <Text style={styles.practiceText}>A, cá</Text>
+            <Text style={styles.practiceText}>A, cá.</Text>
             <Text style={styles.speaker}>🔊</Text>
           </Pressable>
         </View>

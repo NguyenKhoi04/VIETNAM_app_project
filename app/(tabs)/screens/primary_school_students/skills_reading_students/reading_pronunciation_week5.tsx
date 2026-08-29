@@ -1,4 +1,4 @@
-//Phát âm tập đọc
+// Phát âm tập đọc - Bài ki kì kí...
 import { Audio } from "expo-av";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -35,44 +35,48 @@ export default function PracticeReadingScreen() {
     if (params.ten_ky_nang) setTenKyNang(params.ten_ky_nang);
   }, [params.ho_ten, params.ten_ky_nang]);
 
+  // Map âm thanh (bạn cần chuẩn bị file tương ứng)
   const AUDIO_MAP: Record<string, any> = {
-    a: require("../../../../../text-to-speech/speech_a.wav"),
-    b: require("../../../../../text-to-speech/speech_b.wav"),
-    c: require("../../../../../text-to-speech/speech_c.wav"),
-    // Bạn có thể khai báo sẵn thêm các từ bên dưới:
-    ba: require("../../../../../text-to-speech/speech_ba.wav"),
-    bà: require("../../../../../text-to-speech/speech_ba_huyen.wav"),
-    ca: require('../../../../../text-to-speech/speech_ca.wav'),
-    cá: require('../../../../../text-to-speech/speech_ca_sac.wav'),
-    a_ba: require('../../../../../text-to-speech/speech_a_ba.wav'),
-    a_ca: require('../../../../../text-to-speech/speech_a_ca.wav'),
-
+    i: require("../../../../../text-to-speech/speech_i.wav"),
+    k: require("../../../../../text-to-speech/speech_k.wav"),
+    ki: require("../../../../../text-to-speech/speech_ki.wav"),
+    kì: require("../../../../../text-to-speech/speech_ki_huyen.wav"),
+    kí: require("../../../../../text-to-speech/speech_ki_sac.wav"),
+    kỉ: require("../../../../../text-to-speech/speech_ki_hoi.wav"),
+    kĩ: require("../../../../../text-to-speech/speech_ki_nga.wav"),
+    kè: require("../../../../../text-to-speech/speech_ke_huyen.wav"),
+    kẻ: require("../../../../../text-to-speech/speech_ke_hoi.wav"),
+    kệ: require("../../../../../text-to-speech/speech_ke_nang.wav"),
+    bi_do: require("../../../../../text-to-speech/speech_bi_do.wav"),
+    ki_da: require("../../../../../text-to-speech/speech_ki_da.wav"),
+    nam_ve_ki_da: require("../../../../../text-to-speech/speech_nam_ve_ki_da.wav"),
+    kida_keda: require("../../../../../text-to-speech/speech_kida_keda.wav"),
   };
+
   const playSound = async (text: string) => {
-    console.log("Phát âm:", text);
+  console.log("Phát âm:", text);
 
-    // Lấy file âm thanh tương ứng với chữ cái/từ được bấm
-    const audioSource = AUDIO_MAP[text.toLowerCase()];
+  // Không dùng toLowerCase() với từ có dấu tiếng Việt
+  const audioSource = AUDIO_MAP[text] || AUDIO_MAP[text.toLowerCase()];
 
-    if (!audioSource) {
-      console.warn(`Chưa gán file âm thanh cho: "${text}"`);
-      return;
+  if (!audioSource) {
+    console.warn(`Chưa gán file âm thanh cho: "${text}"`);
+    return;
+  }
+
+  try {
+    // Dừng âm thanh cũ
+    if (sound) {
+      await sound.unloadAsync();
     }
 
-    try {
-      // Dừng âm thanh trước đó nếu có
-      if (sound) {
-        await sound.unloadAsync();
-      }
-
-      // Nạp và phát file tương ứng
-      const { sound: newSound } = await Audio.Sound.createAsync(audioSource);
-      setSound(newSound);
-      await newSound.playAsync();
-    } catch (error) {
-      console.error("Lỗi phát âm thanh:", error);
-    }
-  };
+    const { sound: newSound } = await Audio.Sound.createAsync(audioSource);
+    setSound(newSound);
+    await newSound.playAsync();
+  } catch (error) {
+    console.error("Lỗi phát âm thanh:", error);
+  }
+};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -93,9 +97,9 @@ export default function PracticeReadingScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* ===== Dòng chữ cái a b c ===== */}
+        {/* ===== 1. Chữ i và k ===== */}
         <View style={styles.letterRow}>
-          {["a", "b", "c"].map((letter) => (
+          {["r", "s"].map((letter) => (
             <Pressable
               key={letter}
               style={({ pressed }) => [
@@ -110,137 +114,223 @@ export default function PracticeReadingScreen() {
           ))}
         </View>
 
-        {/* ===== Hàng số 3 | bảng ba | loa ===== */}
-        <Pressable
-          style={({ pressed }) => [styles.rowItem, pressed && styles.pressed]}
-          onPress={() => playSound("ba")}
-        >
-          <Text style={styles.bigNumber}>3</Text>
-
-          <View style={styles.syllableBox}>
-            <View style={styles.topRow}>
-              <View style={styles.smallBox}>
-                <Text style={styles.smallLetter}>b</Text>
-              </View>
-              <View style={styles.smallBox}>
-                <Text style={styles.smallLetter}>a</Text>
-              </View>
-            </View>
-            <View style={styles.bottomBox}>
-              <Text style={styles.syllableText}>ba</Text>
-            </View>
-          </View>
-
-          <Text style={styles.speaker}>🔊</Text>
-        </Pressable>
-
-        {/* ===== Hàng hình bà | bảng bà | loa ===== */}
-        <Pressable
-          style={({ pressed }) => [styles.rowItem, pressed && styles.pressed]}
-          onPress={() => playSound("bà")}
-        >
-          <Image
-            source={require("@/assets/images/hinh_ba.png")}
-            style={styles.wordImage}
-            resizeMode="contain"
-          />
-
-          <View style={styles.syllableBox}>
-            <View style={styles.topRow}>
-              <View style={styles.smallBox}>
-                <Text style={styles.smallLetter}>b</Text>
-              </View>
-              <View style={styles.smallBox}>
-                <Text style={styles.smallLetter}>a</Text>
-              </View>
-            </View>
-            <View style={styles.bottomBox}>
-              <Text style={styles.syllableText}>bà</Text>
-            </View>
-          </View>
-
-          <Text style={styles.speaker}>🔊</Text>
-        </Pressable>
-
-        {/* ===== Hàng hình ca | bảng ca | loa ===== */}
-        <Pressable
-          style={({ pressed }) => [styles.rowItem, pressed && styles.pressed]}
-          onPress={() => playSound("ca")}
-        >
-          <Image
-            source={require("@/assets/images/hinh_ca.png")}
-            style={styles.wordImage}
-            resizeMode="contain"
-          />
-
-          <View style={styles.syllableBox}>
-            <View style={styles.topRow}>
-              <View style={styles.smallBox}>
-                <Text style={styles.smallLetter}>c</Text>
-              </View>
-              <View style={styles.smallBox}>
-                <Text style={styles.smallLetter}>a</Text>
-              </View>
-            </View>
-            <View style={styles.bottomBox}>
-              <Text style={styles.syllableText}>ca</Text>
-            </View>
-          </View>
-
-          <Text style={styles.speaker}>🔊</Text>
-        </Pressable>
-
-        {/* ===== Hàng hình cá | bảng cá | loa ===== */}
-        <Pressable
-          style={({ pressed }) => [styles.rowItem, pressed && styles.pressed]}
-          onPress={() => playSound("cá")}
-        >
-          <Image
-            source={require("@/assets/images/con_ca.png")}
-            style={styles.wordImage}
-            resizeMode="contain"
-          />
-
-          <View style={styles.syllableBox}>
-            <View style={styles.topRow}>
-              <View style={styles.smallBox}>
-                <Text style={styles.smallLetter}>c</Text>
-              </View>
-              <View style={styles.smallBox}>
-                <Text style={styles.smallLetter}>á</Text>
-              </View>
-            </View>
-            <View style={styles.bottomBox}>
-              <Text style={styles.syllableText}>cá</Text>
-            </View>
-          </View>
-
-          <Text style={styles.speaker}>🔊</Text>
-        </Pressable>
-
-        {/* ===== Luyện tập cuối ===== */}
-        <View style={styles.practiceRow}>
+       {/* ===== 2. Bảng r a ra nằm ngang ===== */}
+        <View style={styles.horizontalTableRow}>
+          {/* Nhóm 1: bảng ra + loa */}
           <Pressable
             style={({ pressed }) => [
-              styles.practiceBox,
+              styles.horizontalGroup,
               pressed && styles.pressed,
             ]}
-            onPress={() => playSound("a_ba")}
+            onPress={() => playSound("ra")}
           >
-            <Text style={styles.practiceText}>A, bà</Text>
+            <View style={styles.horizontalBox}>
+              <View style={styles.hCell}>
+                <Text style={styles.hLetter}>r</Text>
+              </View>
+              <View style={styles.hCell}>
+                <Text style={styles.hLetter}>a</Text>
+              </View>
+              <View style={[styles.hCell, styles.hLast]}>
+                <Text style={styles.hLetter}>ra</Text>
+              </View>
+            </View>
             <Text style={styles.speaker}>🔊</Text>
           </Pressable>
 
+          {/* Nhóm 2: bảng s e sẻ + loa */}
           <Pressable
             style={({ pressed }) => [
-              styles.practiceBox,
+              styles.horizontalGroup,
               pressed && styles.pressed,
             ]}
-            onPress={() => playSound("a_ca")}
+            onPress={() => playSound("sẻ")}
           >
-            <Text style={styles.practiceText}>A, cá</Text>
+            <View style={styles.horizontalBox}>
+              <View style={styles.hCell}>
+                <Text style={styles.hLetter}>s</Text>
+              </View>
+              <View style={styles.hCell}>
+                <Text style={styles.hLetter}>e</Text>
+              </View>
+              <View style={[styles.hCell, styles.hLast]}>
+                <Text style={styles.hLetter}>sẻ</Text>
+              </View>
+            </View>
             <Text style={styles.speaker}>🔊</Text>
           </Pressable>
+        </View>
+        {/* ===== 3. Bảng 2 hàng × 3 cột nguyên âm ===== */}
+        <View style={styles.grid3}>
+          {[
+            ["rạ", "rế", "rẻ", "rẽ", "rổ",], // hàng 1
+            ["sa", "sả", "sẽ", "sẻ", "sò",], // hàng 2 (có thể thay bằng kỉ, kĩ nếu cần)
+          ].map((row, rowIndex) => (
+            <View key={rowIndex} style={styles.gridRow}>
+              {row.map((word) => (
+                <Pressable
+                  key={word + rowIndex}
+                  style={({ pressed }) => [
+                    styles.gridCell,
+                    pressed && styles.pressed,
+                  ]}
+                  onPress={() => playSound(word)}
+                >
+                  <Text style={styles.gridText}>{word}</Text>
+                  <Text style={styles.smallSpeaker}>🔊</Text>
+                </Pressable>
+              ))}
+            </View>
+          ))}
+        </View>
+
+        {/* ===== 4. Hình ảnh nằm ngang ===== */}
+          <View style={styles.imageGrid}>
+            {/* Ô 1: rổ rá*/}
+            <Pressable
+              style={({ pressed }) => [
+                styles.imageCard,
+                pressed && styles.pressed,
+              ]}
+              onPress={() => playSound("ro_ra")}
+            >
+              <Image
+                source={require("@/assets/images/ro_ra.png")}
+                style={styles.cardImage}
+                resizeMode="contain"
+              />
+              <Text style={styles.cardWord}>rổ rá</Text>
+              <Text style={styles.smallSpeaker}>🔊</Text>
+            </Pressable>
+
+            {/* Ô 2: cá rô */}
+            <Pressable
+              style={({ pressed }) => [
+                styles.imageCard,
+                pressed && styles.pressed,
+              ]}
+              onPress={() => playSound("ca_ro")}  
+            >
+              <Image
+                source={require("@/assets/images/ca_ro.png")}
+                style={styles.cardImage}
+                resizeMode="contain"
+              />
+              <Text style={styles.cardWord}>cá rô</Text>
+              <Text style={styles.smallSpeaker}>🔊</Text>
+            </Pressable>
+          </View>
+
+          <View style={styles.imageGrid}>
+            {/* Ô 3: su su */}
+            <Pressable
+              style={({ pressed }) => [
+                styles.imageCard,
+                pressed && styles.pressed,
+              ]}
+              onPress={() => playSound("su_su")}
+            >
+              <Image
+                source={require("@/assets/images/su_su.png")}
+                style={styles.cardImage}
+                resizeMode="contain"
+              />
+              <Text style={styles.cardWord}>su su</Text>
+              <Text style={styles.smallSpeaker}>🔊</Text>
+            </Pressable>
+
+            {/* Ô 4: chữ số */}
+            <Pressable
+              style={({ pressed }) => [
+                styles.imageCard,
+                pressed && styles.pressed,
+              ]}
+              onPress={() => playSound("chu_so")}  
+            >
+              <Image
+                source={require("@/assets/images/chu_so.png")}
+                style={styles.cardImage}
+                resizeMode="contain"
+              />
+              <Text style={styles.cardWord}>chữ số</Text>
+              <Text style={styles.smallSpeaker}>🔊</Text>
+            </Pressable>
+          </View>
+
+          <View style={styles.imageGrid}>
+            {/* Ô 5: ốc sò */}
+            <Pressable
+              style={({ pressed }) => [
+                styles.imageCard,
+                pressed && styles.pressed,
+              ]}
+              onPress={() => playSound("oc_so")}
+            >
+              <Image
+                source={require("@/assets/images/oc_so.png")}
+                style={styles.cardImage}
+                resizeMode="contain"
+              />
+              <Text style={styles.cardWord}>ốc sò</Text>
+              <Text style={styles.smallSpeaker}>🔊</Text>
+            </Pressable>
+
+            {/* Ô 6: Chim sẻ */}
+            <Pressable
+              style={({ pressed }) => [
+                styles.imageCard,
+                pressed && styles.pressed,
+              ]}
+              onPress={() => playSound("chim_se")}  
+            >
+              <Image
+                source={require("@/assets/images/chim_se.png")}
+                style={styles.cardImage}
+                resizeMode="contain"
+              />
+              <Text style={styles.cardWord}>chim sẻ</Text>
+              <Text style={styles.smallSpeaker}>🔊</Text>
+            </Pressable>
+          </View>
+
+        {/* ===== 5. Câu luyện tập ===== */}
+        <View style={styles.sentenceSection}>
+          <Pressable
+            style={({ pressed }) => [styles.sentenceBox, pressed && styles.pressed]}
+            onPress={() => playSound("nam_ve_ki_da")}
+          >
+            <Text style={styles.sentenceText}>Bầy sẻ non ríu ra ríu rít bên mẹ.</Text>
+            <Text style={styles.speaker}>🔊</Text>
+          </Pressable>
+
+          {/* ===== Câu luyện tập ===== */}
+          <View style={styles.sentenceSection}>
+            <View style={styles.sentenceBox}>
+              {/* Câu 1 + loa */}
+              <Pressable
+                style={({ pressed }) => [
+                  styles.sentenceLine,
+                  pressed && styles.pressed,
+                ]}
+                onPress={() => playSound("cho_co_ga_ri")}
+              >
+                <Text style={styles.sentenceText}>Chợ có gà ri, cá rô, su su.</Text>
+                {/* <Text style={styles.speaker}>🔊</Text> */}
+              </Pressable>
+
+              {/* Câu 2 + loa */}
+              <Pressable
+                style={({ pressed }) => [
+                  styles.sentenceLine,
+                  pressed && styles.pressed,
+                ]}
+                onPress={() => playSound("cho_co_ca_ro_ra")}
+              >
+                <Text style={styles.sentenceText}>Chợ có cả rổ rá.</Text>
+                <Text style={styles.speaker}>🔊</Text>
+              </Pressable>
+            </View>
+          </View>
         </View>
       </ScrollView>
 
@@ -254,150 +344,188 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFFFF",
   },
-  /* Banner Chương trình */
   bannerContainer: {
     alignItems: "center",
     marginHorizontal: 5,
     marginTop: 8,
     marginBottom: 5,
   },
-
   bannerBackground: {
     width: "100%",
     height: 85,
     justifyContent: "center",
     alignItems: "center",
   },
-
   bannerTextContainer: {
     alignItems: "center",
     marginTop: -25,
   },
-
   bannerTitle: {
     fontSize: 16,
     fontWeight: "700",
     color: "#E53E3E",
-    letterSpacing: 0.5,
   },
-
   bannerSubtitle: {
     fontSize: 14,
     color: "#2B6CB0",
     marginTop: 2,
-    textTransform: "lowercase",
   },
   scrollContent: {
-    padding: 20,
+    padding: 16,
     paddingBottom: 40,
   },
 
-  /* Chữ a b c - chữ bên trái loa */
+  /* Chữ i k */
   letterRow: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginBottom: 28,
+    marginBottom: 24,
   },
   letterItem: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: 10,
     padding: 8,
-    borderRadius: 12,
   },
   letterText: {
-    fontSize: 42,
+    fontSize: 48,
     fontWeight: "700",
     color: "#1E3A8A",
   },
   speaker: {
-    fontSize: 24,
+    fontSize: 14,
+    marginLeft: 4,
+  },
+  smallSpeaker: {
+    fontSize: 18,
   },
   pressed: {
-    opacity: 0.7,
+    opacity: 0.75,
     transform: [{ scale: 0.97 }],
   },
 
-  /* Hàng chung: số/hình | bảng | loa */
-  rowItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+  /* Bảng ngang k i ki */
+    horizontalTableRow: {
+      flexDirection: "row",
+      justifyContent: "space-around",   // quan trọng
+      alignItems: "center",
+      marginBottom: 28,
+      paddingHorizontal: 4,
+    },
+
+    horizontalGroup: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 6,
+      paddingVertical: 6,
+      paddingHorizontal: 4,
+      borderRadius: 10,
+    },
+
+    horizontalBox: {
+      flexDirection: "row",
+      borderWidth: 1.5,
+      borderColor: "#94A3B8",
+      borderRadius: 8,
+      overflow: "hidden",
+    },
+
+    hCell: {
+      width: 38,          // giảm nhẹ để vừa màn hình nhỏ
+      height: 40,
+      borderRightWidth: 1,
+      borderColor: "#CBD5E1",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "#F8FAFC",
+    },
+
+    hLast: {
+      borderRightWidth: 0,
+      backgroundColor: "#FFFFFF",
+    },
+
+    hLetter: {
+      fontSize: 17,
+      fontWeight: "600",
+      color: "#1E40AF",
+    },
+  /* Lưới 2 hàng × 5 cột */
+  grid3: {
     marginBottom: 28,
-    paddingHorizontal: 8,
-    paddingVertical: 10,
-    borderRadius: 12,
   },
-  bigNumber: {
-    fontSize: 56,
-    fontWeight: "800",
-    color: "#E11D48",
-    width: 60,
-    textAlign: "center",
-  },
-  wordImage: {
-    width: 80,
-    height: 80,
-  },
-
-  /* Bảng vần */
-  syllableBox: {
-    borderWidth: 1.5,
-    borderColor: "#94A3B8",
-    borderRadius: 8,
-    overflow: "hidden",
-  },
-  topRow: {
-    flexDirection: "row",
-  },
-  smallBox: {
-    width: 40,
-    height: 34,
-    borderRightWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: "#CBD5E1",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F8FAFC",
-  },
-  smallLetter: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#1E40AF",
-  },
-  bottomBox: {
-    height: 38,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-  },
-  syllableText: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: "#0F172A",
-  },
-
-  /* Luyện tập cuối */
-  practiceRow: {
+  gridRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 16,
+    marginBottom: 12,
   },
-  practiceBox: {
+  gridCell: {
+    width: (width - 48) / 5,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    paddingVertical: 12,
+    backgroundColor: "#F1F5F9",
+    borderRadius: 10,
+  },
+  gridText: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#1E3A8A",
+  },
+
+  /* Hình ảnh 1 hàng × 2 cột */
+imageGrid: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  marginBottom: 28,
+},
+imageCard: {
+  width: (width - 48) / 2,
+  flexDirection: "row",
+  alignItems: "center",
+  backgroundColor: "#F8FAFC",
+  borderWidth: 1,
+  borderColor: "#E2E8F0",
+  borderRadius: 12,
+  padding: 12,
+  gap: 8,
+},
+cardImage: {
+  width: 55,
+  height: 55,
+},
+cardWord: {
+  flex: 1,
+  fontSize: 18,
+  fontWeight: "600",
+  color: "#1E3A8A",
+},
+
+  /* Câu luyện tập */
+  sentenceSection: {
+    gap: 10,
+  },
+  sentenceBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     borderWidth: 1.5,
     borderColor: "#64748B",
     borderRadius: 12,
     paddingVertical: 14,
     paddingHorizontal: 18,
-    width: "47%",
-    justifyContent: "space-between",
     backgroundColor: "#F8FAFC",
   },
-  practiceText: {
-    fontSize: 20,
+  sentenceText: {
+    fontSize: 18,
     fontWeight: "600",
     color: "#1E3A8A",
   },
+  sentenceLine: {
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+},
 });
