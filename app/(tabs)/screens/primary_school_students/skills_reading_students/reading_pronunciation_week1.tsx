@@ -261,34 +261,29 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 5,
   },
-
   bannerBackground: {
     width: "100%",
-    height: 85,
+    height: 95,
     justifyContent: "center",
     alignItems: "center",
   },
-
   bannerTextContainer: {
     alignItems: "center",
     marginTop: -25,
+    width: "90%", // Đảm bảo text có đủ chiều ngang để hiển thị trên 1 dòng
   },
-
   bannerTitle: {
     fontSize: 16,
     fontWeight: "700",
     color: "#E53E3E",
-    letterSpacing: 0.5,
   },
-
   bannerSubtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: "#2B6CB0",
     marginTop: 2,
-    textTransform: "lowercase",
   },
   scrollContent: {
-    padding: 20,
+    padding: 16,
     paddingBottom: 40,
   },
 

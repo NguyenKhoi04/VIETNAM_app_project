@@ -12,6 +12,7 @@ import Header from "./screens/primary_school_students/Header";
 import HomePrimary from "./screens/primary_school_students/Home_primary";
 import PracticeReading from "./screens/primary_school_students/skills_reading_students/practice_reading";
 import ReadingWeekDetails from "./screens/primary_school_students/skills_reading_students/reading_week1_details";
+import ReadingTopicDetails from "./screens/primary_school_students/skills_reading_students/reading_topic1_details";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,7 @@ export default function App() {
       <Stack.Screen name="Home_primary" component={HomePrimary} />
       <Stack.Screen name="PracticeReading" component={PracticeReading} />
       <Stack.Screen name="ReadingWeekDetails" component={ReadingWeekDetails} />
+      <Stack.Screen name="ReadingTopicDetails" component={ReadingTopicDetails} />
       <Stack.Screen name="Footer" component={Footer} />
     </Stack.Navigator>
   );

@@ -35,7 +35,7 @@ interface Feature {
 
 const BG_COLORS = ['#E0F7FA', '#FFF3E0', '#E8F5E9', '#E0F2FE', '#CCCCFF'];
 
-export default function PracticeReadingScreen() {
+export default function ReadingTopicDetailsScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{
     ho_ten?: string;
@@ -83,89 +83,20 @@ export default function PracticeReadingScreen() {
               activeOpacity={0.8}
               onPress={() =>
                 router.push(
-                  '/(tabs)/screens/primary_school_students/skills_reading_students/reading_week1_details'
+                  '/(tabs)/screens/primary_school_students/skills_reading_students/reading_pronunciation_topic1' as any
                 )
               }
             >
               <Image
-                source={require('@/assets/images/hsth_tuan1.png')}
+                source={require('@/assets/images/bai1_chude1.png')}
                 style={styles.imageBox}
                 resizeMode="cover"
               />
             </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() =>
-                router.push(
-                  '/(tabs)/screens/primary_school_students/skills_reading_students/reading_week3_details'
-                )
-              }
-            >
-            <Image
-              source={require('@/assets/images/hsth_tuan3.png')}
-              style={styles.imageBox}
-              resizeMode="cover"
-            />
-            </TouchableOpacity>
-           
-          </View>
 
-          <View style={styles.imageRow}>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() =>
-                router.push(
-                  '/(tabs)/screens/primary_school_students/skills_reading_students/reading_week5_details'
-                )
-              }
-            >
-              <Image
-              source={require('@/assets/images/hsth_tuan5.png')}
-              style={styles.imageBox}
-              resizeMode="cover"
-            />
-            </TouchableOpacity>
-           
-  
           </View>
         </View>
       
-        {/* Grid 4 hình */}
-         <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() =>
-                router.push(
-                  '/(tabs)/screens/primary_school_students/skills_reading_students/reading_topic1_details' as any
-                )
-              }
-            >
-              <Image
-                source={require('@/assets/images/chude1.png')}
-                style={styles.imageBox}
-                resizeMode="cover"
-              />
-            </TouchableOpacity>
-            {/* <Image
-              source={require('@/assets/images/hsth_tuan3.png')}
-              style={styles.imageBox}
-              resizeMode="cover"
-            />
-          </View>
-
-          // <View style={styles.imageRow}>
-          //   <Image
-          //     source={require('@/assets/images/hsth_tuan5.png')}
-          //     style={styles.imageBox}
-          //     resizeMode="cover"
-          //   />
-          //   {/* <Image
-          //     source={require('@/assets/images/hsth_tuan1.png')}
-          //     style={styles.imageBox}
-          //     resizeMode="cover"
-          //   /> 
-          // </View>
-        </View>*/}
-        
       </ScrollView>
       <Footer />
     </SafeAreaView>

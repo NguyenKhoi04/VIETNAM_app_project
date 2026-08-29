@@ -37,20 +37,29 @@ export default function PracticeReadingScreen() {
 
   // Map âm thanh (bạn cần chuẩn bị file tương ứng)
   const AUDIO_MAP: Record<string, any> = {
-    i: require("../../../../../text-to-speech/speech_i.wav"),
-    k: require("../../../../../text-to-speech/speech_k.wav"),
-    ki: require("../../../../../text-to-speech/speech_ki.wav"),
-    kì: require("../../../../../text-to-speech/speech_ki_huyen.wav"),
-    kí: require("../../../../../text-to-speech/speech_ki_sac.wav"),
-    kỉ: require("../../../../../text-to-speech/speech_ki_hoi.wav"),
-    kĩ: require("../../../../../text-to-speech/speech_ki_nga.wav"),
-    kè: require("../../../../../text-to-speech/speech_ke_huyen.wav"),
-    kẻ: require("../../../../../text-to-speech/speech_ke_hoi.wav"),
-    kệ: require("../../../../../text-to-speech/speech_ke_nang.wav"),
-    bi_do: require("../../../../../text-to-speech/speech_bi_do.wav"),
-    ki_da: require("../../../../../text-to-speech/speech_ki_da.wav"),
-    nam_ve_ki_da: require("../../../../../text-to-speech/speech_nam_ve_ki_da.wav"),
-    kida_keda: require("../../../../../text-to-speech/speech_kida_keda.wav"),
+    r: require("../../../../../text-to-speech/speech_r.wav"),
+    ra: require("../../../../../text-to-speech/speech_ra.wav"),
+    rạ: require("../../../../../text-to-speech/speech_ra_nang.wav"),
+    rế: require("../../../../../text-to-speech/speech_re_sac.wav"),
+    rẻ: require("../../../../../text-to-speech/speech_re_hoi.wav"),
+    rẽ: require("../../../../../text-to-speech/speech_re_nga.wav"),
+    rổ: require("../../../../../text-to-speech/speech_ro_hoi.wav"),
+    s: require("../../../../../text-to-speech/speech_s.wav"),
+    sa: require("../../../../../text-to-speech/speech_sa.wav"),
+    sả: require("../../../../../text-to-speech/speech_sa_hoi.wav"),
+    sẽ: require("../../../../../text-to-speech/speech_se_nga.wav"),
+    sẻ: require("../../../../../text-to-speech/speech_se_hoi.wav"),
+    sổ: require("../../../../../text-to-speech/speech_so_hoi.wav"),
+    sò: require("../../../../../text-to-speech/speech_so_huyen.wav"),
+    ro_ra: require("../../../../../text-to-speech/speech_ro_ra.wav"),
+    ca_ro: require("../../../../../text-to-speech/speech_ca_ro.wav"),
+    su_su: require("../../../../../text-to-speech/speech_su_su.wav"),
+    chu_so: require("../../../../../text-to-speech/speech_chu_so.wav"),
+    oc_so: require("../../../../../text-to-speech/speech_oc_so.wav"),
+    chim_se: require("../../../../../text-to-speech/speech_chim_se.wav"),
+    bay_se: require("../../../../../text-to-speech/speech_bay_se.wav"),
+    ga_casu: require("../../../../../text-to-speech/speech_ga_casu.wav"),
+    cho_roca: require("../../../../../text-to-speech/speech_cho_roca.wav"),
   };
 
   const playSound = async (text: string) => {
@@ -164,7 +173,7 @@ export default function PracticeReadingScreen() {
         <View style={styles.grid3}>
           {[
             ["rạ", "rế", "rẻ", "rẽ", "rổ",], // hàng 1
-            ["sa", "sả", "sẽ", "sẻ", "sò",], // hàng 2 (có thể thay bằng kỉ, kĩ nếu cần)
+            ["sa", "sả", "sẽ", "sổ", "sò",], // hàng 2 (có thể thay bằng kỉ, kĩ nếu cần)
           ].map((row, rowIndex) => (
             <View key={rowIndex} style={styles.gridRow}>
               {row.map((word) => (
@@ -297,7 +306,7 @@ export default function PracticeReadingScreen() {
         <View style={styles.sentenceSection}>
           <Pressable
             style={({ pressed }) => [styles.sentenceBox, pressed && styles.pressed]}
-            onPress={() => playSound("nam_ve_ki_da")}
+            onPress={() => playSound("bay_se")}
           >
             <Text style={styles.sentenceText}>Bầy sẻ non ríu ra ríu rít bên mẹ.</Text>
             <Text style={styles.speaker}>🔊</Text>
@@ -312,10 +321,11 @@ export default function PracticeReadingScreen() {
                   styles.sentenceLine,
                   pressed && styles.pressed,
                 ]}
-                onPress={() => playSound("cho_co_ga_ri")}
-              >
-                <Text style={styles.sentenceText}>Chợ có gà ri, cá rô, su su.</Text>
-                {/* <Text style={styles.speaker}>🔊</Text> */}
+                onPress={() => playSound("ga_casu")}
+              > 
+              {/* <Text style={styles.speaker}>🔊</Text>  */}
+              <Text style={styles.sentenceText}>Chợ có gà ri, cá rô, su su.</Text>
+                
               </Pressable>
 
               {/* Câu 2 + loa */}
@@ -324,10 +334,10 @@ export default function PracticeReadingScreen() {
                   styles.sentenceLine,
                   pressed && styles.pressed,
                 ]}
-                onPress={() => playSound("cho_co_ca_ro_ra")}
+                onPress={() => playSound("cho_roca")}
               >
                 <Text style={styles.sentenceText}>Chợ có cả rổ rá.</Text>
-                <Text style={styles.speaker}>🔊</Text>
+                {/* <Text style={styles.speaker}>🔊</Text> */}
               </Pressable>
             </View>
           </View>
@@ -344,7 +354,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFFFF",
   },
-  bannerContainer: {
+   bannerContainer: {
     alignItems: "center",
     marginHorizontal: 5,
     marginTop: 8,
@@ -352,13 +362,14 @@ const styles = StyleSheet.create({
   },
   bannerBackground: {
     width: "100%",
-    height: 85,
+    height: 95,
     justifyContent: "center",
     alignItems: "center",
   },
   bannerTextContainer: {
     alignItems: "center",
     marginTop: -25,
+    width: "90%", // Đảm bảo text có đủ chiều ngang để hiển thị trên 1 dòng
   },
   bannerTitle: {
     fontSize: 16,
@@ -366,7 +377,7 @@ const styles = StyleSheet.create({
     color: "#E53E3E",
   },
   bannerSubtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: "#2B6CB0",
     marginTop: 2,
   },

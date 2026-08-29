@@ -259,13 +259,14 @@ const styles = StyleSheet.create({
   },
   bannerBackground: {
     width: "100%",
-    height: 85,
+    height: 95,
     justifyContent: "center",
     alignItems: "center",
   },
   bannerTextContainer: {
     alignItems: "center",
     marginTop: -25,
+    width: "90%", // Đảm bảo text có đủ chiều ngang để hiển thị trên 1 dòng
   },
   bannerTitle: {
     fontSize: 16,
@@ -273,7 +274,7 @@ const styles = StyleSheet.create({
     color: "#E53E3E",
   },
   bannerSubtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: "#2B6CB0",
     marginTop: 2,
   },
@@ -287,6 +288,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     marginBottom: 24,
+    top: -10,
   },
   letterItem: {
     flexDirection: "row",
@@ -317,6 +319,7 @@ const styles = StyleSheet.create({
       alignItems: "center",
       marginBottom: 28,
       paddingHorizontal: 4,
+      top: -20,
     },
 
     horizontalGroup: {
@@ -359,6 +362,7 @@ const styles = StyleSheet.create({
   /* Lưới 2 hàng × 3 cột */
   grid3: {
     marginBottom: 28,
+    top: -20,
   },
   gridRow: {
     flexDirection: "row",
@@ -386,6 +390,7 @@ imageGrid: {
   flexDirection: "row",
   justifyContent: "space-between",
   marginBottom: 28,
+  top: -20,
 },
 imageCard: {
   width: (width - 48) / 2,
@@ -422,6 +427,7 @@ cardWord: {
     borderRadius: 12,
     paddingVertical: 14,
     paddingHorizontal: 18,
+    top: -20,
     backgroundColor: "#F8FAFC",
   },
   sentenceText: {
