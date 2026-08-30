@@ -33,13 +33,12 @@ export default function PracticeReadingScreen() {
 
   const AUDIO_MAP: Record<string, any> = {
     doc_mau: require("../../../../../text-to-speech/speech_docmau_bai1_topic1.wav"),
-    dong_phuc: require("../../../../../text-to-speech/speech_dong_phuc.wav"),
-    hanh_dien: require("../../../../../text-to-speech/speech_hanh_dien.wav"),
-    chung_chac: require("../../../../../text-to-speech/speech_chung_chac.wav"),
-    cau1: require("../../../../../text-to-speech/speech_cau1.wav"),
-    cau2: require("../../../../../text-to-speech/speech_cau2.wav"),
-    cau3: require("../../../../../text-to-speech/speech_cau3.wav"),
-    cau4: require("../../../../../text-to-speech/speech_cau4.wav"),
+    dong_phuc: require("../../../../../text-to-speech/speech_docmau_dong_phuc.wav"),
+    hanh_dien: require("../../../../../text-to-speech/speech_docmau_hanh_dien.wav"),
+    chung_chac: require("../../../../../text-to-speech/speech_docmau_chung_chac.wav"),
+    doan1: require("../../../../../text-to-speech/speech_docmau_doan1_bai1_topic1.wav"),
+    doan2: require("../../../../../text-to-speech/speech_docmau_doan2_bai1_topic1.wav"),
+    doan3: require("../../../../../text-to-speech/speech_docmau_doan3_bai1_topic1.wav"),
   };
 
   const playSound = async (key: string) => {
@@ -69,7 +68,7 @@ export default function PracticeReadingScreen() {
   const renderMode1 = () => (
     <View style={styles.storyBox}>
       <View style={styles.tabHeader}>
-        <Text style={styles.tabTitle}>Đọc theo mẫu</Text>
+        
         <Pressable onPress={() => playSound("doc_mau")}>
           <Text style={styles.speaker}>🔊</Text>
         </Pressable>
@@ -78,15 +77,16 @@ export default function PracticeReadingScreen() {
       <Text style={styles.title}>Tôi là học sinh lớp 1</Text>
 
       <Text style={styles.paragraph}>
-        Tôi tên là Nam, học sinh lớp 1A, Trường Tiểu học Lê Quý Đôn. Ngày đầu đi học, mặc bộ đồng phục của trường, tôi hãnh diện lắm.
+        {/* \u00A0\u00A0\u00A0\u00A0 : 4 khoang trang và thụt câu */}
+        {"\u00A0\u00A0\u00A0\u00A0"}Tôi tên là Nam, học sinh lớp 1A, Trường Tiểu học Lê Quý Đôn. Ngày đầu đi học, mặc bộ đồng phục của trường, tôi hãnh diện lắm.
       </Text>
 
       <Text style={styles.paragraph}>
-        Hồi đầu năm học, tôi mới học chữ cái. Thế mà bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa. Tôi có thêm nhiều bạn mới.
+        {"\u00A0\u00A0\u00A0\u00A0"}Hồi đầu năm học, tôi mới học chữ cái. Thế mà bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa. Tôi có thêm nhiều bạn mới.
       </Text>
 
       <Text style={styles.paragraph}>
-        Ai cũng bảo từ khi đi học, tôi chững chạc hẳn lên.
+        {"\u00A0\u00A0\u00A0\u00A0"}Ai cũng bảo từ khi đi học, tôi chững chạc hẳn lên.
       </Text>
 
       <Text style={styles.author}>(Trung Sơn)</Text>
@@ -96,7 +96,7 @@ export default function PracticeReadingScreen() {
   const renderMode2 = () => (
     <View style={styles.storyBox}>
       <View style={styles.tabHeader}>
-        <Text style={styles.tabTitle}>Đọc theo mẫu</Text>
+        <Text style={styles.tabTitle}>Hiểu từ khó</Text>
         <Pressable onPress={() => playSound("doc_mau")}>
           <Text style={styles.speaker}>🔊</Text>
         </Pressable>
@@ -105,7 +105,7 @@ export default function PracticeReadingScreen() {
       <Text style={styles.title}>Tôi là học sinh lớp 1</Text>
 
       <Text style={styles.paragraph}>
-        Tôi tên là Nam, học sinh lớp 1A, Trường Tiểu học Lê Quý Đôn. Ngày đầu đi học, mặc bộ{" "}
+        {"\u00A0\u00A0\u00A0\u00A0"}Tôi tên là Nam, học sinh lớp 1A, Trường Tiểu học Lê Quý Đôn. Ngày đầu đi học, mặc bộ{" "}
         <Text
           style={styles.hardWord}
           onPress={() =>
@@ -129,11 +129,11 @@ export default function PracticeReadingScreen() {
       </Text>
 
       <Text style={styles.paragraph}>
-        Hồi đầu năm học, tôi mới học chữ cái. Thế mà bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa. Tôi có thêm nhiều bạn mới.
+        {"\u00A0\u00A0\u00A0\u00A0"}Hồi đầu năm học, tôi mới học chữ cái. Thế mà bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa. Tôi có thêm nhiều bạn mới.
       </Text>
 
       <Text style={styles.paragraph}>
-        Ai cũng bảo từ khi đi học, tôi{" "}
+        {"\u00A0\u00A0\u00A0\u00A0"}Ai cũng bảo từ khi đi học, tôi{" "}
         <Text
           style={styles.hardWord}
           onPress={() =>
@@ -161,34 +161,36 @@ export default function PracticeReadingScreen() {
       {/* Câu 1 */}
       <Pressable
         style={({ pressed }) => [styles.sentenceLine, pressed && styles.pressed]}
-        onPress={() => playSound("cau1")}
+        onPress={() => playSound("doan1")}
       >
+        <Text style={styles.speaker_2}>🔊</Text>
         <Text style={styles.paragraph}>
-          Tôi tên là Nam, học sinh lớp 1A, Trường Tiểu học Lê Quý Đôn. Ngày đầu đi học, mặc bộ đồng phục của trường, tôi hãnh diện lắm.
+          {"\u00A0\u00A0\u00A0\u00A0"}Tôi tên là Nam, học sinh lớp 1A, Trường Tiểu học Lê Quý Đôn. Ngày đầu đi học, mặc bộ đồng phục của trường, tôi hãnh diện lắm.
         </Text>
-        <Text style={styles.speaker}>🔊</Text>
+        
       </Pressable>
 
       {/* Câu 2 */}
       <Pressable
         style={({ pressed }) => [styles.sentenceLine, pressed && styles.pressed]}
-        onPress={() => playSound("cau2")}
+        onPress={() => playSound("doan2")}
       >
+        <Text style={styles.speaker_2}>🔊</Text>
         <Text style={styles.paragraph}>
-          Hồi đầu năm học, tôi mới học chữ cái. Thế mà bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa. Tôi có thêm nhiều bạn mới.
+          {"\u00A0\u00A0\u00A0\u00A0"}Hồi đầu năm học, tôi mới học chữ cái. Thế mà bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa. Tôi có thêm nhiều bạn mới.
         </Text>
-        <Text style={styles.speaker}>🔊</Text>
+        
       </Pressable>
 
       {/* Câu 3 */}
       <Pressable
         style={({ pressed }) => [styles.sentenceLine, pressed && styles.pressed]}
-        onPress={() => playSound("cau3")}
-      >
+        onPress={() => playSound("doan3")}
+      ><Text style={styles.speaker_2}>🔊</Text>
         <Text style={styles.paragraph}>
-          Ai cũng bảo từ khi đi học, tôi chững chạc hẳn lên.
+          {"\u00A0\u00A0\u00A0\u00A0"}Ai cũng bảo từ khi đi học, tôi chững chạc hẳn lên.
         </Text>
-        <Text style={styles.speaker}>🔊</Text>
+        
       </Pressable>
 
       <Text style={styles.author}>(Trung Sơn)</Text>
@@ -225,13 +227,13 @@ export default function PracticeReadingScreen() {
           style={[styles.modeBtn, mode === 2 && styles.modeBtnActive]}
           onPress={() => setMode(2)}
         >
-          <Text style={[styles.modeText, mode === 2 && styles.modeTextActive]}>2. Từ khó</Text>
+          <Text style={[styles.modeText, mode === 2 && styles.modeTextActive]}>2. Hiểu từ khó</Text>
         </Pressable>
         <Pressable
           style={[styles.modeBtn, mode === 3 && styles.modeBtnActive]}
           onPress={() => setMode(3)}
         >
-          <Text style={[styles.modeText, mode === 3 && styles.modeTextActive]}>3. Từng câu</Text>
+          <Text style={[styles.modeText, mode === 3 && styles.modeTextActive]}>3. Đọc theo mẫu</Text>
         </Pressable>
       </View>
 
@@ -389,8 +391,13 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   speaker: {
-    fontSize: 18,
-    marginLeft: 6,
+    fontSize: 16,
+    marginLeft: 5,
+  },
+
+  speaker_2: {
+    fontSize: 14,
+    marginLeft: -15,
   },
   pressed: {
     opacity: 0.7,
