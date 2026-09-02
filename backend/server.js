@@ -178,6 +178,30 @@ app.get('/api/skills', (req, res) => {
   });
 });
 
+// API lớp nào theo kỹ năng lớp đó
+app.get('/api/skills-by-class', (req, res) => {
+  const { lop } = req.query;
+  const sql = `
+    SELECT 
+  ky_nang.id_ky_nang,
+  ky_nang.ten_ky_nang,
+  ky_nang.mo_ta,
+  ky_nang.icon,
+  ky_nang.url_link,
+  chuong_trinh.ten_chuong_trinh
+  FROM ky_nang
+  JOIN chuong_trinh ON ky_nang.lop = chuong_trinh.id_chuong_trinh
+  WHERE ky_nang.lop = ?
+  `;
+  db.query(sql, [lop], (err, results) => {
+    if (err) {
+      console.error('Lỗi SQL:', err);
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
+
 // API lấy danh sách người dùng
 app.get('/api/data', (req, res) => {
   // Đã sửa 'mguoi_dung' thành 'nguoi_dung'

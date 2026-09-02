@@ -53,7 +53,7 @@ const HomePrimary = ({ navigation, route }: any) => {
     }
   }, [route?.params?.ho_ten]);
 
-  // Lấy danh sách lớp khi mở màn hình
+  // 1. Lấy danh sách lớp khi mở màn hình
   useEffect(() => {
     const fetchClasses = async () => {
       try {
@@ -62,6 +62,7 @@ const HomePrimary = ({ navigation, route }: any) => {
 
         if (Array.isArray(data) && data.length > 0) {
           setClasses(data);
+          // Mặc định chọn lớp đầu tiên
           setSelectedClass(`Lớp ${data[0].lop}`);
         } else {
           setClasses([]);
@@ -74,7 +75,7 @@ const HomePrimary = ({ navigation, route }: any) => {
     fetchClasses();
   }, []);
 
-  // Tự động lấy danh sách kỹ năng khi selectedClass thay đổi
+  // 2. Tự động lấy danh sách kỹ năng & chương trình khi selectedClass thay đổi
   useEffect(() => {
     if (!selectedClass) return;
 
@@ -82,12 +83,14 @@ const HomePrimary = ({ navigation, route }: any) => {
 
     const fetchSkillsData = async () => {
       try {
+        // Dùng endpoint GET_SKILLS_BY_CLASS
         const response = await fetch(
-          `${API_ENDPOINTS.GET_SKILLS}?lop=${lopNumber}`
+          `${API_ENDPOINTS.GET_SKILLS_BY_CLASS}?lop=${lopNumber}`
         );
         const data: Feature[] = await response.json();
 
         if (Array.isArray(data) && data.length > 0) {
+          // Lấy tên chương trình của lớp đó gán vào banner
           setProgramName(data[0]?.ten_chuong_trinh || '');
           const formattedFeatures = data.map((item, index) => ({
             ...item,
@@ -122,30 +125,32 @@ const HomePrimary = ({ navigation, route }: any) => {
   // };
 
   const handleNavigate = (url?: string, tenKyNang?: string) => {
-  console.log('--- CHECK ROUTE ---');
-  console.log('Tên kỹ năng:', tenKyNang);
-  console.log('url_link nhận được:', url);
+    if (!url) {
+      Alert.alert('Thông báo', `Tính năng "${tenKyNang}" đang được phát triển!`);
+      return;
+    }
 
-  if (!url) {
-    Alert.alert('Thông báo', `Tính năng "${tenKyNang}" đang được phát triển!`);
-    return;
-  }
+    const path = url.startsWith('/') ? url : `/${url}`;
 
-  // Tự động thêm dấu / nếu thiếu
-  const path = url.startsWith('/') ? url : `/${url}`;
-
-  router.push({
-    pathname: path as any,
-    params: {
-      ho_ten: name,
-      ten_ky_nang: tenKyNang || '',
-    },
-  });
-};
+    router.push({
+      pathname: path as any,
+      params: {
+        ho_ten: name,
+        ten_ky_nang: tenKyNang || '',
+      },
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={navigation} route={route} />
+      <Header
+      name={name}
+      classes={classes}
+      selectedClass={selectedClass}
+      setSelectedClass={setSelectedClass}
+      navigation={navigation}
+      route={route}
+    />
 
       {/* Banner Chương trình */}
       <View style={styles.bannerContainer}>
@@ -156,37 +161,77 @@ const HomePrimary = ({ navigation, route }: any) => {
         >
           <View style={styles.bannerTextContainer}>
             <Text style={styles.bannerTitle}>CHƯƠNG TRÌNH</Text>
-            <Text style={styles.bannerSubtitle}>{ten_chuong_trinh}</Text>
+            <Text style={styles.bannerSubtitle}>
+              {ten_chuong_trinh || 'Chưa có chương trình'}
+            </Text>
           </View>
         </ImageBackground>
       </View>
 
+      {/* NÚT CHỌN LỚP (Gắn vào đây để người dùng bấm chọn) */}
+      {/* <View style={styles.classContainer}>
+        <View style={styles.classGrid}>
+          {classes.map((cls, index) => {
+            const classLabel = `Lớp ${cls.lop}`;
+            const isActive = selectedClass === classLabel;
+
+            return (
+              <TouchableOpacity
+                key={cls.lop ?? index}
+                style={[
+                  styles.classButton,
+                  isActive && styles.classButtonActive,
+                ]}
+                onPress={() => setSelectedClass(classLabel)}
+              >
+                <Text
+                  style={[
+                    styles.classText,
+                    isActive && styles.classTextActive,
+                  ]}
+                >
+                  {classLabel}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View> */}
+
+      {/* Danh sách kỹ năng của lớp được chọn */}
       <ScrollView
         style={styles.mainContent}
         contentContainerStyle={styles.scrollContent}
       >
-        <Text style={styles.sectionTitle}>Các kỹ năng hôm nay ✨</Text>
+        <Text style={styles.sectionTitle}>
+          Các kỹ năng {selectedClass} hôm nay ✨
+        </Text>
 
         <View style={styles.featuresGrid}>
-          {features.map((feature) => (
-            <TouchableOpacity
-              key={feature.id_ky_nang}
-              style={[styles.featureCard, { backgroundColor: feature.bgColor }]}
-              // ✅ ĐÃ SỬA: Chỉ truyền URL string và tên kỹ năng
-              onPress={() =>
-                handleNavigate(feature.url_link, feature.ten_ky_nang)
-              }
-              activeOpacity={0.8}
-            >
-              <View style={styles.emojiContainer}>
-                <Text style={styles.featureEmoji}>
-                  {feature.icon || '🌟'}
-                </Text>
-              </View>
-              <Text style={styles.featureTitle}>{feature.ten_ky_nang}</Text>
-              <Text style={styles.featureDesc}>{feature.mo_ta}</Text>
-            </TouchableOpacity>
-          ))}
+          {features.length > 0 ? (
+            features.map((feature) => (
+              <TouchableOpacity
+                key={feature.id_ky_nang}
+                style={[styles.featureCard, { backgroundColor: feature.bgColor }]}
+                onPress={() =>
+                  handleNavigate(feature.url_link, feature.ten_ky_nang)
+                }
+                activeOpacity={0.8}
+              >
+                <View style={styles.emojiContainer}>
+                  <Text style={styles.featureEmoji}>
+                    {feature.icon || '🌟'}
+                  </Text>
+                </View>
+                <Text style={styles.featureTitle}>{feature.ten_ky_nang}</Text>
+                <Text style={styles.featureDesc}>{feature.mo_ta}</Text>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text style={{ textAlign: 'center', color: '#888', marginTop: 20 }}>
+              {selectedClass} hiện chưa có kỹ năng nào.
+            </Text>
+          )}
         </View>
       </ScrollView>
 
@@ -331,3 +376,19 @@ const styles = StyleSheet.create({
 });
 
 export default HomePrimary;
+
+
+  // Điều hướng bằng router của expo-router
+  // const handleNavigate = (url?: string, tenKyNang?: string) => {
+  //   if (url) {
+  //     router.push({
+  //       pathname: url as any,
+  //       params: {
+  //         ho_ten: name,
+  //         ten_ky_nang: tenKyNang || '',
+  //       },
+  //     });
+  //   } else {
+  //     Alert.alert('Thông báo', `Tính năng "${tenKyNang}" đang được phát triển!`);
+  //   }
+  // };

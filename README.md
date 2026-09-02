@@ -258,7 +258,7 @@ Giá trị cần lưu:
 
 \*\* Giá trị trong database phải trùng khớp chính xác với name được khai báo trong <Stack.Screen name="..."/>:
 
-❌ Giá trị cũ (sai): /screens/primary_school_students/skills_reading_students/practice_reading
+❌ Giá trị cũ (sai): /screens/primary_school_students/skills_reading_students/_practice_reading_class1
 
 ✅ Giá trị mới (đúng): PracticeReading
 

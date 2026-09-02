@@ -10,7 +10,7 @@ import MenuSurvey from "./screens/foreigners/menu_survery";
 import Footer from "./screens/primary_school_students/Footer";
 import Header from "./screens/primary_school_students/Header";
 import HomePrimary from "./screens/primary_school_students/Home_primary";
-import PracticeReading from "./screens/primary_school_students/skills_reading_students/practice_reading";
+import PracticeReading from "./screens/primary_school_students/skills_reading_students/practice_reading_class1";
 import ReadingWeekDetails from "./screens/primary_school_students/skills_reading_students/reading_week1_details";
 import ReadingTopicDetails from "./screens/primary_school_students/skills_reading_students/reading_topic1_details";
 
