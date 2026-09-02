@@ -1,4 +1,5 @@
 // Phát âm tập đọc - Bài ki kì kí...
+import classes from "*.module.css";
 import { Audio } from "expo-av";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -14,7 +15,7 @@ import {
   View,
 } from "react-native";
 import Footer from "../Footer";
-import Header from "../Header";
+import Header, { ClassInfo } from "../Header";
 
 const { width } = Dimensions.get("window");
 
@@ -29,6 +30,12 @@ export default function PracticeReadingScreen() {
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [tenKyNang, setTenKyNang] = useState(params.ten_ky_nang || "Tập Đọc");
   const [tenBaiHoc] = useState("ki  kì  kí  kỉ  kĩ  kè  kẻ  kệ");
+ 
+  const [selectedClass, setSelectedClass] = useState<string>('');
+ 
+  const navigation = router; // Sử dụng router như navigation
+  const [classes, setClasses] = useState<ClassInfo[]>([]);
+
 
   useEffect(() => {
     if (params.ho_ten) setName(params.ho_ten);
@@ -54,33 +61,40 @@ export default function PracticeReadingScreen() {
   };
 
   const playSound = async (text: string) => {
-  console.log("Phát âm:", text);
+    console.log("Phát âm:", text);
 
-  // Không dùng toLowerCase() với từ có dấu tiếng Việt
-  const audioSource = AUDIO_MAP[text] || AUDIO_MAP[text.toLowerCase()];
+    // Không dùng toLowerCase() với từ có dấu tiếng Việt
+    const audioSource = AUDIO_MAP[text] || AUDIO_MAP[text.toLowerCase()];
 
-  if (!audioSource) {
-    console.warn(`Chưa gán file âm thanh cho: "${text}"`);
-    return;
-  }
-
-  try {
-    // Dừng âm thanh cũ
-    if (sound) {
-      await sound.unloadAsync();
+    if (!audioSource) {
+      console.warn(`Chưa gán file âm thanh cho: "${text}"`);
+      return;
     }
 
-    const { sound: newSound } = await Audio.Sound.createAsync(audioSource);
-    setSound(newSound);
-    await newSound.playAsync();
-  } catch (error) {
-    console.error("Lỗi phát âm thanh:", error);
-  }
-};
+    try {
+      // Dừng âm thanh cũ
+      if (sound) {
+        await sound.unloadAsync();
+      }
+
+      const { sound: newSound } = await Audio.Sound.createAsync(audioSource);
+      setSound(newSound);
+      await newSound.playAsync();
+    } catch (error) {
+      console.error("Lỗi phát âm thanh:", error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={null} route={{ params: { ho_ten: name } }} />
+      <Header
+        name={name}
+        classes={classes}
+        selectedClass={selectedClass}
+        setSelectedClass={setSelectedClass}
+        navigation={navigation}
+        route={router}
+      />
 
       {/* Banner */}
       <View style={styles.bannerContainer}>
@@ -114,7 +128,7 @@ export default function PracticeReadingScreen() {
           ))}
         </View>
 
-       {/* ===== 2. Bảng k i ki nằm ngang ===== */}
+        {/* ===== 2. Bảng k i ki nằm ngang ===== */}
         <View style={styles.horizontalTableRow}>
           {/* Nhóm 1: bảng ki + loa */}
           <Pressable
@@ -185,46 +199,49 @@ export default function PracticeReadingScreen() {
         </View>
 
         {/* ===== 4. Hình ảnh nằm ngang ===== */}
-          <View style={styles.imageGrid}>
-            {/* Ô 1: bí đỏ */}
-            <Pressable
-              style={({ pressed }) => [
-                styles.imageCard,
-                pressed && styles.pressed,
-              ]}
-              onPress={() => playSound("bi_do")}
-            >
-              <Image
-                source={require("@/assets/images/bi_do.png")}
-                style={styles.cardImage}
-                resizeMode="contain"
-              />
-              <Text style={styles.cardWord}>bí đỏ</Text>
-              <Text style={styles.smallSpeaker}>🔊</Text>
-            </Pressable>
+        <View style={styles.imageGrid}>
+          {/* Ô 1: bí đỏ */}
+          <Pressable
+            style={({ pressed }) => [
+              styles.imageCard,
+              pressed && styles.pressed,
+            ]}
+            onPress={() => playSound("bi_do")}
+          >
+            <Image
+              source={require("@/assets/images/bi_do.png")}
+              style={styles.cardImage}
+              resizeMode="contain"
+            />
+            <Text style={styles.cardWord}>bí đỏ</Text>
+            <Text style={styles.smallSpeaker}>🔊</Text>
+          </Pressable>
 
-            {/* Ô 2: kì đà */}
-            <Pressable
-              style={({ pressed }) => [
-                styles.imageCard,
-                pressed && styles.pressed,
-              ]}
-              onPress={() => playSound("ki_da")}  
-            >
-              <Image
-                source={require("@/assets/images/ki_da.png")}
-                style={styles.cardImage}
-                resizeMode="contain"
-              />
-              <Text style={styles.cardWord}>kì đà</Text>
-              <Text style={styles.smallSpeaker}>🔊</Text>
-            </Pressable>
-          </View>
+          {/* Ô 2: kì đà */}
+          <Pressable
+            style={({ pressed }) => [
+              styles.imageCard,
+              pressed && styles.pressed,
+            ]}
+            onPress={() => playSound("ki_da")}
+          >
+            <Image
+              source={require("@/assets/images/ki_da.png")}
+              style={styles.cardImage}
+              resizeMode="contain"
+            />
+            <Text style={styles.cardWord}>kì đà</Text>
+            <Text style={styles.smallSpeaker}>🔊</Text>
+          </Pressable>
+        </View>
 
         {/* ===== 5. Câu luyện tập ===== */}
         <View style={styles.sentenceSection}>
           <Pressable
-            style={({ pressed }) => [styles.sentenceBox, pressed && styles.pressed]}
+            style={({ pressed }) => [
+              styles.sentenceBox,
+              pressed && styles.pressed,
+            ]}
             onPress={() => playSound("nam_ve_ki_da")}
           >
             <Text style={styles.sentenceText}>Nam vẽ kì đà.</Text>
@@ -232,7 +249,10 @@ export default function PracticeReadingScreen() {
           </Pressable>
 
           <Pressable
-            style={({ pressed }) => [styles.sentenceBox, pressed && styles.pressed]}
+            style={({ pressed }) => [
+              styles.sentenceBox,
+              pressed && styles.pressed,
+            ]}
             onPress={() => playSound("kida_keda")}
           >
             <Text style={styles.sentenceText}>Kì đà bò ở kẽ đá.</Text>
@@ -313,52 +333,52 @@ const styles = StyleSheet.create({
   },
 
   /* Bảng ngang k i ki */
-    horizontalTableRow: {
-      flexDirection: "row",
-      justifyContent: "space-around",   // quan trọng
-      alignItems: "center",
-      marginBottom: 28,
-      paddingHorizontal: 4,
-      top: -20,
-    },
+  horizontalTableRow: {
+    flexDirection: "row",
+    justifyContent: "space-around", // quan trọng
+    alignItems: "center",
+    marginBottom: 28,
+    paddingHorizontal: 4,
+    top: -20,
+  },
 
-    horizontalGroup: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: 6,
-      paddingVertical: 6,
-      paddingHorizontal: 4,
-      borderRadius: 10,
-    },
+  horizontalGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+    borderRadius: 10,
+  },
 
-    horizontalBox: {
-      flexDirection: "row",
-      borderWidth: 1.5,
-      borderColor: "#94A3B8",
-      borderRadius: 8,
-      overflow: "hidden",
-    },
+  horizontalBox: {
+    flexDirection: "row",
+    borderWidth: 1.5,
+    borderColor: "#94A3B8",
+    borderRadius: 8,
+    overflow: "hidden",
+  },
 
-    hCell: {
-      width: 38,          // giảm nhẹ để vừa màn hình nhỏ
-      height: 40,
-      borderRightWidth: 1,
-      borderColor: "#CBD5E1",
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "#F8FAFC",
-    },
+  hCell: {
+    width: 38, // giảm nhẹ để vừa màn hình nhỏ
+    height: 40,
+    borderRightWidth: 1,
+    borderColor: "#CBD5E1",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F8FAFC",
+  },
 
-    hLast: {
-      borderRightWidth: 0,
-      backgroundColor: "#FFFFFF",
-    },
+  hLast: {
+    borderRightWidth: 0,
+    backgroundColor: "#FFFFFF",
+  },
 
-    hLetter: {
-      fontSize: 17,
-      fontWeight: "600",
-      color: "#1E40AF",
-    },
+  hLetter: {
+    fontSize: 17,
+    fontWeight: "600",
+    color: "#1E40AF",
+  },
   /* Lưới 2 hàng × 3 cột */
   grid3: {
     marginBottom: 28,
@@ -386,33 +406,33 @@ const styles = StyleSheet.create({
   },
 
   /* Hình ảnh 1 hàng × 2 cột */
-imageGrid: {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  marginBottom: 28,
-  top: -20,
-},
-imageCard: {
-  width: (width - 48) / 2,
-  flexDirection: "row",
-  alignItems: "center",
-  backgroundColor: "#F8FAFC",
-  borderWidth: 1,
-  borderColor: "#E2E8F0",
-  borderRadius: 12,
-  padding: 12,
-  gap: 8,
-},
-cardImage: {
-  width: 55,
-  height: 55,
-},
-cardWord: {
-  flex: 1,
-  fontSize: 18,
-  fontWeight: "600",
-  color: "#1E3A8A",
-},
+  imageGrid: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 28,
+    top: -20,
+  },
+  imageCard: {
+    width: (width - 48) / 2,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F8FAFC",
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    borderRadius: 12,
+    padding: 12,
+    gap: 8,
+  },
+  cardImage: {
+    width: 55,
+    height: 55,
+  },
+  cardWord: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#1E3A8A",
+  },
 
   /* Câu luyện tập */
   sentenceSection: {

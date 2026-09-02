@@ -258,17 +258,17 @@ Giá trị cần lưu:
 
 \*\* Giá trị trong database phải trùng khớp chính xác với name được khai báo trong <Stack.Screen name="..."/>:
 
-❌ Giá trị cũ (sai): /screens/primary_school_students/skills_reading_students/_practice_reading_class1
+❌ Giá trị cũ (sai): /screens/primary_school_students/skills_reading_students/\_practice_reading_class1
 
 ✅ Giá trị mới (đúng): PracticeReading
 
-
 ## cách làm Text- to- Speech (TTS)
-Bước 1: TRUY CẬP https://marketplace.fptcloud.com/en/models/fpt-ai-vits 
+
+Bước 1: TRUY CẬP https://marketplace.fptcloud.com/en/models/fpt-ai-vits
 Bước 2 lấy API
 Bước 3 chép code
 Bước 4: tạo cmd : npm install openai
-Bước 5 chạy  node tts.js để tải file âm thanh
+Bước 5 chạy node tts.js để tải file âm thanh
 
 Để giảm tốc độ phát âm cho phù hợp với học sinh tiểu học, bạn có thể áp dụng 2 cách sau:
 
@@ -278,13 +278,13 @@ OpenAI SDK hỗ trợ thuộc tính speed với dải giá trị từ 0.25 đế
 
 Chỉnh sửa lại hàm run() trong file tts.js:
 async function run() {
-  const response = await client.audio.speech.create({
-    model: 'FPT.AI-VITS',
-    input: 'xin chào, chúng tôi là FPT',
-    response_format: 'wav',
-    voice: 'std_kimngan',
-    speed: 0.75, // Giảm tốc độ phát âm (0.7 - 0.8 phù hợp cho tiểu học)
-  });
+const response = await client.audio.speech.create({
+model: 'FPT.AI-VITS',
+input: 'xin chào, chúng tôi là FPT',
+response_format: 'wav',
+voice: 'std_kimngan',
+speed: 0.75, // Giảm tốc độ phát âm (0.7 - 0.8 phù hợp cho tiểu học)
+});
 }
 
 Cách 2: Ngắt nhịp văn bản bằng dấu câu
@@ -297,34 +297,35 @@ ví dụ 2: nếu kéo dài âm A (vd: Aaaaa, cá) thì A... cá ( thêm 3 chấ
 
 Sau đó trở về file reading_pronuciation.stx thêm âm thanh vô
 
-1. Bước 1: npx expo install expo-av
-2. sửa code
-// Xử lý phát âm thanh
-  const playSound = async (text: string) => {
+1.  Bước 1: npx expo install expo-av
+2.  sửa code
+    // Xử lý phát âm thanh
+    const playSound = async (text: string) => {
     console.log('Phát âm:', text);
     try {
-      // Dừng và giải phóng file âm thanh đang phát trước đó (nếu có)
-      if (sound) {
-        await sound.unloadAsync();
-      }
-
-      // Nạp và phát file âm thanh (đổi lại đuôi .wav/.mp3 theo đúng file của bạn)
-      const { sound: newSound } = await Audio.Sound.createAsync(
-        require('@/assets/audio/speech_a.wav') // Trỏ đúng tới thư mục chứa file âm thanh
-      );
-
-      setSound(newSound);
-      await newSound.playAsync();
-    } catch (error) {
-      console.error('Lỗi phát âm thanh:', error);
+    // Dừng và giải phóng file âm thanh đang phát trước đó (nếu có)
+    if (sound) {
+    await sound.unloadAsync();
     }
-  };
 
-  // Tự động giải phóng bộ nhớ âm thanh khi component bị unmount
-  useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync();
+          // Nạp và phát file âm thanh (đổi lại đuôi .wav/.mp3 theo đúng file của bạn)
+          const { sound: newSound } = await Audio.Sound.createAsync(
+            require('@/assets/audio/speech_a.wav') // Trỏ đúng tới thư mục chứa file âm thanh
+          );
+
+          setSound(newSound);
+          await newSound.playAsync();
+        } catch (error) {
+          console.error('Lỗi phát âm thanh:', error);
         }
-      : undefined;
-  }, [sound]);
+
+    };
+
+// Tự động giải phóng bộ nhớ âm thanh khi component bị unmount
+useEffect(() => {
+return sound
+? () => {
+sound.unloadAsync();
+}
+: undefined;
+}, [sound]);

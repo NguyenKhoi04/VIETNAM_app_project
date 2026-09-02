@@ -1,5 +1,5 @@
 import { Audio } from "expo-av";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   Dimensions,
@@ -13,12 +13,15 @@ import {
   View,
 } from "react-native";
 import Footer from "../Footer";
-import Header from "../Header";
+import Header, { ClassInfo } from "../Header";
 
 const { width } = Dimensions.get("window");
 
 export default function PracticeReadingScreen() {
-  const params = useLocalSearchParams<{ ho_ten?: string; ten_ky_nang?: string }>();
+  const params = useLocalSearchParams<{
+    ho_ten?: string;
+    ten_ky_nang?: string;
+  }>();
   const [name, setName] = useState(params.ho_ten || "");
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [tenBaiHoc] = useState("Tôi là học sinh lớp 1");
@@ -26,6 +29,10 @@ export default function PracticeReadingScreen() {
   const [showExplain, setShowExplain] = useState(false);
   const [explainWord, setExplainWord] = useState("");
   const [explainText, setExplainText] = useState("");
+
+  const [selectedClass, setSelectedClass] = useState<string>("");
+  // Sử dụng router như navigation
+  const [classes, setClasses] = useState<ClassInfo[]>([]);
 
   useEffect(() => {
     if (params.ho_ten) setName(params.ho_ten);
@@ -68,7 +75,6 @@ export default function PracticeReadingScreen() {
   const renderMode1 = () => (
     <View style={styles.storyBox}>
       <View style={styles.tabHeader}>
-        
         <Pressable onPress={() => playSound("doc_mau")}>
           <Text style={styles.speaker}>🔊</Text>
         </Pressable>
@@ -78,15 +84,20 @@ export default function PracticeReadingScreen() {
 
       <Text style={styles.paragraph}>
         {/* \u00A0\u00A0\u00A0\u00A0 : 4 khoang trang và thụt câu */}
-        {"\u00A0\u00A0\u00A0\u00A0"}Tôi tên là Nam, học sinh lớp 1A, Trường Tiểu học Lê Quý Đôn. Ngày đầu đi học, mặc bộ đồng phục của trường, tôi hãnh diện lắm.
+        {"\u00A0\u00A0\u00A0\u00A0"}Tôi tên là Nam, học sinh lớp 1A, Trường Tiểu
+        học Lê Quý Đôn. Ngày đầu đi học, mặc bộ đồng phục của trường, tôi hãnh
+        diện lắm.
       </Text>
 
       <Text style={styles.paragraph}>
-        {"\u00A0\u00A0\u00A0\u00A0"}Hồi đầu năm học, tôi mới học chữ cái. Thế mà bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa. Tôi có thêm nhiều bạn mới.
+        {"\u00A0\u00A0\u00A0\u00A0"}Hồi đầu năm học, tôi mới học chữ cái. Thế mà
+        bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa. Tôi có
+        thêm nhiều bạn mới.
       </Text>
 
       <Text style={styles.paragraph}>
-        {"\u00A0\u00A0\u00A0\u00A0"}Ai cũng bảo từ khi đi học, tôi chững chạc hẳn lên.
+        {"\u00A0\u00A0\u00A0\u00A0"}Ai cũng bảo từ khi đi học, tôi chững chạc
+        hẳn lên.
       </Text>
 
       <Text style={styles.author}>(Trung Sơn)</Text>
@@ -105,11 +116,15 @@ export default function PracticeReadingScreen() {
       <Text style={styles.title}>Tôi là học sinh lớp 1</Text>
 
       <Text style={styles.paragraph}>
-        {"\u00A0\u00A0\u00A0\u00A0"}Tôi tên là Nam, học sinh lớp 1A, Trường Tiểu học Lê Quý Đôn. Ngày đầu đi học, mặc bộ{" "}
+        {"\u00A0\u00A0\u00A0\u00A0"}Tôi tên là Nam, học sinh lớp 1A, Trường Tiểu
+        học Lê Quý Đôn. Ngày đầu đi học, mặc bộ{" "}
         <Text
           style={styles.hardWord}
           onPress={() =>
-            openExplain("đồng phục", "Đồng phục là bộ quần áo giống nhau của học sinh khi đến trường.")
+            openExplain(
+              "đồng phục",
+              "Đồng phục là bộ quần áo giống nhau của học sinh khi đến trường.",
+            )
           }
         >
           đồng phục
@@ -119,7 +134,10 @@ export default function PracticeReadingScreen() {
         <Text
           style={styles.hardWord}
           onPress={() =>
-            openExplain("hãnh diện", "Hãnh diện nghĩa là cảm thấy tự hào, vui vẻ vì điều gì đó tốt đẹp.")
+            openExplain(
+              "hãnh diện",
+              "Hãnh diện nghĩa là cảm thấy tự hào, vui vẻ vì điều gì đó tốt đẹp.",
+            )
           }
         >
           hãnh diện
@@ -129,7 +147,9 @@ export default function PracticeReadingScreen() {
       </Text>
 
       <Text style={styles.paragraph}>
-        {"\u00A0\u00A0\u00A0\u00A0"}Hồi đầu năm học, tôi mới học chữ cái. Thế mà bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa. Tôi có thêm nhiều bạn mới.
+        {"\u00A0\u00A0\u00A0\u00A0"}Hồi đầu năm học, tôi mới học chữ cái. Thế mà
+        bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa. Tôi có
+        thêm nhiều bạn mới.
       </Text>
 
       <Text style={styles.paragraph}>
@@ -137,7 +157,10 @@ export default function PracticeReadingScreen() {
         <Text
           style={styles.hardWord}
           onPress={() =>
-            openExplain("chững chạc", "Chững chạc nghĩa là trông người lớn hơn, đứng đắn, chín chắn hơn.")
+            openExplain(
+              "chững chạc",
+              "Chững chạc nghĩa là trông người lớn hơn, đứng đắn, chín chắn hơn.",
+            )
           }
         >
           chững chạc
@@ -160,37 +183,49 @@ export default function PracticeReadingScreen() {
 
       {/* Câu 1 */}
       <Pressable
-        style={({ pressed }) => [styles.sentenceLine, pressed && styles.pressed]}
+        style={({ pressed }) => [
+          styles.sentenceLine,
+          pressed && styles.pressed,
+        ]}
         onPress={() => playSound("doan1")}
       >
         <Text style={styles.speaker_2}>🔊</Text>
         <Text style={styles.paragraph}>
-          {"\u00A0\u00A0\u00A0\u00A0"}Tôi tên là Nam, học sinh lớp 1A, Trường Tiểu học Lê Quý Đôn. Ngày đầu đi học, mặc bộ đồng phục của trường, tôi hãnh diện lắm.
+          {"\u00A0\u00A0\u00A0\u00A0"}Tôi tên là Nam, học sinh lớp 1A, Trường
+          Tiểu học Lê Quý Đôn. Ngày đầu đi học, mặc bộ đồng phục của trường, tôi
+          hãnh diện lắm.
         </Text>
-        
       </Pressable>
 
       {/* Câu 2 */}
       <Pressable
-        style={({ pressed }) => [styles.sentenceLine, pressed && styles.pressed]}
+        style={({ pressed }) => [
+          styles.sentenceLine,
+          pressed && styles.pressed,
+        ]}
         onPress={() => playSound("doan2")}
       >
         <Text style={styles.speaker_2}>🔊</Text>
         <Text style={styles.paragraph}>
-          {"\u00A0\u00A0\u00A0\u00A0"}Hồi đầu năm học, tôi mới học chữ cái. Thế mà bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa. Tôi có thêm nhiều bạn mới.
+          {"\u00A0\u00A0\u00A0\u00A0"}Hồi đầu năm học, tôi mới học chữ cái. Thế
+          mà bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa.
+          Tôi có thêm nhiều bạn mới.
         </Text>
-        
       </Pressable>
 
       {/* Câu 3 */}
       <Pressable
-        style={({ pressed }) => [styles.sentenceLine, pressed && styles.pressed]}
+        style={({ pressed }) => [
+          styles.sentenceLine,
+          pressed && styles.pressed,
+        ]}
         onPress={() => playSound("doan3")}
-      ><Text style={styles.speaker_2}>🔊</Text>
+      >
+        <Text style={styles.speaker_2}>🔊</Text>
         <Text style={styles.paragraph}>
-          {"\u00A0\u00A0\u00A0\u00A0"}Ai cũng bảo từ khi đi học, tôi chững chạc hẳn lên.
+          {"\u00A0\u00A0\u00A0\u00A0"}Ai cũng bảo từ khi đi học, tôi chững chạc
+          hẳn lên.
         </Text>
-        
       </Pressable>
 
       <Text style={styles.author}>(Trung Sơn)</Text>
@@ -199,7 +234,14 @@ export default function PracticeReadingScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={null} route={{ params: { ho_ten: name } }} />
+      <Header
+        name={name}
+        classes={classes}
+        selectedClass={selectedClass}
+        setSelectedClass={setSelectedClass}
+        navigation={navigation}
+        route={router}
+      />
 
       {/* Banner giữ nguyên */}
       <View style={styles.bannerContainer}>
@@ -221,19 +263,25 @@ export default function PracticeReadingScreen() {
           style={[styles.modeBtn, mode === 1 && styles.modeBtnActive]}
           onPress={() => setMode(1)}
         >
-          <Text style={[styles.modeText, mode === 1 && styles.modeTextActive]}>1. Mẫu</Text>
+          <Text style={[styles.modeText, mode === 1 && styles.modeTextActive]}>
+            1. Mẫu
+          </Text>
         </Pressable>
         <Pressable
           style={[styles.modeBtn, mode === 2 && styles.modeBtnActive]}
           onPress={() => setMode(2)}
         >
-          <Text style={[styles.modeText, mode === 2 && styles.modeTextActive]}>2. Hiểu từ khó</Text>
+          <Text style={[styles.modeText, mode === 2 && styles.modeTextActive]}>
+            2. Hiểu từ khó
+          </Text>
         </Pressable>
         <Pressable
           style={[styles.modeBtn, mode === 3 && styles.modeBtnActive]}
           onPress={() => setMode(3)}
         >
-          <Text style={[styles.modeText, mode === 3 && styles.modeTextActive]}>3. Đọc theo mẫu</Text>
+          <Text style={[styles.modeText, mode === 3 && styles.modeTextActive]}>
+            3. Đọc theo mẫu
+          </Text>
         </Pressable>
       </View>
 
@@ -249,7 +297,10 @@ export default function PracticeReadingScreen() {
           <View style={styles.modalBox}>
             <Text style={styles.modalTitle}>{explainWord}</Text>
             <Text style={styles.modalContent}>{explainText}</Text>
-            <Pressable style={styles.closeBtn} onPress={() => setShowExplain(false)}>
+            <Pressable
+              style={styles.closeBtn}
+              onPress={() => setShowExplain(false)}
+            >
               <Text style={styles.closeText}>Đóng</Text>
             </Pressable>
           </View>

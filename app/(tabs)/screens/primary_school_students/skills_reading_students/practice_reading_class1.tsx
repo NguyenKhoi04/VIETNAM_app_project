@@ -11,9 +11,11 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
+
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import Header from '../Header';
+import Header, { ClassInfo } from '../Header';
 import Footer from '../Footer';
 import { API_ENDPOINTS } from '@/src/config/api';
 
@@ -36,13 +38,18 @@ interface Feature {
 const BG_COLORS = ['#E0F7FA', '#FFF3E0', '#E8F5E9', '#E0F2FE', '#CCCCFF'];
 
 export default function PracticeReadingScreen() {
-  const router = useRouter();
+
   const params = useLocalSearchParams<{
     ho_ten?: string;
     ten_ky_nang?: string;
   }>();
 
   const [name, setName] = useState<string>(params.ho_ten || '');
+  const [selectedClass, setSelectedClass] = useState<string>('');
+  const router = useRouter();
+  const navigation = router; // Sử dụng router như navigation
+  const [classes, setClasses] = useState<ClassInfo[]>([]);
+  
   // Ưu tiên lấy tên kỹ năng từ params, fallback "Tập Đọc"
   const [tenKyNang, setTenKyNang] = useState<string>(
     params.ten_ky_nang || 'Tập Đọc'
@@ -53,9 +60,33 @@ export default function PracticeReadingScreen() {
     if (params.ten_ky_nang) setTenKyNang(params.ten_ky_nang);
   }, [params.ho_ten, params.ten_ky_nang]);
 
+   const handleNavigate = (url?: string, tenKyNang?: string) => {
+    if (!url) {
+      Alert.alert('Thông báo', `Tính năng "${tenKyNang}" đang được phát triển!`);
+      return;
+    }
+
+    const path = url.startsWith('/') ? url : `/${url}`;
+
+    router.push({
+      pathname: path as any,
+      params: {
+        ho_ten: name,
+        ten_ky_nang: tenKyNang || '',
+      },
+    });
+  };
+  
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={null} route={{ params: { ho_ten: name } }} />
+      <Header
+      name={name}
+      classes={classes}
+      selectedClass={selectedClass}
+      setSelectedClass={setSelectedClass}
+      navigation={navigation}
+      route={router}
+    />
 
       {/* Banner Kỹ năng - ĐÃ SỬA */}
       <View style={styles.bannerContainer}>

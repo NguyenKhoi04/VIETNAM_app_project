@@ -14,7 +14,7 @@ import {
   View,
 } from "react-native";
 import Footer from "../Footer";
-import Header from "../Header";
+import Header, { ClassInfo } from "../Header";
 
 const { width } = Dimensions.get("window");
 
@@ -29,6 +29,11 @@ export default function PracticeReadingScreen() {
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [tenKyNang, setTenKyNang] = useState(params.ten_ky_nang || "Tập Đọc");
   const [tenBaiHoc] = useState("rạ  rế  rổ  sả  sẽ  sò");
+ 
+  const [selectedClass, setSelectedClass] = useState<string>('');
+  const navigation = router; // Sử dụng router như navigation
+  const [classes, setClasses] = useState<ClassInfo[]>([]);
+
 
   useEffect(() => {
     if (params.ho_ten) setName(params.ho_ten);
@@ -89,7 +94,14 @@ export default function PracticeReadingScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={null} route={{ params: { ho_ten: name } }} />
+       <Header
+      name={name}
+      classes={classes}
+      selectedClass={selectedClass}
+      setSelectedClass={setSelectedClass}
+      navigation={navigation}
+      route={router}
+    />
 
       {/* Banner */}
       <View style={styles.bannerContainer}>

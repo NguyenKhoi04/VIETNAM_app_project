@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import Header from '../Header';
+import Header, { ClassInfo } from '../Header';
 import Footer from '../Footer';
 import { API_ENDPOINTS } from '@/src/config/api';
 
@@ -41,6 +41,10 @@ export default function ReadingWeekDetailsScreen() {
   }>();
 
   const [name, setName] = useState<string>(params.ho_ten || '');
+  const [selectedClass, setSelectedClass] = useState<string>('');
+
+  const navigation = router; // Sử dụng router như navigation
+  const [classes, setClasses] = useState<ClassInfo[]>([]);
   const [tenKyNang, setTenKyNang] = useState<string>(
     params.ten_ky_nang || 'Tập Đọc'
   );
@@ -52,7 +56,14 @@ export default function ReadingWeekDetailsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={null} route={{ params: { ho_ten: name } }} />
+       <Header
+      name={name}
+      classes={classes}
+      selectedClass={selectedClass}
+      setSelectedClass={setSelectedClass}
+      navigation={navigation}
+      route={router}
+    />
 
       {/* Banner Kỹ năng */}
       <View style={styles.bannerContainer}>

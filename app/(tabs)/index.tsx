@@ -27,7 +27,6 @@ export default function App() {
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="RoleSelection" component={RoleSelectionScreen} />
       <Stack.Screen name="MenuSurvey" component={MenuSurvey} />
-      <Stack.Screen name="Header" component={Header} />
       <Stack.Screen name="Home_primary" component={HomePrimary} />
       <Stack.Screen name="PracticeReading" component={PracticeReading} />
       <Stack.Screen name="ReadingWeekDetails" component={ReadingWeekDetails} />
