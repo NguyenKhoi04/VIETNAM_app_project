@@ -11,18 +11,13 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
-
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Header, { ClassInfo } from '../Header';
 import Footer from '../Footer';
 import { API_ENDPOINTS } from '@/src/config/api';
 
 const { width } = Dimensions.get('window');
-
-
-
 interface Feature {
   id_ky_nang: number;
   ma_ky_nang: string;
@@ -37,8 +32,8 @@ interface Feature {
 
 const BG_COLORS = ['#E0F7FA', '#FFF3E0', '#E8F5E9', '#E0F2FE', '#CCCCFF'];
 
-export default function PracticeReadingScreen() {
-
+export default function ReadingTopicDetailsScreen() {
+  const router = useRouter();
   const params = useLocalSearchParams<{
     ho_ten?: string;
     ten_ky_nang?: string;
@@ -46,10 +41,9 @@ export default function PracticeReadingScreen() {
 
   const [name, setName] = useState<string>(params.ho_ten || '');
   const [selectedClass, setSelectedClass] = useState<string>('');
-  const router = useRouter();
+
   const navigation = router; // Sử dụng router như navigation
   const [classes, setClasses] = useState<ClassInfo[]>([]);
-  
   // Ưu tiên lấy tên kỹ năng từ params, fallback "Tập Đọc"
   const [tenKyNang, setTenKyNang] = useState<string>(
     params.ten_ky_nang || 'Tập Đọc'
@@ -60,26 +54,9 @@ export default function PracticeReadingScreen() {
     if (params.ten_ky_nang) setTenKyNang(params.ten_ky_nang);
   }, [params.ho_ten, params.ten_ky_nang]);
 
-   const handleNavigate = (url?: string, tenKyNang?: string) => {
-    if (!url) {
-      Alert.alert('Thông báo', `Tính năng "${tenKyNang}" đang được phát triển!`);
-      return;
-    }
-
-    const path = url.startsWith('/') ? url : `/${url}`;
-
-    router.push({
-      pathname: path as any,
-      params: {
-        ho_ten: name,
-        ten_ky_nang: tenKyNang || '',
-      },
-    });
-  };
-  
   return (
     <SafeAreaView style={styles.container}>
-      <Header
+       <Header
       name={name}
       classes={classes}
       selectedClass={selectedClass}
@@ -107,82 +84,42 @@ export default function PracticeReadingScreen() {
         style={styles.mainContent}
         contentContainerStyle={styles.scrollContent}
       >
-
+        {/* Grid 4 hình */}
         <View style={styles.imageGrid}>
+          <View style={styles.imageRow}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() =>
+                router.push(
+                  '/(tabs)/screens/primary_school_students/skills_reading_class2students/reading_topic2week5_class2details_bai9' as any
+                )
+              }
+            >
+              <Image
+                source={require('@/assets/images/lop2/lop2_tuan3.png')}
+                style={styles.imageBox}
+                resizeMode="cover"
+              />
+            </TouchableOpacity>
 
-        {/* Hàng 1 */}
-        <View style={styles.imageRow}>
-          <TouchableOpacity
-            style={styles.touchableImage}
-            activeOpacity={0.8}
-            onPress={() =>
-              router.push(
-                '/(tabs)/screens/primary_school_students/skills_reading_class2students/reading_topic1week3_class2details' as any
-              )
-            }
-          >
-            <Image
-              source={require('@/assets/images/lop2/em_lonlen.png')}
-              style={styles.imageBox}
-              resizeMode="cover"
-            />
-          </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() =>
+                router.push(
+                  '/(tabs)/screens/primary_school_students/skills_reading_class2students/reading_topic2week6_class2details_bai11' as any
+                )
+              }
+            >
+              <Image
+                source={require('@/assets/images/lop2/lop2_tuan3.png')}
+                style={styles.imageBox}
+                resizeMode="cover"
+              />
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.touchableImage}
-            activeOpacity={0.8}
-            onPress={() =>
-              router.push(
-                '/(tabs)/screens/primary_school_students/skills_reading_class2students/reading_topic2week6_class2details' as any
-              )
-            }
-          >
-            <Image
-              source={require('@/assets/images/lop2/hoc_vui.png')}
-              style={styles.imageBox}
-              resizeMode="cover"
-            />
-          </TouchableOpacity>
+          </View>
         </View>
-
-
-        {/* Hàng 2 */}
-        <View style={styles.imageRow}>
-          <TouchableOpacity
-            style={styles.touchableImage}
-            activeOpacity={0.8}
-            onPress={() =>
-              router.push(
-                '/(tabs)/screens/primary_school_students/skills_reading_class2students/reading_topic3week10_class2details' as any
-              )
-            }
-          >
-            <Image
-              source={require('@/assets/images/lop2/tuoi_tho.png')}
-              style={styles.imageBox}
-              resizeMode="cover"
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.touchableImage}
-            activeOpacity={0.8}
-            onPress={() =>
-              router.push(
-                '/(tabs)/screens/primary_school_students/skills_reading_class2students/reading_topic4week17_class2details' as any
-              )
-            }
-          >
-            <Image
-              source={require('@/assets/images/lop2/gia_dinh.png')}
-              style={styles.imageBox}
-              resizeMode="cover"
-            />
-          </TouchableOpacity>
-        </View>
-
-      </View>
-        
+      
       </ScrollView>
       <Footer />
     </SafeAreaView>
@@ -246,25 +183,17 @@ const styles = StyleSheet.create({
   },
   imageGrid: {
   marginVertical: 12,
-  gap: 12,
+  gap: 12,                    // khoảng cách giữa 2 hàng
 },
-
 imageRow: {
   flexDirection: 'row',
   justifyContent: 'space-between',
-  gap: 12,
+  gap: 12,                    // khoảng cách giữa 2 ảnh trong 1 hàng
 },
-
-touchableImage: {
-  width: (width - 16 * 2 - 12) / 2,
-  height: (width - 16 * 2 - 12) / 2,
-},
-
 imageBox: {
-  width: (width - 16 * 2 - 12) / 2,
-  height: (width - 16 * 2 - 12) / 2,
+  width: (width - 16 * 2 - 12) / 2,   // tính đúng 2 cột
+  height: (width - 16 * 2 - 12) / 2,  // vuông
   borderRadius: 12,
   backgroundColor: '#E5E7EB',
 },
-
 });

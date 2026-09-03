@@ -42,17 +42,15 @@ const [showAnswer2, setShowAnswer2] = useState(false);
   }, [params.ho_ten]);
 
   const AUDIO_MAP: Record<string, any> = {
-    doc_mau: require("../../../../../text-to-speech/speech_docmau_bai1_topic1.wav"),
-    dong_phuc: require("../../../../../text-to-speech/speech_docmau_dong_phuc.wav"),
-    hanh_dien: require("../../../../../text-to-speech/speech_docmau_hanh_dien.wav"),
-    chung_chac: require("../../../../../text-to-speech/speech_docmau_chung_chac.wav"),
-    doan1: require("../../../../../text-to-speech/speech_docmau_doan1_bai1_topic1.wav"),
-    doan2: require("../../../../../text-to-speech/speech_docmau_doan2_bai1_topic1.wav"),
-    doan3: require("../../../../../text-to-speech/speech_docmau_doan3_bai1_topic1.wav"),
-    cau_hoi_1: require("../../../../../text-to-speech/speech_cau_hoi_1_bai1_topic1.wav"),
-    cau_hoi_2: require("../../../../../text-to-speech/speech_cau_hoi_2_bai1_topic1.wav"),
-    dap_an_1: require("../../../../../text-to-speech/speech_dap_an_1_bai1_topic1.wav"),
-    dap_an_2: require("../../../../../text-to-speech/speech_dap_an_2_bai1_topic1.wav"),
+    docmau_bai5week3: require("../../../../../text-to-speech/speech_docmau_bai5week3.wav"),
+    doan1: require("../../../../../text-to-speech/speech_docmau_doan1_bai5week3.wav"),
+    doan2: require("../../../../../text-to-speech/speech_docmau_doan2_bai5week3.wav"),
+    doan3: require("../../../../../text-to-speech/speech_docmau_doan3_bai5week3.wav"),
+    doan4: require("../../../../../text-to-speech/speech_docmau_doan4_bai5week3.wav"),
+    cau_hoi_1: require("../../../../../text-to-speech/speech_cau_hoi_1_bai5week3.wav"),
+    cau_hoi_2: require("../../../../../text-to-speech/speech_cau_hoi_2_bai5week3.wav"),
+    dap_an_1: require("../../../../../text-to-speech/speech_dap_an_1_bai5week3.wav"),
+    dap_an_2: require("../../../../../text-to-speech/speech_dap_an_2_bai5week3.wav"),
   };
 
   const playSound = async (key: string) => {
@@ -82,111 +80,82 @@ const [showAnswer2, setShowAnswer2] = useState(false);
   const renderMode1 = () => (
     <View style={styles.storyBox}>
       <View style={styles.tabHeader}>
-        <Pressable onPress={() => playSound("doc_mau")}>
+        <Pressable onPress={() => playSound("docmau_bai5week3")}>
           <Text style={styles.speaker}>🔊</Text>
         </Pressable>
       </View>
 
-      <Text style={styles.title}>Tôi là học sinh lớp 1</Text>
+      <Text style={styles.title}>EM CÓ XINH KHÔNG?</Text>
 
       <Text style={styles.paragraph}>
         {/* \u00A0\u00A0\u00A0\u00A0 : 4 khoang trang và thụt câu */}
-        {"\u00A0\u00A0\u00A0\u00A0"}Tôi tên là Nam, học sinh lớp 1A, Trường Tiểu
-        học Lê Quý Đôn. Ngày đầu đi học, mặc bộ đồng phục của trường, tôi hãnh
-        diện lắm.
+        {"\u00A0\u00A0\u00A0\u00A0"}Voi em thích mặc đẹp và thích được khen xinh. 
+        Ở nhà, voi em luôn hỏi anh: “Em có xinh không?”. Voi anh bao giờ cũng khen: “Em xinh lắm!”.
       </Text>
 
       <Text style={styles.paragraph}>
-        {"\u00A0\u00A0\u00A0\u00A0"}Hồi đầu năm học, tôi mới học chữ cái. Thế mà
-        bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa. Tôi có
-        thêm nhiều bạn mới.
+        {"\u00A0\u00A0\u00A0\u00A0"}Một hôm,gặp hươu, voi em hỏi:
       </Text>
 
       <Text style={styles.paragraph}>
-        {"\u00A0\u00A0\u00A0\u00A0"}Ai cũng bảo từ khi đi học, tôi chững chạc
-        hẳn lên.
+        {"\u00A0\u00A0\u00A0\u00A0"}- Em có xinh khóng?
       </Text>
 
-      <Text style={styles.author}>(Trung Sơn)</Text>
+      <Text style={styles.paragraph}>
+        {"\u00A0\u00A0\u00A0\u00A0"}Hươu ngắm voi rồi lắc đầu:
+      </Text>
+
+      <Text style={styles.paragraph}>
+        {"\u00A0\u00A0\u00A0\u00A0"}- Chưa xinh lắm vì em không có đôi sừng giống anh.
+      </Text>
+
+      <Text style={styles.paragraph}>{"\u00A0\u00A0\u00A0\u00A0"} Nghe vậy, voi nhặt vài cành cây khô, gài lên đầu rồi đi tiếp.
+
+      </Text>
+      <Text style={styles.paragraph}>
+        {"\u00A0\u00A0\u00A0\u00A0"}Gặp dê, voihỏi:
+      </Text>
+
+      <Text style={styles.paragraph}>
+        {"\u00A0\u00A0\u00A0\u00A0"}- Em có xinh khóng?
+      </Text>
+
+      <Text style={styles.paragraph}>{"\u00A0\u00A0\u00A0\u00A0"}- Không, vì cậu không có râu giống tôi.
+      </Text>
+      
+      <Text style={styles.paragraph}> {"\u00A0\u00A0\u00A0\u00A0"}Voi liền nhổ một khóm cỏ dại bên đường, gắn lên cằm rồi đi về nhà.
+      </Text>
+
+      <Text style={styles.paragraph}>
+        {"\u00A0\u00A0\u00A0\u00A0"}Về nhà với đôi sừng và bộ râu giả, voi em hớn hở hỏi anh:
+      </Text>
+
+      <Text style={styles.paragraph}>
+        {"\u00A0\u00A0\u00A0\u00A0"}- Em có xinh khóng?
+      </Text>
+
+      <Text style={styles.paragraph}>Voi anh nói:</Text>
+
+      <Text style={styles.paragraph}>- Trời ơi, sao em lại thêm sừng và râu thế này? Xấu lắm! </Text>
+
+      <Text style={styles.paragraph}>
+        {"\u00A0\u00A0\u00A0\u00A0"} Voi em ngắm mình trong gương và thấy xấu thật. Sau khi bỏ sừng và râu đi, voi em thấy mình xinh đẹp hẳn lên. 
+        Giờ đây, voi em hiểu rằng mình chỉ xinh đẹp khi đúng là voi.
+        </Text>
+
+      <Text style={styles.author}>(Theo Ấu Phúc, Voi em đi tìm tự tin)</Text>
     </View>
   );
+
+ 
 
   const renderMode2 = () => (
-    <View style={styles.storyBox}>
-      <View style={styles.tabHeader}>
-        <Text style={styles.tabTitle}>Hiểu từ khó</Text>
-        <Pressable onPress={() => playSound("doc_mau")}>
-          <Text style={styles.speaker}>🔊</Text>
-        </Pressable>
-      </View>
-
-      <Text style={styles.title}>Tôi là học sinh lớp 1</Text>
-
-      <Text style={styles.paragraph}>
-        {"\u00A0\u00A0\u00A0\u00A0"}Tôi tên là Nam, học sinh lớp 1A, Trường Tiểu
-        học Lê Quý Đôn. Ngày đầu đi học, mặc bộ{" "}
-        <Text
-          style={styles.hardWord}
-          onPress={() =>
-            openExplain(
-              "đồng phục",
-              "Đồng phục là bộ quần áo giống nhau của học sinh khi đến trường.",
-            )
-          }
-        >
-          đồng phục
-          <Text style={styles.questionMark}> ?</Text>
-        </Text>{" "}
-        của trường, tôi{" "}
-        <Text
-          style={styles.hardWord}
-          onPress={() =>
-            openExplain(
-              "hãnh diện",
-              "Hãnh diện nghĩa là cảm thấy tự hào, vui vẻ vì điều gì đó tốt đẹp.",
-            )
-          }
-        >
-          hãnh diện
-          <Text style={styles.questionMark}> ?</Text>
-        </Text>{" "}
-        lắm.
-      </Text>
-
-      <Text style={styles.paragraph}>
-        {"\u00A0\u00A0\u00A0\u00A0"}Hồi đầu năm học, tôi mới học chữ cái. Thế mà
-        bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa. Tôi có
-        thêm nhiều bạn mới.
-      </Text>
-
-      <Text style={styles.paragraph}>
-        {"\u00A0\u00A0\u00A0\u00A0"}Ai cũng bảo từ khi đi học, tôi{" "}
-        <Text
-          style={styles.hardWord}
-          onPress={() =>
-            openExplain(
-              "chững chạc",
-              "Chững chạc nghĩa là trông người lớn hơn, đứng đắn, chín chắn hơn.",
-            )
-          }
-        >
-          chững chạc
-          <Text style={styles.questionMark}> ?</Text>
-        </Text>{" "}
-        hẳn lên.
-      </Text>
-
-      <Text style={styles.author}>(Trung Sơn)</Text>
-    </View>
-  );
-
-  const renderMode3 = () => (
     <View style={styles.storyBox}>
       <View style={styles.tabHeader}>
         <Text style={styles.tabTitle}>Đọc theo mẫu</Text>
       </View>
 
-      <Text style={styles.title}>Tôi là học sinh lớp 1</Text>
+      <Text style={styles.title}>Em có xinh khóng?</Text>
 
       {/* Câu 1 */}
       <Pressable
@@ -198,9 +167,8 @@ const [showAnswer2, setShowAnswer2] = useState(false);
       >
         <Text style={styles.speaker_2}>🔊</Text>
         <Text style={styles.paragraph}>
-          {"\u00A0\u00A0\u00A0\u00A0"}Tôi tên là Nam, học sinh lớp 1A, Trường
-          Tiểu học Lê Quý Đôn. Ngày đầu đi học, mặc bộ đồng phục của trường, tôi
-          hãnh diện lắm.
+          {"\u00A0\u00A0\u00A0\u00A0"}
+Voi em thích mặc đẹp và thích được khen xinh. Ở nhà, voi em luôn hỏi anh: “Em có xinh không?”. Voi anh bao giờ cũng khen: “Em xinh lắm!”.
         </Text>
       </Pressable>
 
@@ -214,9 +182,11 @@ const [showAnswer2, setShowAnswer2] = useState(false);
       >
         <Text style={styles.speaker_2}>🔊</Text>
         <Text style={styles.paragraph}>
-          {"\u00A0\u00A0\u00A0\u00A0"}Hồi đầu năm học, tôi mới học chữ cái. Thế
-          mà bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa.
-          Tôi có thêm nhiều bạn mới.
+          {"\u00A0\u00A0\u00A0\u00A0"}Một hôm, gặp hươu, voi em hỏi:{"\n"} 
+          {"\u00A0\u00A0\u00A0\u00A0"}-Em có xinh không? {"\n"}
+          {"\u00A0\u00A0\u00A0\u00A0"}Hươu ngắm voi rồi lắc đầu:{"\n"} 
+          {"\u00A0\u00A0\u00A0\u00A0"}-Chưa xinh lắm vì em không có đôi sừng giống anh.{"\n"} 
+          {"\u00A0\u00A0\u00A0\u00A0"}Nghe vậy, voi nhặt vài cành cây khô, gài lên đầu rồi đi tiếp.
         </Text>
       </Pressable>
 
@@ -230,44 +200,100 @@ const [showAnswer2, setShowAnswer2] = useState(false);
       >
         <Text style={styles.speaker_2}>🔊</Text>
         <Text style={styles.paragraph}>
-          {"\u00A0\u00A0\u00A0\u00A0"}Ai cũng bảo từ khi đi học, tôi chững chạc
-          hẳn lên.
+          {"\u00A0\u00A0\u00A0\u00A0"}Gặp dê, voi hỏi:{"\n"} 
+          {"\u00A0\u00A0\u00A0\u00A0"}-Em có xinh khóng?{"\n"}
+          {"\u00A0\u00A0\u00A0\u00A0"}-Không, vì cậu không có râu giống tôi.{"\n"} 
+          {"\u00A0\u00A0\u00A0\u00A0"}Voi liền nhổ một khóm cỏ dại bên đường, gắn lên cằm rồi đi về nhà.{"\n"} 
+          {"\u00A0\u00A0\u00A0\u00A0"}Về nhà với đôi sừng và bộ râu giả, voi em hớn hở hỏi anh:{"\n"} 
+          {"\u00A0\u00A0\u00A0\u00A0"}-Em có xinh khóng?{"\n"} 
+          {"\u00A0\u00A0\u00A0\u00A0"}Voi anh nói:{"\n"} 
+          {"\u00A0\u00A0\u00A0\u00A0"}-Trời ơi, sao em lại thêm sừng và râu thế này? Xấu lắm!  
         </Text>
       </Pressable>
-
-      <Text style={styles.author}>(Trung Sơn)</Text>
+      {/* Câu 4 */}
+      <Pressable
+        style={({ pressed }) => [
+          styles.sentenceLine,
+          pressed && styles.pressed,
+        ]}
+        onPress={() => playSound("doan4")}
+      >
+        <Text style={styles.speaker_2}>🔊</Text>
+        <Text style={styles.paragraph}>
+          {"\u00A0\u00A0\u00A0\u00A0"}Voi em ngắm mình trong gương và thấy xấu thật. Sau khi bỏ sừng và râu đi, voi em thấy mình xinh đẹp hẳn lên. Giờ đây, voi em hiểu rằng mình chỉ xinh đẹp khi đúng là voi.
+        </Text>
+      </Pressable>
+      <Text style={styles.author}>(Theo Ấu Phúc, Voi em đi tìm tự tin)</Text>
     </View>
   );
 
-   // ===== Chế độ 4: Tìm hiểu bài học =====
-const renderMode4 = () => (
+   // ===== Chế độ 3: Tìm hiểu bài học =====
+const renderMode3 = () => (
   <View>
     {/* Phần bài đọc */}
     <View style={styles.storyBox}>
       <View style={styles.tabHeader}>
-        <Text style={styles.tabTitle}>Tìm hiểu bài học rút ra đại ý</Text>
+        <Text style={styles.tabTitle}>Tìm hiểu bài và rút ra đại ý</Text>
       </View>
-
-      <Text style={styles.title}>Tôi là học sinh lớp 1</Text>
+      <Text style={styles.title}>EM CÓ XINH KHÔNG?</Text>
 
       <Text style={styles.paragraph}>
-        {"\u00A0\u00A0\u00A0\u00A0"}Tôi tên là Nam, học sinh lớp 1A, Trường Tiểu
-        học Lê Quý Đôn. Ngày đầu đi học, mặc bộ đồng phục của trường, tôi hãnh
-        diện lắm.
+        {/* \u00A0\u00A0\u00A0\u00A0 : 4 khoang trang và thụt câu */}
+        {"\u00A0\u00A0\u00A0\u00A0"}Voi em thích mặc đẹp và thích được khen xinh. 
+        Ở nhà, voi em luôn hỏi anh: “Em có xinh không?”. Voi anh bao giờ cũng khen: “Em xinh lắm!”.
       </Text>
 
       <Text style={styles.paragraph}>
-        {"\u00A0\u00A0\u00A0\u00A0"}Hồi đầu năm học, tôi mới học chữ cái. Thế mà
-        bây giờ, tôi đã đọc được truyện tranh. Tôi còn biết làm toán nữa. Tôi có
-        thêm nhiều bạn mới.
+        {"\u00A0\u00A0\u00A0\u00A0"}Một hôm,gặp hươu, voi em hỏi:
       </Text>
 
       <Text style={styles.paragraph}>
-        {"\u00A0\u00A0\u00A0\u00A0"}Ai cũng bảo từ khi đi học, tôi chững chạc
-        hẳn lên.
+        {"\u00A0\u00A0\u00A0\u00A0"}- Em có xinh khóng?
       </Text>
 
-      <Text style={styles.author}>(Trung Sơn)</Text>
+      <Text style={styles.paragraph}>
+        {"\u00A0\u00A0\u00A0\u00A0"}Hươu ngắm voi rồi lắc đầu:
+      </Text>
+
+      <Text style={styles.paragraph}>
+        {"\u00A0\u00A0\u00A0\u00A0"}- Chưa xinh lắm vì em không có đôi sừng giống anh.
+      </Text>
+
+      <Text style={styles.paragraph}>{"\u00A0\u00A0\u00A0\u00A0"} Nghe vậy, voi nhặt vài cành cây khô, gài lên đầu rồi đi tiếp.
+
+      </Text>
+      <Text style={styles.paragraph}>
+        {"\u00A0\u00A0\u00A0\u00A0"}Gặp dê, voihỏi:
+      </Text>
+
+      <Text style={styles.paragraph}>
+        {"\u00A0\u00A0\u00A0\u00A0"}- Em có xinh khóng?
+      </Text>
+
+      <Text style={styles.paragraph}>{"\u00A0\u00A0\u00A0\u00A0"}- Không, vì cậu không có râu giống tôi.
+      </Text>
+      
+      <Text style={styles.paragraph}> {"\u00A0\u00A0\u00A0\u00A0"}Voi liền nhổ một khóm cỏ dại bên đường, gắn lên cằm rồi đi về nhà.
+      </Text>
+
+      <Text style={styles.paragraph}>
+        {"\u00A0\u00A0\u00A0\u00A0"}Về nhà với đôi sừng và bộ râu giả, voi em hớn hở hỏi anh:
+      </Text>
+
+      <Text style={styles.paragraph}>
+        {"\u00A0\u00A0\u00A0\u00A0"}- Em có xinh khóng?
+      </Text>
+
+      <Text style={styles.paragraph}>Voi anh nói:</Text>
+
+      <Text style={styles.paragraph}>- Trời ơi, sao em lại thêm sừng và râu thế này? Xấu lắm! </Text>
+
+      <Text style={styles.paragraph}>
+        {"\u00A0\u00A0\u00A0\u00A0"} Voi em ngắm mình trong gương và thấy xấu thật. Sau khi bỏ sừng và râu đi, voi em thấy mình xinh đẹp hẳn lên. 
+        Giờ đây, voi em hiểu rằng mình chỉ xinh đẹp khi đúng là voi.
+        </Text>
+
+      <Text style={styles.author}>(Theo Ấu Phúc, Voi em đi tìm tự tin)</Text>
     </View>
 
     {/* ===== PHẦN CÂU HỎI ===== */}
@@ -284,7 +310,7 @@ const renderMode4 = () => (
         {/* Ô câu hỏi */}
         <View style={styles.questionBox}>
           <Text style={styles.questionText}>
-            Nam học lớp mấy và ở trường nào?
+            Voi em đã hỏi voi anh, hươu và dê điều gì?
           </Text>
         </View>
 
@@ -295,7 +321,6 @@ const renderMode4 = () => (
             onPress={() => setShowAnswer1(!showAnswer1)}
           >
             <Text style={styles.answerButtonText}>Trả lời</Text>
-            <Text style={styles.speaker}>🔊</Text>
             <Text style={styles.arrow}>{showAnswer1 ? "▲" : "▼"}</Text>
           </Pressable>
         </View>
@@ -304,7 +329,7 @@ const renderMode4 = () => (
         {showAnswer1 && (
           <View style={styles.answerBox}>
             <Text style={styles.answerContent}>
-              Nam học lớp 1A, Trường Tiểu học Lê Quý Đôn.
+              Voi em đã hỏi voi anh, hươu và dê “Em có xinh không?”
             </Text>
             <Pressable onPress={() => playSound("dap_an_1")}>
               <Text style={styles.speaker}>🔊</Text>
@@ -324,7 +349,7 @@ const renderMode4 = () => (
 
         <View style={styles.questionBox}>
           <Text style={styles.questionText}>
-            Khi mặc đồng phục, Nam cảm thấy như thế nào?
+            Trước sự thay đổi của voi em, voi anh đã nói gì? 
           </Text>
         </View>
 
@@ -334,7 +359,6 @@ const renderMode4 = () => (
             onPress={() => setShowAnswer2(!showAnswer2)}
           >
             <Text style={styles.answerButtonText}>Trả lời</Text>
-            <Text style={styles.speaker}>🔊</Text>
             <Text style={styles.arrow}>{showAnswer2 ? "▲" : "▼"}</Text>
           </Pressable>
         </View>
@@ -342,7 +366,7 @@ const renderMode4 = () => (
         {showAnswer2 && (
           <View style={styles.answerBox}>
             <Text style={styles.answerContent}>
-              Nam cảm thấy hãnh diện lắm.
+              Trước sự thay đổi của voi em, voi anh đã nói: “Trời ơi, sao em lại thêm sừng và râu thế này? Xấu lắm!” 
             </Text>
             <Pressable onPress={() => playSound("dap_an_2")}>
               <Text style={styles.speaker}>🔊</Text>
@@ -394,7 +418,7 @@ const renderMode4 = () => (
           onPress={() => setMode(2)}
         >
           <Text style={[styles.modeText, mode === 2 && styles.modeTextActive]}>
-            2. Hiểu từ khó
+            2. Đọc theo mẫu
           </Text>
         </Pressable>
         <Pressable
@@ -402,15 +426,7 @@ const renderMode4 = () => (
           onPress={() => setMode(3)}
         >
           <Text style={[styles.modeText, mode === 3 && styles.modeTextActive]}>
-            3. Đọc theo mẫu
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[styles.modeBtn, mode === 4 && styles.modeBtnActive]}
-          onPress={() => setMode(4)}
-        >
-          <Text style={[styles.modeText, mode === 4 && styles.modeTextActive]}>
-            4. Tìm hiểu bài học
+            3. Tìm hiểu bài học
           </Text>
         </Pressable>
       </View>
@@ -419,7 +435,6 @@ const renderMode4 = () => (
         {mode === 1 && renderMode1()}
         {mode === 2 && renderMode2()}
         {mode === 3 && renderMode3()}
-        {mode === 4 && renderMode4()}
       </ScrollView>
 
       {/* Modal giải thích từ khó */}
